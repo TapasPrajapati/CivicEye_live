@@ -1,105 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crime Reporting - Home</title>
-  <link rel="stylesheet" href="/Forntend/Home/home.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container">
-      <a href="/Forntend/Home/index.html" class="logo">Civiceye</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CivicEye Dashboard</title>
+    <link rel="stylesheet" href="home.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+
+  <body>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-btn" id="closeNav">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <div class="logo">
+          <i data-lucide="shield"></i>
+          <span>CivicEye</span>
+        </div>
+      </div>
       <ul class="nav-links">
-        <li><a href="/Forntend/Home/index.html">Home</a></li>
-        <li><a href="/Forntend/How-it-works/how-it-works.html">How It Works</a></li>
-        <li><a href="/Forntend/About Us/about-us.html">About Us</a></li>
-        <li><a href="/Forntend/Contact Us/contact-us.html">Contact</a></li>
-        <li><a href="#">Privacy Policy</a></li>
+        <li>
+          <a href="#" class="active"><i data-lucide="home"></i>Home</a>
+        </li>
+        <li>
+          <a href="#"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        </li>
+        <li>
+          <a href="#"><i data-lucide="help-circle"></i>How it works</a>
+        </li>
+        <li>
+          <a href="#"><i data-lucide="phone"></i>Contact</a>
+        </li>
+        <li>
+          <a href="#"><i data-lucide="users"></i>About Us</a>
+        </li>
+        <li>
+          <a href="#"><i data-lucide="shield"></i>Privacy and Policy</a>
+        </li>
       </ul>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Hero Section -->
-<section class="hero">
-    <div class="container">
-      <h2>Report Crime Anytime, Anywhere – Your Safety Matters</h2>
-      <a href="report.html" class="btn emergency-btn">Report Crime Now</a>
-      <div class="hot-map-preview">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.123456789012!2d77.12345678901234!3d28.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDA3JzI0LjQiTiA3N8KwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- Key Features Section -->
-  <section class="features">
-    <div class="container">
-      <h2>Key Features</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Quick FIR Reporting</h3>
-          <p>Report crimes quickly by entering details manually.</p>
+    <main class="main-content">
+      <header class="top-nav">
+        <button class="menu-btn" id="openNav">
+          <i data-lucide="menu"></i>
+        </button>
+        <div class="brand">CivicEye</div>
+        <div class="user-actions">
+          <button class="btn btn-login">Login</button>
+          <button class="btn btn-signup">Signup</button>
+          <div class="profile-pic">
+            <img
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=40&h=40"
+              alt="Profile"
+            />
+          </div>
         </div>
-        <div class="feature-card">
-          <h3>AI-Powered FIR Generation</h3>
-          <p>Upload images and generate FIRs using AI.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Real-Time Crime Hotspots</h3>
-          <p>Stay informed with live crime hotspot maps.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Anonymous Reporting</h3>
-          <p>Report crimes anonymously to ensure your safety.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </header>
 
-  <!-- Call-to-Action Section -->
-  <section class="cta">
-    <div class="container">
-      <h2>Take Action Now</h2>
-      <div class="cta-buttons">
-        <a href="#" class="btn">Report Crime Now</a>
-        <a href="#" class="btn">View Crime Hotspots</a>
-        <a href="#" class="btn">Learn How It Works</a>
+      <div class="alert-banner">
+        <p>
+          5000 people die due to late registration of FIR! Now you can register
+          a digital case even without login
+        </p>
+        <button class="btn btn-register">Register a case</button>
       </div>
-    </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-links">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="/Forntend/About Us/about-us.html">About Us</a></li>
-          <li><a href="/Forntend/Contact Us/contact-us.html">Contact</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
-      <div class="footer-social">
-        <h3>Follow Us</h3>
-        <ul>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Instagram</a></li>
-        </ul>
-      </div>
-      <div class="footer-contacts">
-        <h3>Emergency Contacts</h3>
-        <ul>
-          <li>Police: 100</li>
-          <li>Ambulance: 102</li>
-          <li>Women's Helpline: 1091</li>
-        </ul>
-      </div>
-    </div>
-  </footer>
+      <div class="content-grid">
+        <section class="news-feed">
+          <div class="news-card">
+            <img
+              src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=300&h=200"
+              alt="Police car"
+            />
+            <div class="news-content">
+              <h3>News Title</h3>
+              <p>
+                Recent updates about local safety measures and community
+                initiatives...
+              </p>
+            </div>
+          </div>
+          <div class="news-card">
+            <img
+              src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=300&h=200"
+              alt="CCTV"
+            />
+            <div class="news-content">
+              <h3>Safety Update</h3>
+              <p>New security measures implemented in downtown area...</p>
+            </div>
+          </div>
+          <div class="news-card">
+            <img
+              src="https://images.unsplash.com/photo-1557318041-1ce374d55ebf?auto=format&fit=crop&w=300&h=200"
+              alt="Community"
+            />
+            <div class="news-content">
+              <h3>Community Alert</h3>
+              <p>Important information about recent events in your area...</p>
+            </div>
+          </div>
+          <button class="btn btn-more">More</button>
+        </section>
 
-  <script src="/Forntend/Home/home.js"></script>
-</body>
+        <section class="map-section">
+          <div class="map-container">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.123456789012!2d77.12345678901234!3d28.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDA3JzI0LjQiTiA3N8KwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+              allowfullscreen=""
+              loading="lazy"
+            >
+            </iframe>
+          </div>
+        </section>
+      </div>
+
+      <section class="statistics">
+        <div class="stat-card">
+          <h3>Total no. of cases</h3>
+          <p class="stat-number">2045</p>
+        </div>
+        <div class="stat-card">
+          <h3>No. of case Solved</h3>
+          <p class="stat-number">1045</p>
+        </div>
+        <div class="stat-card">
+          <h3>No. of cases Pending</h3>
+          <p class="stat-number">1000</p>
+        </div>
+        <div class="stat-card">
+          <h3>Cases registered this year</h3>
+          <p class="stat-number">500</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>© 2024 CivicEye. All rights reserved.</p>
+      </footer>
+    </main>
+
+    <script src="home.js"></script>
+  </body>
 </html>
