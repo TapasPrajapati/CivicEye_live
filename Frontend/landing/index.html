@@ -680,21 +680,21 @@
                         <!-- User Registration Form -->
                         <div class="card-front">
                             <h2 class="form-title">User Registration</h2>
-                            <form>
+                            <form id="userForm">
                                 <div class="form-group">
-                                    <input type="text" placeholder="Name" required>
+                                    <input type="text" id="userName" placeholder="Name" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="number" min="18" placeholder="Age" required>
+                                    <input type="number" id="userAge" min="18" placeholder="Age" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="tel" pattern="[0-9]{10}" placeholder="Mobile No." required>
+                                    <input type="tel" id="userMobile"  pattern="[0-9]{10}" placeholder="Mobile No." required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" placeholder="Email" required>
+                                    <input type="email" id="userEmail"  placeholder="Email" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" placeholder="Password" required>
+                                    <input type="password" id="userPassword" placeholder="Password" required>
                                 </div>
                                 <button type="submit" class="submit-btn">Register</button>
                                 <p style="margin-top: 10px; margin-left: 50px;">You have an account?
@@ -706,31 +706,31 @@
                         <!-- Police Registration Form -->
                         <div class="card-back">
                             <h2 class="form-title">Police Registration</h2>
-                            <form>
+                            <form id="policeForm">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <input type="text" placeholder="Police ID" required>
+                                        <input type="text" id="policeId" placeholder="Police ID" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" placeholder="Batch NO." required>
+                                        <input type="text" id="batchNo" placeholder="Batch NO." required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <input type="text" placeholder="Rank" required>
+                                        <input type="text" id="rank"  placeholder="Rank" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="tel" pattern="[0-9]{10}" placeholder="Phone No." required>
+                                        <input type="tel" id="policePhone" pattern="[0-9]{10}" placeholder="Phone No." required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" placeholder="Police Station" required>
+                                    <input type="text" id="station"  placeholder="Police Station" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" placeholder="Email" required>
+                                    <input type="email" id="policeEmail"  placeholder="Email" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" placeholder="Password" required>
+                                    <input type="password" id="policePassword"  placeholder="Password" required>
                                 </div>
                                 <button type="submit" class="submit-btn">Register</button>
                                 <p style="margin-top: 10px; margin-left: 50px;">You have an account?
@@ -788,6 +788,69 @@
     </main>
 
     <script>
+
+        // Handle User Registration
+document.querySelector('#userForm .submit-btn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  
+  const userData = {
+    name: document.getElementById('userName').value,
+    age: document.getElementById('userAge').value,
+    mobile: document.getElementById('userMobile').value,
+    email: document.getElementById('userEmail').value,
+    password: document.getElementById('userPassword').value
+  };
+
+  try {
+    const response = await fetch('http://localhost:5000/register/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData)
+    });
+    
+    if (response.ok) {
+      alert('Registration successful!');
+      loginModal.classList.remove('active');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+// Handle Police Registration
+document.querySelector('#policeForm .submit-btn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  
+  const policeData = {
+    policeId: document.getElementById('policeId').value,
+    batchNo: document.getElementById('batchNo').value,
+    rank: document.getElementById('rank').value,
+    phone: document.getElementById('policePhone').value,
+    station: document.getElementById('station').value,
+    email: document.getElementById('policeEmail').value,
+    password: document.getElementById('policePassword').value
+  };
+
+  try {
+    const response = await fetch('http://localhost:5000/register/police', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(policeData)
+    });
+    
+    if (response.ok) {
+      alert('Police registration successful!');
+      loginModal.classList.remove('active');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
         const openLoginBtn = document.getElementById('openLoginBtn');
 const userLoginModal = document.getElementById('userLoginModal');
 
