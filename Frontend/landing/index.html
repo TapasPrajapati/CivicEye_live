@@ -445,10 +445,16 @@
                     <i data-lucide="phone-call"></i>
                     Emergency
                 </button>
-                <button id="openLoginBtn" class="btn btn-login" >Login</button>
+                <button id="openLoginBtn" class="btn btn-login">Login</button>
                 <button id="showLogin" class="btn btn-signup">Register</button>
+                <div id="profileSection" style="display: none;">
+                    <button id="profileBtn" class="btn btn-profile">
+                        <i data-lucide="user"></i>
+                    </button>
+                </div>
             </div>
         </header>
+
 
         <div class="alert-banner">
             <div class="alert-content">
@@ -566,6 +572,7 @@
                 </div>
               </section>
         </div>
+        
         <div class="login-modal" id="userLoginModal">
             <div class="modal-box">
                 <div class="card">
@@ -575,7 +582,7 @@
                         <span class="show">Show</span>
                     </label>
         
-                    <form class="form">
+                    <form class="form" id="loginForm">
                         <div class="title">Sign In</div>
                         <label class="label_input" for="email-input">Email</label>
                         <input spellcheck="false" class="input" type="email" name="email" id="email-input" required>
@@ -931,6 +938,97 @@ document.querySelector('#userLoginModal form').addEventListener('submit', (e) =>
                 policeLabel.style.color = '#666';
             }
         });
+
+        const profileSection = document.getElementById("profileSection");
+      const profileBtn = document.getElementById("profileBtn");
+      const profileModal = document.getElementById("profileModal");
+      const profileContent = document.getElementById("profileContent");
+
+      // Show login modal
+      openLoginBtn.addEventListener("click", () => {
+        userLoginModal.classList.add("active");
+      });
+
+      // Hide login modal when clicking outside
+      userLoginModal.addEventListener("click", function (e) {
+        if (e.target === userLoginModal) {
+          userLoginModal.classList.remove("active");
+        }
+      });
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById("email-input").value;
+          const password = document.getElementById("password-input").value;
+
+          try {
+            const response = await fetch("http://localhost:5000/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              localStorage.setItem("userData", JSON.stringify(data));
+              alert("Login successful!"); // Show success message
+              userLoginModal.classList.remove("active");
+              profileSection.style.display = "block";
+              openLoginBtn.style.display = "none";
+              showLogin.style.display = "none";
+            } else {
+              alert("Invalid credentials"); // Show error message
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+
+      // Show profile modal
+      profileBtn.addEventListener("click", async () => {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        const { type, data } = userData;
+
+        try {
+          const response = await fetch(
+            'http://localhost:5000/profile/${data._id}'
+          );
+          if (response.ok) {
+            const profileData = await response.json();
+            profileContent.innerHTML = `
+                <p><strong>Name:</strong> ${profileData.name}</p>
+                <p><strong>Email:</strong> ${profileData.email}</p>
+                ${
+                  type === "user"
+                    ? `
+                    <p><strong>Age:</strong> ${profileData.age}</p>
+                    <p><strong>Mobile:</strong> ${profileData.mobile}</p>
+                `
+                    : `
+                    <p><strong>Rank:</strong> ${profileData.rank}</p>
+                    <p><strong>Station:</strong> ${profileData.station}</p>
+                    <p><strong>Phone:</strong> ${profileData.phone}</p>
+                `
+                }
+            `;
+            profileModal.classList.add("active");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      });
+
+      // Hide profile modal when clicking outside
+      profileModal.addEventListener("click", function (e) {
+        if (e.target === profileModal) {
+          profileModal.classList.remove("active");
+        }
+      });
     </script>
     <script src="/Frontend/landing/main.js"></script>
 </body>

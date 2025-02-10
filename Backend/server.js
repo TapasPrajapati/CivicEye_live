@@ -49,31 +49,6 @@ app.post('/register/user', async (req, res) => {
     }
 });
 
-app.get('/login', async function(req, res) {
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(401).json({ success: false, message: 'Invalid Email' });
-        }
-
-        const validPassword = await user.comparePassword(password);
-
-        if (validPassword) {
-            // Return a token for future requests
-            const token = generateToken();
-            res.json({ success: true, token });
-        } else {
-            res.status(401).json({ success: false, message: 'Invalid Password' });
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-});
-
 app.post('/register/police', async (req, res) => {
     try {
         const newPolice = new Police(req.body);
@@ -81,6 +56,55 @@ app.post('/register/police', async (req, res) => {
         res.status(201).send('Police officer registered successfully');
     } catch (error) {
         res.status(400).send(error.message);
+    }
+});
+
+// Login Endpoint
+// Login Endpoint
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Check if the user exists
+        const user = await User.findOne({ email, password });
+        if (user) {
+            return res.status(200).json({ type: 'user', data: user });
+        }
+
+        // Check if the police officer exists
+        const police = await Police.findOne({ email, password });
+        if (police) {
+            return res.status(200).json({ type: 'police', data: police });
+        }
+
+        // If no user or police officer is found
+        res.status(404).send('Invalid credentials');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Fetch User/Police Data Endpoint
+app.get('/profile/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Check if the ID belongs to a user
+        const user = await User.findById(id);
+        if (user) {
+            return res.status(200).json(user);
+        }
+
+        // Check if the ID belongs to a police officer
+        const police = await Police.findById(id);
+        if (police) {
+            return res.status(200).json(police);
+        }
+
+        // If no user or police officer is found
+        res.status(404).send('Profile not found');
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 
