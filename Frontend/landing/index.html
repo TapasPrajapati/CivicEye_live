@@ -558,12 +558,14 @@
             <section class="map-section">
                 <h2>Nearby Police Stations</h2>
                 <div class="map-container">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.123456789012!2d77.12345678901234!3d28.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDA3JzI0LjQiTiA3N8KwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
-                        allowfullscreen="" loading="lazy">
-                    </iframe>
+                  <!-- Add an id "mapIframe" so we can update its src later -->
+                  <iframe id="mapIframe"
+                          src="https://maps.google.com/maps?q=28.123456789012345,77.12345678901234&z=15&output=embed"
+                          allowfullscreen=""
+                          loading="lazy">
+                  </iframe>
                 </div>
-            </section>
+              </section>
         </div>
         <div class="login-modal" id="userLoginModal">
             <div class="modal-box">
@@ -788,6 +790,28 @@
     </main>
 
     <script>
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var mapUrl = "https://maps.google.com/maps?q=" + lat + "," + lng + "&z=15&output=embed";
+        document.getElementById('mapIframe').src = mapUrl;
+      },
+      function (error) {
+        console.error("Error getting location: ", error);
+        // Optionally, you can set a default location or show an error message.
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
 
         // Handle User Registration
 document.querySelector('#userForm .submit-btn').addEventListener('click', async (e) => {
