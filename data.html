@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(251, 245, 234);
+  padding: 20px 200px;
+  border: 0px solid transparent;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  margin: 0 15px;
+}
+
+.navbar li:nth-child(3) {
+  margin-right: 50px; /* Further reduced gap after Cities */
+}
+
+.navbar li:nth-child(4) {
+  margin-left: 5px; /* Further reduced gap before About */
+}
+
+.navbar a {
+  text-decoration: none;
+  color: rgb(43, 43, 138);
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: #00bcd4;
+}
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .crime-header {
+            text-align: left;
+        }
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+h1{
+  text-align: center;
+  color:#990033;
+}
+.desc{
+  padding-top: 20px;
+  text-align: center;
+  color:rgb(97, 98, 99);
+  font-size: 18px;
+}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="/Home.html">Home</a></li>
+      <li><a href="/stories.html">Stories</a></li>
+      <li><a href="/cities">Cities</a></li>
+    </ul>
+    <ul>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/glossery.html">References</a></li>
+      <li><a href="/data.html">Data</a></li>
+    </ul>
+  </nav>
+  <div class="main-header">
+    <h1 class="text-center">Data</h1>
+  </div>
+  <p class="desc">Capital city Delhi always gets tagged as unsafe for women, but it is two other cities that<br> have higher rates of crimes against women — Vijaywada and Gwalior — an analysis of the<br> latest five years of crime d
+  <div class="table-responsive">
+    <div class="table-container">
+      <table>
+          <thead>
+              <tr>
+                  <th>City</th>
+                  <th>Crime</th>
+                  <th>2010</th>
+                  <th>2011</th>
+                  <th>2012</th>
+                  <th>2013</th>
+                  <th>2014</th>
+                  <th>Average</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Acid attack</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>0.1</td>
+                  <td>0.1</td>
+              </tr>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Agrarian riots</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>0.0</td>
+                  <td>0.0</td>
+              </tr>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Arson</td>
+                  <td>0.1</td>
+                  <td>0.1</td>
+                  <td>0.0</td>
+                  <td>0.1</td>
+                  <td>0.3</td>
+                  <td>0.1</td>
+              </tr>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Assault on women with intent to outrage her modesty</td>
+                  <td>6.7</td>
+                  <td>23.6</td>
+                  <td>7.6</td>
+                  <td>20.8</td>
+                  <td>25.7</td>
+                  <td>16.9</td>
+              </tr>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Attempt to acid attack</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>0.0</td>
+                  <td>0.0</td>
+              </tr>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Attempt to commit culpable homicide not amounting to murder</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>4.1</td>
+                  <td>4.1</td>
+              </tr>
+              <tr>
+                  <td>Agra</td>
+                  <td class="crime-header">Attempt to commit murder</td>
+                  <td>4.6</td>
+                  <td>7.2</td>
+                  <td>4.6</td>
+                  <td>5.2</td>
+                  <td>5.0</td>
+                  <td>5.3</td>
+              </tr>
+              <tr>
+                <td>Agra</td>
+                <td class="crime-header">Attempt to commit murder</td>
+                <td>4.6</td>
+                <td>7.2</td>
+                <td>4.6</td>
+                <td>5.2</td>
+                <td>5.0</td>
+                <td>5.3</td>
+            </tr>
+            <tr>
+              <td>Agra</td>
+              <td class="crime-header">Attempt to commit murder</td>
+              <td>4.6</td>
+              <td>7.2</td>
+              <td>4.6</td>
+              <td>5.2</td>
+              <td>5.0</td>
+              <td>5.3</td>
+          </tr>
+          <tr>
+            <td>Agra</td>
+            <td class="crime-header">Attempt to commit murder</td>
+            <td>4.6</td>
+            <td>7.2</td>
+            <td>4.6</td>
+            <td>5.2</td>
+            <td>5.0</td>
+            <td>5.3</td>
+        </tr>
+        <tr>
+          <td>Agra</td>
+          <td class="crime-header">Attempt to commit murder</td>
+          <td>4.6</td>
+          <td>7.2</td>
+          <td>4.6</td>
+          <td>5.2</td>
+          <td>5.0</td>
+          <td>5.3</td>
+      </tr>
+      <tr>
+        <td>Agra</td>
+        <td class="crime-header">Attempt to commit murder</td>
+        <td>4.6</td>
+        <td>7.2</td>
+        <td>4.6</td>
+        <td>5.2</td>
+        <td>5.0</td>
+        <td>5.3</td>
+    </tr>
+    <tr>
+      <td>Agra</td>
+      <td class="crime-header">Attempt to commit murder</td>
+      <td>4.6</td>
+      <td>7.2</td>
+      <td>4.6</td>
+      <td>5.2</td>
+      <td>5.0</td>
+      <td>5.3</td>
+  </tr>
+  <tr>
+    <td>Agra</td>
+    <td class="crime-header">Attempt to commit murder</td>
+    <td>4.6</td>
+    <td>7.2</td>
+    <td>4.6</td>
+    <td>5.2</td>
+    <td>5.0</td>
+    <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<var> <tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+ <tr>
+      <td>Agra</td>
+      <td class="crime-header">Attempt to commit murder</td>
+      <td>4.6</td>
+      <td>7.2</td>
+      <td>4.6</td>
+      <td>5.2</td>
+      <td>5.0</td>
+      <td>5.3</td>
+  </tr>
+  <tr>
+    <td>Agra</td>
+    <td class="crime-header">Attempt to commit murder</td>
+    <td>4.6</td>
+    <td>7.2</td>
+    <td>4.6</td>
+    <td>5.2</td>
+    <td>5.0</td>
+    <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+<tr>
+  <td>Agra</td>
+  <td class="crime-header">Attempt to commit murder</td>
+  <td>4.6</td>
+  <td>7.2</td>
+  <td>4.6</td>
+  <td>5.2</td>
+  <td>5.0</td>
+  <td>5.3</td>
+</tr>
+          </tbody>
+      </table>
+  </div>
+  </div>
+</body>
+</html>

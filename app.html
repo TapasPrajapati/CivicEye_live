@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Rate Analysis by City</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bar-city {
+            opacity: 0.8; /* Slightly more opaque for city bars */
+        }
+        .bar-national {
+            opacity: 0.5; /* More transparent for national bars */
+        }
+        .legend rect {
+            opacity: 0.8; /* Slightly more opaque legend rects */
+        }
+
+        .chart-container {
+            margin-bottom: 20px; /* Space between charts */
+        }
+        .axis-label {
+          font-size: 12px; /* Adjust font size as needed */
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Crime Rate Analysis by City</h1>
+    <div class="dropdown">
+        <label for="city-select">Select City:</label>
+        <select id="city-select">
+            <option value="Agra">Agra</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+        </select>
+    </div>
+    <div id="charts-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
