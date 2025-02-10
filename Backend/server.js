@@ -49,6 +49,31 @@ app.post('/register/user', async (req, res) => {
     }
 });
 
+app.get('/login', async function(req, res) {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ success: false, message: 'Invalid Email' });
+        }
+
+        const validPassword = await user.comparePassword(password);
+
+        if (validPassword) {
+            // Return a token for future requests
+            const token = generateToken();
+            res.json({ success: true, token });
+        } else {
+            res.status(401).json({ success: false, message: 'Invalid Password' });
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
 app.post('/register/police', async (req, res) => {
     try {
         const newPolice = new Police(req.body);
