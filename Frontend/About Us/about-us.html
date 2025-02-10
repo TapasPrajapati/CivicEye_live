@@ -4,23 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us - Crime Reporting</title>
-  <link rel="stylesheet" href="/Forntend/About Us/about-us.css">
+  <link rel="stylesheet" href="/Frontend/About Us/about-us.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container">
-      <a href="/Forntend/Home/index.html" class="logo">CrimeReport</a>
-      <ul class="nav-links">
-        <li><a href="/Forntend/Home/index.html">Home</a></li>
-        <li><a href="/Forntend/How-it-works/how-it-works.html">How It Works</a></li>
-        <li><a href="/Forntend/About Us/about-us.html">About Us</a></li>
-        <li><a href="/Forntend/Contact Us/contact-us.html">Contact</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-      </ul>
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button class="close-btn" id="closeNav">
+        <i data-lucide="chevron-left"></i>
+      </button>
+      <div class="logo">
+        <i data-lucide="shield"></i>
+        <span>CivicEye</span>
+      </div>
     </div>
+    <ul class="nav-links">
+      <li>
+        <a href="/Frontend/Home/index.html" class="active"><i data-lucide="home"></i>Home</a>
+      </li>
+      <li>
+        <a href="#"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      </li>
+      <li>
+        <a href="/Frontend/How-it-works/how-it-works.html"><i data-lucide="help-circle"></i>How it works</a>
+      </li>
+      <li>
+        <a href="/Frontend/Contact Us/contact-us.html"><i data-lucide="phone"></i>Contact</a>
+      </li>
+      <li>
+        <a href="/Frontend/About Us/about-us.html"><i data-lucide="users"></i>About Us</a>
+      </li>
+      <li>
+        <a href="/Frontend/Privacy-Policy/privacy-policy.html"><i data-lucide="shield"></i>Privacy and Policy</a>
+      </li>
+    </ul>
   </nav>
+
+  <main class="main-content">
+    <header class="top-nav">
+      <button class="menu-btn" id="openNav">
+        <i data-lucide="menu"></i>
+      </button>
+      <div class="brand">CivicEye</div>
+      <div class="user-actions">
+        <button class="btn btn-login">Login</button>
+        <button class="btn btn-signup">Signup</button>
+        <div class="profile-pic">
+          <img
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=40&h=40"
+            alt="Profile"
+          />
+        </div>
+      </div>
+    </header>
 
   <!-- Mission and Vision Section -->
   <section class="mission-vision">
@@ -114,5 +151,6 @@
       </div>
     </div>
   </footer>
+  <script src="/Frontend/About Us/about-us.js"></script>
 </body>
 </html>

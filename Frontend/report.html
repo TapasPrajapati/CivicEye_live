@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Case - CivicEye</title>
+    <link rel="stylesheet" href="/Frontend/landing/style.css">
+    <link rel="stylesheet" href="/Frontend/report.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-btn" id="closeNav">
+                <i data-lucide="chevron-left"></i>
+            </button>
+            <div class="logo">
+                <i data-lucide="shield-alert"></i>
+                <span>CivicEye</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/Frontend/landing/index.html" class="active">
+                    <i data-lucide="home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Home/index.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/report.html">
+                    <i data-lucide="file-text"></i>
+                    <span>Report Case</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Track_case/track.html">
+                    <i data-lucide="search"></i>
+                    <span>Track Case</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/emergency.html">
+                    <i data-lucide="phone"></i>
+                    <span>Emergency Contacts</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Home/index.html">
+                    <i data-lucide="help-circle"></i>
+                    <span>Help Guide</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Home/index.html">
+                    <i data-lucide="shield"></i>
+                    <span>Safety Tips</span>
+                </a>
+            </li>
+        </ul>
+        <div class="emergency-section">
+            <div class="emergency-title">
+                <i data-lucide="phone-call"></i>
+                <span>Emergency Numbers</span>
+            </div>
+            <div class="emergency-numbers">
+                <a href="tel:100" class="emergency-item" style="color: #FFFF;">
+                    <span class="service">Police</span>
+                    <span class="number">100</span>
+                </a>
+                
+                <a href="tel:1091" class="emergency-item" style="color: #FFFF;">
+                    <span class="service">Women Helpline</span>
+                    <span class="number">1091</span>
+                </a>
+                <a href="tel:102" class="emergency-item" style="color: #FFFF;">
+                    <span class="service">Ambulance</span>
+                    <span class="number">102</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-nav">
+            <div class="nav-left">
+                <button class="menu-btn" id="openNav">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="brand" onclick="window.location.href='/Frontend/landing/index.html'" style="cursor: pointer;">
+                    <i data-lucide="shield-alert"></i>
+                    <span>CivicEye</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="btn btn-emergency">
+                    <i data-lucide="phone-call"></i>
+                    Emergency
+                </button>
+                <button class="btn btn-login">Login</button>
+                <button class="btn btn-signup">Register</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <h1>Report a Crime</h1>
+            <form id="crimeForm">
+                <!-- Personal Information -->
+                <fieldset>
+                    <legend>Your Information</legend>
+                    <div class="form-group">
+                        <label for="name">Full Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+                    </div>
+                </fieldset>
+    
+                <!-- Crime Details -->
+                <fieldset>
+                    <legend>Crime Details</legend>
+                    <div class="form-group">
+                        <label for="crimeType">Type of Crime:</label>
+                        <select id="crimeType" name="crimeType" required>
+                            <option value="">Select Crime Type</option>
+                            <option value="theft">Theft/Burglary</option>
+                            <option value="assault">Assault</option>
+                            <option value="vandalism">Vandalism</option>
+                            <option value="fraud">Fraud</option>
+                            <option value="cyber">Cyber Crime</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date & Time of Incident:</label>
+                        <input type="datetime-local" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" placeholder="Enter location or address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Incident Description:</label>
+                        <textarea id="description" name="description" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="evidence">Upload Evidence (photos, documents):</label>
+                        <input type="file" id="evidence" name="evidence" multiple accept="image/*,.pdf,.doc,.docx">
+                    </div>
+                </fieldset>
+    
+                <!-- Consent -->
+                <div class="consent">
+                    <input type="checkbox" id="consent" name="consent" required>
+                    <label for="consent">I confirm that the information provided is accurate to the best of my knowledge</label>
+                </div>
+    
+                <button type="submit" class="sub">Submit Report</button>
+            </form>
+    
+            <div id="confirmation" class="hidden">
+                <h2>Report Submitted Successfully!</h2>
+                <p>Your report ID: <span id="reportId"></span></p>
+                <p>We will contact you shortly regarding this matter.</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Emergency Contacts</h3>
+                    <ul>
+                        <a href="tel:100" style="color: #fff; text-decoration: none;">
+                        <li><strong>Police:</strong> 100</li>
+                        </a>
+                        <a href="tel:1091" style="color: #fff; text-decoration: none;">
+                        <li><strong>Women's Helpline:</strong> 1091</li>
+                        </a>
+                        <a href="tel:102" style="color: #fff; text-decoration: none;">
+                        <li><strong>Ambulance:</strong> 102</li>
+                        </a>
+                        <a href="tel:1098" style="color: #fff; text-decoration: none;">
+                        <li><strong>Child Helpline:</strong> 1098</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/Frontend/report.html">Report Case</a></li>
+                        <li><a href="/Frontend/Track_case/track.html">Track Case</a></li>
+                        <li><a href="#">Safety Tips</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 CivicEye. All rights reserved.</p>
+            </div>
+        </footer>
+    </main>
+
+    <script src="/Frontend/landing/main.js"></script>
+    <script src="/Frontend/report.js"></script>
+</body>
+</html>

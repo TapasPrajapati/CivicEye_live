@@ -1,11 +1,11 @@
 // Initialize Lucide icons (do this *once* at the beginning)
 lucide.createIcons();
 async function fixSidebarVisibility() {
-  const sidebar = $0.parentElement;
-  await setElementStyles(sidebar, {
-    transform: 'none',
-    left: '0px',
-  });
+    const sidebar = $0.parentElement;
+    await setElementStyles(sidebar, {
+        transform: 'none',
+        left: '0px',
+    });
 }
 fixSidebarVisibility();
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.classList.remove('open');
     });
 
-    closeButton.addEventListener('click',()=>{
-      sidebar.style.display = 'none';
+    closeButton.addEventListener('click', () => {
+        sidebar.style.display = 'none';
     })
 
     // Close sidebar if clicked outside on smaller screens

@@ -1,0 +1,100 @@
+.container {
+    max-width: 800px;
+    margin-top: 25px;
+    margin: 25px auto 45px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+legend {
+    padding: 0 10px;
+    color: #34495e;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+input[type="file"] {
+    padding: 3px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.sub {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+sub:hover {
+    background-color: #2980b9;
+}
+
+.consent {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.consent label {
+    margin-bottom: 0;
+    font-weight: normal;
+}
+
+.hidden {
+    display: none;
+}
+
+#confirmation {
+    text-align: center;
+    padding: 30px;
+    background-color: #e8f5e9;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#confirmation h2 {
+    color: #2ecc71;
+    margin-bottom: 15px;
+}

@@ -1,0 +1,165 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tracker-form {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+}
+
+.tracker-form input {
+    padding: 12px;
+    width: 300px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.tracker-form button {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.case-details {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin: 30px 0;
+    text-align: center;
+}
+
+.case-details h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.case-details p {
+    margin: 10px 0;
+    color: #34495e;
+}
+
+.status-timeline {
+    position: relative;
+    margin: 50px 0;
+    padding: 20px 0;
+}
+
+.progress-line {
+    position: absolute;
+    height: 4px;
+    background-color: #eee;
+    width: 80%;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.status-steps-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+}
+
+.status-step {
+    flex: 0 1 23%;
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+}
+.status-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin: 0 auto 15px;
+    border: 3px solid;
+}
+
+/* Status Colors */
+.status-filed .status-icon {
+    border-color: #8e44ad;  /* Changed to purple */
+    color: #8e44ad;
+}
+
+.status-review .status-icon {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.status-investigation .status-icon {
+    border-color: #f1c40f;
+    color: #f1c40f;
+}
+
+.status-resolved .status-icon {
+    border-color: #27ae60;
+    color: #27ae60;
+}
+
+.status-filed.active {
+    background-color: #f3e8ff;
+    border-left: 4px solid #8e44ad;
+}
+
+.status-review.active {
+    background-color: #ebf5fb;
+    border-left: 4px solid #3498db;
+}
+
+.status-investigation.active {
+    background-color: #fcf3cf;
+    border-left: 4px solid #f1c40f;
+}
+
+.status-resolved.active {
+    background-color: #e9f7ef;
+    border-left: 4px solid #27ae60;
+}
+
+#caseStatus {
+    display: none;
+}
+
+#caseStatus.visible {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .status-steps-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .status-step {
+        width: 100%;
+        flex: 1 0 auto;
+    }
+    
+    .progress-line {
+        display: none;
+    }
+}

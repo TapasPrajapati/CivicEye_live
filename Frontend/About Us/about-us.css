@@ -1,33 +1,22 @@
-:root {
-  --primary-color: #487fbe;
-  --secondary-color: #9ba8bc;
-  --accent-color: #dc143c;
-  --background: #e4cbcb;
-  --text-color: #120f0f;
-  --light-text: #6b7280;
-  --white: #ffffff;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
-}
-
-/* changes on whole document */
+/* General Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Body */
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--background);
-  color: var(--text-color);
-  display: flex;
-  min-height: 100vh;
-  transition: var(--transition);
+  line-height: 1.6;
+  background-color: #F5F5F5;
+  color: #333333;
 }
 
-/* Sidebar after opened */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 .sidebar {
   width: 280px;
   background-color:#0A2647 ;
@@ -103,7 +92,7 @@ body {
 
 /* Navigation (Sidebar Links & Menu Button) */
 .menu-btn {
-  display: none; /* Hide by default */
+  display: none; 
   background: none;
   border: none;
   cursor: pointer;
@@ -208,138 +197,147 @@ body {
 }
 
 
-/* Alert Banner */
-.alert-banner {
-  background-color: #ec9090;
-  border: 1px solid #fee2e2;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin: 1rem 2rem;
-  border-radius: 0.5rem;
+/* Mission and Vision Section */
+.mission-vision {
+  padding: 4rem 0;
   text-align: center;
 }
 
-/* fir registration button  */
-.btn-register {
-  background-color: var(--accent-color);
-  color: var(--white);
-  border: none;
-  padding: 0.8rem 2rem;
-  font-weight: 600;
-  animation: pulse 1.5s infinite;
+.mission-vision h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #0A2647;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* Content Grid */
-.content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 2rem;
-}
-
-/* News Feed */
-.news-feed {
-  border: 2px solid var(--primary-color);
+.mission, .vision {
+  background-color: #FFFFFF;
   padding: 1.5rem;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
-.news-card {
-  background-color: var(--white);
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  overflow: hidden;
+.mission h2, .vision h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #0A2647;
 }
 
-.news-card img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
+.mission p, .vision p {
+  font-size: 1rem;
+  color: #333333;
 }
 
-.news-content {
-  padding: 1rem;
-  flex: 1;
+/* Team Introduction Section */
+.team {
+  padding: 4rem 0;
+  background-color: #F5F5F5;
 }
 
-.news-content h3 {
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
-}
-
-.btn-more {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--primary-color);
-  color: var(--white);
-  border: none;
-  margin-top: 1rem;
-}
-
-/* Map Section */
-.map-container {
-  background-color: var(--white);
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  height: 100%;
-}
-
-.map-container iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* Statistics Section */
-.statistics {
-  display: grid;
-  margin-left: 50px;
-  margin-right: 50px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 60px;
-  padding: 0 2rem 2rem;
-}
-
-.stat-card {
-  background-color: var(--white);
-  padding: 1.5rem;
-  padding-top: 70px;
-  padding-bottom: 100px;
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow);
+.team h2 {
   text-align: center;
-}
-
-.stat-number {
   font-size: 2rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  color: #0A2647;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-member {
+  background-color: #FFFFFF;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.team-member img {
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.team-member h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #0A2647;
+}
+
+.team-member p {
+  font-size: 1rem;
+  color: #333333;
+}
+
+/* Partnerships Section */
+.partnerships {
+  padding: 4rem 0;
+}
+
+.partnerships h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #0A2647;
+}
+
+.partnership-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.partnership {
+  background-color: #FFFFFF;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.partnership h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #0A2647;
+}
+
+.partnership p {
+  font-size: 1rem;
+  color: #333333;
 }
 
 /* Footer */
 .footer {
-  text-align: center;
-  padding: 2rem;
-  background-color: var(--white);
-  border-top: 1px solid #e5e7eb;
+  background-color: #0A2647;
+  color: #FFFFFF;
+  padding: 2rem 0;
 }
+
+.footer .container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.footer h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.footer ul {
+  list-style: none;
+}
+
+.footer ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer ul li a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
 
 /* Responsive Design */
 @media (min-width: 300px) {
