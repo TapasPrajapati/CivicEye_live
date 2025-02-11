@@ -327,7 +327,7 @@ body {
 
 /* News Section */
 .news-section {
-    grid-column: span 1;
+    grid-column: span 2;
     background-color: var(--white);
     padding: 1.5rem;
     border-radius: 0.5rem;
@@ -383,6 +383,7 @@ body {
 
 /* Map Section */
 .map-section {
+    grid-column: span 2;
     background-color: var(--white);
     padding: 1.5rem;
     border-radius: 0.5rem;
