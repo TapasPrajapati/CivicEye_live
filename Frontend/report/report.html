@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Case - CivicEye</title>
     <link rel="stylesheet" href="/Frontend/landing/style.css">
-    <link rel="stylesheet" href="/Frontend/report.css">
+    <link rel="stylesheet" href="/Frontend/report/report.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -110,7 +110,7 @@
 
         <div class="container">
             <h1>Report a Crime</h1>
-            <form id="crimeForm">
+            <form id="crimeForm" onsubmit="submitReport(event)" enctype="multipart/form-data">
                 <!-- Personal Information -->
                 <fieldset>
                     <legend>Your Information</legend>
@@ -124,7 +124,7 @@
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number:</label>
-                        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+                        <input type="tel" id="phone" name="phone"  required>
                     </div>
                 </fieldset>
     
@@ -174,6 +174,7 @@
                 <h2>Report Submitted Successfully!</h2>
                 <p>Your report ID: <span id="reportId"></span></p>
                 <p>We will contact you shortly regarding this matter.</p>
+                <button id="goBack" class="btn-back">Go Back</button>
             </div>
         </div>
 
@@ -219,8 +220,9 @@
             </div>
         </footer>
     </main>
+  
 
     <script src="/Frontend/landing/main.js"></script>
-    <script src="/Frontend/report.js"></script>
+    <script src="/Frontend/report/report.js"></script>
 </body>
 </html>
