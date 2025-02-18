@@ -1,117 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FIR Management - Admin Dashboard</title>
-    <link rel="stylesheet" href="/Frontend/Admin/admin.css">
-    <link rel="stylesheet" href="/Frontend/Admin/fir-management.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/Frontend/Admin/admin.css" />
+    <link rel="stylesheet" href="/Frontend/Admin/fir-management.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <div class="container">
-        <!-- Sidebar (same as index.html) -->
-        <nav class="sidebar">
-            <div class="logo">
-                <h2>FIR Admin</h2>
+      <!-- Sidebar (same as index.html) -->
+      <nav class="sidebar">
+        <div class="logo">
+          <h2>FIR Admin</h2>
+        </div>
+        <ul class="nav-links">
+          <li data-page="dashboard">
+            <i class="fas fa-home"></i>
+            <a href="/Frontend/Admin/admin.html" class="nav-buttons">
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="active" data-page="fir-management">
+            <i class="fas fa-file-alt"></i>
+            <a href="/Frontend/Admin/fir-management.html" class="nav-buttons">
+              <span>FIR Management</span>
+            </a>
+          </li>
+          <li data-page="user-management">
+            <i class="fas fa-users"></i>
+            <a href="#" class="nav-buttons">
+              <span>User Management</span>
+            </a>
+          </li>
+          <li data-page="hotspots">
+            <i class="fas fa-map-marker-alt"></i>
+            <a href="#" class="nav-buttons">
+              <span>Crime Hotspots</span>
+            </a>
+          </li>
+          <li data-page="officers">
+            <i class="fas fa-user-shield"></i>
+            <a href="/Frontend/Admin/officers.html" class="nav-buttons">
+              <span>Officers</span>
+            </a>
+          </li>
+          <li data-page="analytics">
+            <i class="fas fa-chart-bar"></i>
+            <a href="#" class="nav-buttons">
+              <span>Analytics</span>
+            </a>
+          </li>
+          <li data-page="settings">
+            <i class="fas fa-cog"></i>
+            <a href="#" class="nav-buttons">
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header>
+          <div class="header-content">
+            <div class="search-bar">
+              <input type="text" placeholder="Search FIRs..." />
+              <i class="fas fa-search"></i>
             </div>
-            <ul class="nav-links">
-                <li data-page="dashboard">
-                    <i class="fas fa-home"></i>
-                    <a href="/Frontend/Admin/admin.html"><span>Dashboard</span></a>
-                    
-                </li>
-                <li class="active" data-page="fir-management">
-                    <i class="fas fa-file-alt"></i>
-                    <span>FIR Management</span>
-                </li>
-                <li data-page="user-management">
-                    <i class="fas fa-users"></i>
-                    <span>User Management</span>
-                </li>
-                <li data-page="hotspots">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Crime Hotspots</span>
-                </li>
-                <li data-page="officers">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Officers</span>
-                </li>
-                <li data-page="analytics">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Analytics</span>
-                </li>
-                <li data-page="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header>
-                <div class="header-content">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search FIRs...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="user-profile">
-                        <div class="notifications">
-                            <i class="fas fa-bell"></i>
-                            <span class="badge">3</span>
-                        </div>
-                        <img src="https://via.placeholder.com/40" alt="Admin Profile" class="profile-img">
-                        <span>Admin User</span>
-                    </div>
-                </div>
-            </header>
-
-            <!-- FIR Management Content -->
-            <div class="fir-management-content">
-                <div class="fir-header">
-                    <h1>FIR Management</h1>
-                    <div class="fir-actions">
-                        <div class="filter-group">
-                            <select id="statusFilter">
-                                <option value="all">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="investigating">Under Investigation</option>
-                                <option value="resolved">Resolved</option>
-                            </select>
-                            <select id="dateFilter">
-                                <option value="all">All Time</option>
-                                <option value="today">Today</option>
-                                <option value="week">This Week</option>
-                                <option value="month">This Month</option>
-                            </select>
-                        </div>
-                        <button class="export-btn">
-                            <i class="fas fa-download"></i> Export Data
-                        </button>
-                    </div>
-                </div>
-
-                <!-- FIR List -->
-                <div class="fir-list">
-                    <!-- FIR items will be dynamically added here -->
-                </div>
-
-                <!-- FIR Detail Modal -->
-                <div id="firDetailModal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2>FIR Details</h2>
-                            <span class="close-modal">&times;</span>
-                        </div>
-                        <div class="modal-body">
-                            <!-- FIR details will be dynamically added here -->
-                        </div>
-                    </div>
-                </div>
+            <div class="user-profile">
+              <div class="notifications">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+              </div>
+              <img
+                src="https://via.placeholder.com/40"
+                alt="Admin Profile"
+                class="profile-img"
+              />
+              <span>Admin User</span>
             </div>
-        </main>
+          </div>
+        </header>
+
+        <!-- FIR Management Content -->
+        <div class="fir-management-content">
+          <div class="fir-header">
+            <h1>FIR Management</h1>
+            <div class="fir-actions">
+              <div class="filter-group">
+                <select id="statusFilter">
+                  <option value="all">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="investigating">Under Investigation</option>
+                  <option value="resolved">Resolved</option>
+                </select>
+                <select id="dateFilter">
+                  <option value="all">All Time</option>
+                  <option value="today">Today</option>
+                  <option value="week">This Week</option>
+                  <option value="month">This Month</option>
+                </select>
+              </div>
+              <button class="export-btn">
+                <i class="fas fa-download"></i> Export Data
+              </button>
+            </div>
+          </div>
+
+          <!-- FIR List -->
+          <div class="fir-list">
+            <!-- FIR items will be dynamically added here -->
+          </div>
+
+          <!-- FIR Detail Modal -->
+          <div id="firDetailModal" class="modal">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>FIR Details</h2>
+                <span class="close-modal">&times;</span>
+              </div>
+              <div class="modal-body">
+                <!-- FIR details will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
     <script src="/Frontend/Admin/fir-management.js"></script>
-</body>
+  </body>
 </html>
