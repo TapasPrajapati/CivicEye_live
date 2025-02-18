@@ -2,11 +2,24 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+const multer = require('multer');
+const path = require('path');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Append the file extension
+    }
+});
 
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
+});
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/CivicEye', {
     useNewUrlParser: true,
@@ -34,7 +47,42 @@ const policeSchema = new mongoose.Schema({
     email: String,
     password: String
 });
+const reportSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    phone: String,
+    crimeType: String,
+    date: Date,
+    location: String,
+    description: String,
+    evidence: [String],
+    createdAt: { type: Date, default: Date.now }
+});
 
+const Report = mongoose.model('Report', reportSchema);
+
+app.post('/submit-report', upload.array('evidence'), async (req, res) => {
+    try {
+        console.log('Request Body:', req.body); // Debugging: Log the request body
+        console.log('Uploaded Files:', req.files); // Debugging: Log the uploaded files
+
+        const reportData = req.body;
+        reportData.evidence = req.files.map(file => file.path); // Store file paths
+
+        console.log('Report Data:', reportData); // Debugging: Log the report data
+
+        const newReport = new Report(reportData);
+        await newReport.save();
+
+        console.log('Report Saved:', newReport); // Debugging: Log the saved report
+
+        res.status(201).json({ message: 'Report submitted successfully', reportId: newReport._id });
+    } catch (error) {
+        console.error('Error:', error); // Debugging: Log the error
+        res.status(400).send(error.message);
+    }
+});
+app.use('/uploads', express.static('uploads'));
 const User = mongoose.model('User', userSchema);
 const Police = mongoose.model('Police', policeSchema);
 
