@@ -81,9 +81,10 @@ body {
 }
 
 /* Adjust main content when sidebar is collapsed */
-.sidebar.collapsed + .main-content {
+.sidebar.collapsed+.main-content {
   margin-left: 70px;
 }
+
 .logo {
   padding: 20px 0;
   text-align: center;
