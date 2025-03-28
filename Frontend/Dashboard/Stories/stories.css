@@ -15,11 +15,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color:rgb(251, 245, 234);
+  background-color: #3b82f6;
   padding: 20px 200px;
   border: 0px solid transparent;
 }
-
 .navbar ul {
   list-style: none;
   display: flex;
@@ -41,7 +40,7 @@ body {
 
 .navbar a {
   text-decoration: none;
-  color: rgb(43, 43, 138);
+  color: rgb(240, 240, 247);
   font-size: 20px;
   transition: color 0.3s;
 }
