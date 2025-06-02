@@ -653,14 +653,14 @@ input:checked+.slider:before {
 
     .sidebar.open {
         transform: translateX(0);
+    }
 
-        .sidebar.open+.main-content {
-            margin-left: 280px;
-        }
+    .sidebar.open + .main-content {
+        margin-left: 280px;
+    }
 
-        .content-grid {
-            grid-template-columns: 1fr;
-        }
+    .sidebar.open .content-grid {
+        grid-template-columns: 1fr;
     }
 
     /* Footer */
