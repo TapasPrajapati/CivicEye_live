@@ -357,6 +357,13 @@ body {
     background-color: #f5f5f5;
 }
 
+.news-source {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #666;
+    font-style: italic;
+  }
+
 .news-ticker {
     position: absolute;
     width: 100%;
@@ -364,7 +371,8 @@ body {
 }
 
 .ticker-headline {
-    height: 70%; /* 4 headlines visible at once (100%/4) */
+    height: 25%; /* For 4 visible items in 400px container */
+  /* Keep your existing styles */
     display: flex;
     align-items: center;
     padding: 1.2rem 1rem;
@@ -397,7 +405,7 @@ body {
         transform: translateY(0);
     }
     100% {
-        transform: translateY(-100%);
+        transform: translateY(-50%);
     }
 }
 
