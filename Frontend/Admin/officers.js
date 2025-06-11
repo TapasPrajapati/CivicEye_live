@@ -1,64 +1,64 @@
     // Mock Officers data
 const mockOfficers = [
-    {
-        id: "OFF001",
-        name: "John Smith",
-        badge: "B12345",
-        rank: "inspector",
-        status: "active",
-        photo: "https://via.placeholder.com/60",
-        department: "Criminal Investigation",
-        contact: "+1234567890",
-        email: "john.smith@police.gov",
-        joinDate: "2020-05-15",
-        performance: {
-            casesResolved: 45,
-            activeInvestigations: 8,
-            responseTime: "2.5 hours"
-        },
-        assignedCases: [
-            { id: "FIR2024001", type: "Theft", date: "2024-02-20" },
-            { id: "FIR2024005", type: "Assault", date: "2024-02-18" }
-        ]
+  {
+    id: "OFF001",
+    name: "Rahul Sharma",
+    badge: "B12345",
+    rank: "inspector",
+    status: "active",
+    photo: "https://www.flaticon.com/free-icons/police",
+    department: "Criminal Investigation",
+    contact: "+1234567890",
+    email: "Rahul.Sharma@police.gov",
+    joinDate: "2020-05-15",
+    performance: {
+      casesResolved: 45,
+      activeInvestigations: 8,
+      responseTime: "2.5 hours",
     },
-    {
-        id: "OFF002",
-        name: "Sarah Johnson",
-        badge: "B12346",
-        rank: "subInspector",
-        status: "active",
-        photo: "https://via.placeholder.com/60",
-        department: "Cyber Crime",
-        contact: "+1234567891",
-        email: "sarah.johnson@police.gov",
-        joinDate: "2021-03-10",
-        performance: {
-            casesResolved: 32,
-            activeInvestigations: 5,
-            responseTime: "1.8 hours"
-        },
-        assignedCases: [
-            { id: "FIR2024002", type: "Cybercrime", date: "2024-02-19" }
-        ]
+    assignedCases: [
+      { id: "FIR2024001", type: "Theft", date: "2024-02-20" },
+      { id: "FIR2024005", type: "Assault", date: "2024-02-18" },
+    ],
+  },
+  {
+    id: "OFF002",
+    name: "Ananya Joshi",
+    badge: "B12346",
+    rank: "subInspector",
+    status: "active",
+    photo: ".Frontend/Assets/Male_police.png",
+    department: "Cyber Crime",
+    contact: "+1234567891",
+    email: "Ananya.Joshi@police.gov",
+    joinDate: "2021-03-10",
+    performance: {
+      casesResolved: 32,
+      activeInvestigations: 5,
+      responseTime: "1.8 hours",
     },
-    {
-        id: "OFF003",
-        name: "Mike Wilson",
-        badge: "B12347",
-        rank: "constable",
-        status: "onLeave",
-        photo: "https://via.placeholder.com/60",
-        department: "Traffic",
-        contact: "+1234567892",
-        email: "mike.wilson@police.gov",
-        joinDate: "2022-01-20",
-        performance: {
-            casesResolved: 28,
-            activeInvestigations: 0,
-            responseTime: "2.1 hours"
-        },
-        assignedCases: []
-    }
+    assignedCases: [
+      { id: "FIR2024002", type: "Cybercrime", date: "2024-02-19" },
+    ],
+  },
+  {
+    id: "OFF003",
+    name: "Karthik Nair",
+    badge: "B12347",
+    rank: "constable",
+    status: "onLeave",
+    photo: "https://via.placeholder.com/60",
+    department: "Traffic",
+    contact: "+1234567892",
+    email: "Karthik.Nair@police.gov",
+    joinDate: "2022-01-20",
+    performance: {
+      casesResolved: 28,
+      activeInvestigations: 0,
+      responseTime: "2.1 hours",
+    },
+    assignedCases: [],
+  },
 ];
 
 // Initialize Officers list

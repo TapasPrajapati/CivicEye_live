@@ -353,7 +353,12 @@ body {
 }
 
 /* Animation for the ticker - merged both keyframes */
-@keyframes scroll, ticker-scroll {
+@keyframes scroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+@keyframes ticker-scroll {
     0% { transform: translateY(0); }
     100% { transform: translateY(-50%); }
 }
