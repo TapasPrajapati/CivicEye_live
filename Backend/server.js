@@ -57,7 +57,8 @@ const policeSchema = new mongoose.Schema({
     phone: String,
     station: String,
     email: String,
-    password: String
+    password: String,
+    isAdmin: { type: Boolean, default: false }
 });
 
 const reportSchema = new mongoose.Schema({

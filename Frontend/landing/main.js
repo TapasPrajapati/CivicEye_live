@@ -97,20 +97,38 @@ document.addEventListener("DOMContentLoaded", function () {
   // News API Integration with Infinite Scroll
   const API_KEYS = {
     newsAPI: "a9c94c80e2f845d2ae73c571aa3fc47d",
-    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e",
+    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e", // Removed backticks
   };
 
-  const newsTicker = document.getElementById("newsTicker");
+  const newsTicker = document.getElementById("news-ticker");
 
   if (newsTicker) {
-    // Track current news items
     let currentNewsItems = [];
-    let tickerAnimation;
+    let isFetching = false;
+    let lastFetchTime = 0;
+    let cleanupTicker = null; // To store cleanup function
+
+    async function fetchWithTimeout(url, options = {}, timeout = 8000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      try {
+        const response = await fetch(url, {
+          ...options,
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }
 
     async function fetchNewsAPI() {
       try {
-        const response = await fetch(
-          `https://newsapi.org/v2/top-headlines?q=crime&country=in&pageSize=10&apiKey=${API_KEYS.newsAPI}`
+        const response = await fetchWithTimeout(
+          `https://newsapi.org/v2/top-headlines?q=crime&country=in&pageSize=15&apiKey=${API_KEYS.newsAPI}`
         );
         const data = await response.json();
         return (
@@ -119,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
             source: "NewsAPI",
             isBreaking: true,
             url: article.url,
+            timestamp: new Date(article.publishedAt),
           })) || []
         );
       } catch (error) {
@@ -129,16 +148,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchGNews() {
       try {
-        const response = await fetch(
-          `https://gnews.io/api/v4/top-headlines?q=crime&country=in&max=10&token=${API_KEYS.gNewsAPI}`
+        const response = await fetchWithTimeout(
+          `https://gnews.io/api/v4/top-headlines?q=crime&country=in&max=15&token=${API_KEYS.gNewsAPI}`
         );
         const data = await response.json();
         return (
           data.articles?.map((article) => ({
+            // Fixed variable name from articles to article
             title: article.title,
             source: "GNews",
             isBreaking: false,
             url: article.url,
+            timestamp: new Date(article.publishedAt),
           })) || []
         );
       } catch (error) {
@@ -155,6 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
           source: "Local News",
           isBreaking: false,
           url: "#",
+          timestamp: new Date(),
         },
         {
           title:
@@ -162,81 +184,150 @@ document.addEventListener("DOMContentLoaded", function () {
           source: "Police Bulletin",
           isBreaking: true,
           url: "#",
+          timestamp: new Date(),
         },
       ];
     }
 
     async function getCombinedNews() {
+      if (isFetching) return currentNewsItems;
+      isFetching = true;
+
       try {
-        const [newsApiResults, gNewsResults] = await Promise.all([
+        console.log("Fetching latest crime news...");
+        const [newsApiResults, gNewsResults] = await Promise.allSettled([
           fetchNewsAPI(),
           fetchGNews(),
         ]);
 
-        const combinedNews = [...newsApiResults, ...gNewsResults];
-        return combinedNews.length > 0
-          ? combinedNews.sort(() => Math.random() - 0.5)
-          : getFallbackNews();
+        const combinedNews = [
+          ...(newsApiResults.status === "fulfilled"
+            ? newsApiResults.value
+            : []),
+          ...(gNewsResults.status === "fulfilled" ? gNewsResults.value : []),
+        ];
+
+        console.log(`Fetched ${combinedNews.length} news items`);
+
+        if (combinedNews.length === 0) {
+          console.log("Using fallback news");
+          return getFallbackNews();
+        }
+
+        const uniqueNews = combinedNews.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.title === item.title)
+        );
+
+        uniqueNews.sort((a, b) => b.timestamp - a.timestamp);
+        uniqueNews.slice(0, 3).forEach((item) => (item.isBreaking = true));
+
+        return uniqueNews;
       } catch (error) {
         console.error("Error combining news:", error);
         return getFallbackNews();
+      } finally {
+        isFetching = false;
+        lastFetchTime = Date.now();
       }
     }
 
     function createTickerItem(item) {
       const element = document.createElement("div");
       element.className = "ticker-headline";
+      const timeAgo = getTimeAgo(item.timestamp);
+
       element.innerHTML = `
-                <span class="breaking-news">${
-                  item.isBreaking ? "BREAKING" : "UPDATE"
-                }</span>
-                <span class="headline-text">${item.title}</span>
-                <span class="news-source">(${item.source})</span>
-            `;
+            <span class="breaking-news">${
+              item.isBreaking ? "BREAKING" : "UPDATE"
+            }</span>
+            <span class="headline-text">${item.title}</span>
+            <span class="news-meta">
+                <span class="news-source">${item.source}</span>
+                <span class="news-time">${timeAgo}</span>
+            </span>
+        `;
+
       element.addEventListener("click", () => {
-        window.open(item.url, "_blank");
+        if (item.url && item.url !== "#") {
+          window.open(item.url, "_blank");
+        }
       });
+
       return element;
     }
 
-    function initializeTicker() {
-      // Clear existing content
-      newsTicker.innerHTML = "";
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      if (seconds < 60) return "Just now";
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
 
-      // Create a wrapper for seamless looping
+    function initializeTicker() {
+      // Clean up previous ticker if exists
+      if (cleanupTicker) cleanupTicker();
+
+      newsTicker.innerHTML = "";
       const tickerWrapper = document.createElement("div");
       tickerWrapper.className = "ticker-wrapper";
 
-      // Add all news items twice for infinite effect
-      currentNewsItems.forEach((item) => {
-        tickerWrapper.appendChild(createTickerItem(item));
-      });
-      currentNewsItems.forEach((item) => {
-        tickerWrapper.appendChild(createTickerItem(item));
-      });
+      currentNewsItems.forEach((item) =>
+        tickerWrapper.appendChild(createTickerItem(item))
+      );
+      currentNewsItems.forEach((item) =>
+        tickerWrapper.appendChild(createTickerItem(item))
+      );
 
       newsTicker.appendChild(tickerWrapper);
 
-      // Set animation duration based on item count
       const duration = currentNewsItems.length * 3;
       tickerWrapper.style.animation = `ticker-scroll ${duration}s linear infinite`;
 
-      // Pause on hover
-      newsTicker.addEventListener("mouseenter", () => {
-        tickerWrapper.style.animationPlayState = "paused";
-      });
-      newsTicker.addEventListener("mouseleave", () => {
-        tickerWrapper.style.animationPlayState = "running";
-      });
+      const handleMouseEnter = () =>
+        (tickerWrapper.style.animationPlayState = "paused");
+      const handleMouseLeave = () =>
+        (tickerWrapper.style.animationPlayState = "running");
+
+      newsTicker.addEventListener("mouseenter", handleMouseEnter);
+      newsTicker.addEventListener("mouseleave", handleMouseLeave);
+
+      // Store cleanup function
+      cleanupTicker = () => {
+        newsTicker.removeEventListener("mouseenter", handleMouseEnter);
+        newsTicker.removeEventListener("mouseleave", handleMouseLeave);
+      };
     }
 
     async function updateNewsFeed() {
+      const timeSinceLastFetch = Date.now() - lastFetchTime;
+      const minRefreshInterval = 2 * 60 * 1000;
+
+      if (timeSinceLastFetch < minRefreshInterval) {
+        console.log(
+          `Skipping fetch - ${Math.floor(
+            timeSinceLastFetch / 1000
+          )}s since last fetch`
+        );
+        return;
+      }
+
+      console.log("Updating news feed...");
       currentNewsItems = await getCombinedNews();
       initializeTicker();
     }
 
-    // Initialize and refresh periodically
+    // Initialize immediately
     updateNewsFeed();
-    setInterval(updateNewsFeed, 30); // Refresh every 5 minutes
+
+    // Set interval to check every 30 seconds
+    const checkInterval = setInterval(updateNewsFeed, 10 * 60 * 1000);
+
+    // Also refresh when window gains focus
+    window.addEventListener("focus", updateNewsFeed);
   }
 });
