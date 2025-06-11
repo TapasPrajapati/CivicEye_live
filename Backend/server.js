@@ -4,9 +4,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+const nodemailer = require('nodemailer');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -20,6 +23,15 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
 });
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth:{
+        user: 'tapasprajapati022@gmail.com',
+        pass: 'csfjsvjhplursayu',
+    },
+});
+
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/CivicEye', {
     useNewUrlParser: true,
@@ -47,6 +59,7 @@ const policeSchema = new mongoose.Schema({
     email: String,
     password: String
 });
+
 const reportSchema = new mongoose.Schema({
     name: String,
     email: String,
@@ -59,6 +72,8 @@ const reportSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+const User = mongoose.model('User',userSchema);
+const Police = mongoose.model('Police',policeSchema);
 const Report = mongoose.model('Report', reportSchema);
 
 app.post('/submit-report', upload.array('evidence'), async (req, res) => {
@@ -70,9 +85,34 @@ app.post('/submit-report', upload.array('evidence'), async (req, res) => {
         reportData.evidence = req.files.map(file => file.path); // Store file paths
 
         console.log('Report Data:', reportData); // Debugging: Log the report data
-
+        
         const newReport = new Report(reportData);
         await newReport.save();
+        await transporter.sendMail({
+            from: 'tapasprajapati022@gmail.com',
+            to: 'pesak481@gmail.com', 
+            subject: 'New FIR Submitted - CivicEye',
+            text: `
+            New FIR Submitted:
+
+            Name: ${reportData.name}
+            Email: ${reportData.email}
+            Phone: ${reportData.phone}
+            Crime Type: ${reportData.crimeType}
+            Date: ${reportData.date}
+            Location: ${reportData.location}
+            Description: ${reportData.description}
+
+            Submitted At: ${new Date().toLocaleString()}
+            `
+            }, (error, info) => {
+                if (error) {
+                    console.error("Error sending email:", error);
+                } else {
+                    console.log("Email sent successfully:", info.response);
+                }
+        });
+
 
         console.log('Report Saved:', newReport); // Debugging: Log the saved report
 
@@ -83,9 +123,7 @@ app.post('/submit-report', upload.array('evidence'), async (req, res) => {
     }
 });
 app.use('/uploads', express.static('uploads'));
-const User = mongoose.model('User', userSchema);
-const Police = mongoose.model('Police', policeSchema);
-
+ 
 // Registration Endpoints
 app.post('/register/user', async (req, res) => {
     try {
