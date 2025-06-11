@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Track current news items
     let currentNewsItems = [];
     let tickerAnimation;
-
     async function fetchNewsAPI() {
       try {
         const response = await fetch(
@@ -126,11 +125,45 @@ document.addEventListener("DOMContentLoaded", function () {
         return [];
       }
     }
+    
+
+    const axios = require('axios');
+
+const API_KEY = '8c71ccaf333740d3b5f314f9f0f8bef0'; // Replace with your News API key
+const NEWS_URL = 'https://newsapi.org/v2/top-headlines';
+const COUNTRY_CODE = 'in'; // Example: 'in' for India, 'us' for United States
+
+// Function to fetch and display news
+async function fetchNews() {
+    try {
+        const response = await axios.get(NEWS_URL, {
+            params: {
+                country: COUNTRY_CODE,
+                apiKey: API_KEY,
+            },
+        });
+
+        const articles = response.data.articles;
+        articles.forEach((article, index) => {
+            console.log(`${index + 1}. ${article.title}`);
+            console.log(`   ${article.description}`);
+            console.log(`   Read more: ${article.url}`);
+            console.log('------------------------------------');
+        });
+
+    } catch (error) {
+        console.error('Error fetching news:', error.message);
+    }
+}
+
+// Fetch news every 30 minutes (adjust interval as needed)
+fetchNews();
+setInterval(fetchNews, 30 * 60 * 1000); // 30 minutes
 
     async function fetchGNews() {
       try {
         const response = await fetch(
-          `https://gnews.io/api/v4/top-headlines?q=crime&country=in&max=10&token=${API_KEYS.gNewsAPI}`
+          `https://gnews.io/api/v4/top-headlines?q=crime&country=in&max=100&token=${API_KEYS.gNewsAPI}`
         );
         const data = await response.json();
         return (
