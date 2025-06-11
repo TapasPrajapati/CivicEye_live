@@ -332,37 +332,31 @@ body {
     padding: 1.5rem;
     border-radius: 0.5rem;
     box-shadow: var(--shadow);
-    /* Contains absolutely positioned children */
     position: relative;
-    /* Fixed height to match your design */
     height: 400px;
 }
 
 .news-section h2 {
     margin: 0 0 1rem 0;
     font-size: 1.5rem;
-    /* Prevent heading from affecting layout */
     line-height: 1.2;
 }
 
 .news-container {
-    /* Take full width of parent minus padding */
-    width: calc(100% - 0.7rem); /* 1.5rem padding on each side */
-    height: calc(100% - 1rem - 1.5rem); /* Account for heading and padding */
+    width: calc(100% - 0.7rem);
+    height: calc(100% - 1rem - 1.5rem);
     border: 2px solid #d32f2f;
     border-radius: 5px;
-    /* Critical containment */
     overflow: hidden;
     position: relative;
     background-color: #f5f5f5;
 }
 
-.news-source {
-    margin-left: auto;
-    font-size: 0.8rem;
-    color: #666;
-    font-style: italic;
-  }
+/* Animation for the ticker - merged both keyframes */
+@keyframes scroll, ticker-scroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
 
 .news-ticker {
     position: absolute;
@@ -371,22 +365,25 @@ body {
 }
 
 .ticker-headline {
-    height: 25%; /* For 4 visible items in 400px container */
-  /* Keep your existing styles */
+    height: 100px; /* Using the more specific pixel value */
     display: flex;
     align-items: center;
-    padding: 1.2rem 1rem;
+    padding: 0.75rem 1rem; /* Compromise between 1.2rem/1rem and 0 20px */
     border-bottom: 1px solid #e0e0e0;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: white;
-    /* Prevent text overflow */
     overflow: hidden;
+    cursor: pointer;
+}
+
+.ticker-headline:hover {
+    background-color: #f8f8f8;
 }
 
 .breaking-news {
     font-weight: bold;
     color: #d32f2f;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem; /* Compromise between 0.5rem and 10px */
     font-size: 0.9rem;
     flex-shrink: 0;
 }
@@ -394,19 +391,31 @@ body {
 .headline-text {
     font-size: 1rem;
     color: #333;
-    /* Handle long text */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-grow: 1;
 }
 
-@keyframes scroll {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-50%);
-    }
+.news-meta {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 120px;
+}
+
+.news-source {
+    font-size: 0.8rem;
+    color: #666;
+    font-style: italic;
+    margin-left: auto; /* Keeps source on right side */
+}
+
+.news-time {
+    font-size: 12px;
+    color: #999;
+    margin-top: 3px;
 }
 
 /* Pause on hover
