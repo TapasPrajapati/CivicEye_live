@@ -349,18 +349,18 @@ body {
     /* Take full width of parent minus padding */
     width: calc(100% - 0.7rem); /* 1.5rem padding on each side */
     height: calc(100% - 1rem - 1.5rem); /* Account for heading and padding */
-    border: 2px solid #d32f2f;
+    border: 2px solid #f6dede;
     border-radius: 5px;
     /* Critical containment */
     overflow: hidden;
     position: relative;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
 }
 
 .news-source {
     margin-left: auto;
     font-size: 0.8rem;
-    color: #666;
+    color: #c80f3a;
     font-style: italic;
   }
 
