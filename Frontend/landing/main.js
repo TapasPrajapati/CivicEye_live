@@ -96,13 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // News API Integration with Infinite Scroll
   const API_KEYS = {
-<<<<<<< HEAD
-    newsAPI: "c84307e54292471c87df4053994d5b04",
-    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e",
-=======
     newsAPI: "a9c94c80e2f845d2ae73c571aa3fc47d",
     gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e", // Removed backticks
->>>>>>> cc75c65611dbce52bd7937a192471c1540b24d01
   };
 
   const newsTicker = document.getElementById("news-ticker");
@@ -132,14 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchNewsAPI() {
       try {
-<<<<<<< HEAD
-        const response = await fetch(
-         `https://newsdata.io/api/1/latest?apikey=pub_c84307e54292471c87df4053994d5b04&q=crime%20india&country=in&language=en`
-
-=======
         const response = await fetchWithTimeout(
           `https://newsapi.org/v2/top-headlines?q=crime&country=in&pageSize=15&apiKey=${API_KEYS.newsAPI}`
->>>>>>> cc75c65611dbce52bd7937a192471c1540b24d01
         );
         const data = await response.json();
         return (

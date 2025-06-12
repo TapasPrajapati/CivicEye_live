@@ -354,6 +354,7 @@ body {
     /* Critical containment */
     overflow: hidden;
     position: relative;
+    
     background-color: #ffffff;
 }
 
