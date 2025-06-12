@@ -65,6 +65,7 @@
 //         submitButton.textContent = 'Submit Report';
 //     }
 // });
+
 document.addEventListener('DOMContentLoaded', function() {
     const crimeForm = document.getElementById('crimeForm');
     const confirmation = document.getElementById('confirmation');
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const formData = new FormData(this);
 
-            const response = await fetch('http://localhost:5000/submit-report', {
+            const response = await fetch('http://localhost:5000/api/reports/submit-report', {
                 method: 'POST',
                 body: formData,
             });

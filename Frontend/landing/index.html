@@ -1004,7 +1004,7 @@
 
           try {
             const response = await fetch(
-              "http://localhost:5000/register/user",
+              "http://localhost:5000/api/users/register/user",
               {
                 method: "POST",
                 headers: {
@@ -1041,7 +1041,7 @@
 
           try {
             const response = await fetch(
-              "http://localhost:5000/register/police",
+              "http://localhost:5000/api/police/register/police",
               {
                 method: "POST",
                 headers: {
@@ -1150,7 +1150,7 @@
           const password = document.getElementById("password-input").value;
 
           try {
-            const response = await fetch("http://localhost:5000/login", {
+            const response = await fetch("http://localhost:5000/api/auth/login", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -1181,7 +1181,8 @@
 
         try {
           const response = await fetch(
-            "http://localhost:5000/profile/${data._id}"
+            // ${data._id}
+            "http://localhost:5000//api/auth/profile/:id"
           );
           if (response.ok) {
             const profileData = await response.json();
