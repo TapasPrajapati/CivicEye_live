@@ -6,6 +6,8 @@ sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
 });
 
+
+
 // Navigation handling
 document.querySelectorAll('.nav-links li').forEach(item => {
     item.addEventListener('click', () => {
