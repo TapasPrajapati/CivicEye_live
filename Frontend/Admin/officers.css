@@ -10,6 +10,10 @@
     margin-bottom: 30px;
 }
 
+.Header_logo{
+    color: var(--primary-color);
+  }
+
 .officer-actions {
     display: flex;
     gap: 20px;
