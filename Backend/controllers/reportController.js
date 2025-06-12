@@ -1,4 +1,5 @@
 const Report = require('../models/Report');
+const transporter = require('../config/email');
 
 exports.submitReport = async (req, res) => {
     try {
@@ -12,6 +13,26 @@ exports.submitReport = async (req, res) => {
 
         const newReport = new Report(reportData);
         await newReport.save();
+        
+        // Send email notification (non-blocking)
+        transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: 'pesak481@gmail.com',
+            subject: 'New FIR Submitted - CivicEye',
+            text: `New FIR Submitted:
+                Name: ${reportData.name}
+                Email: ${reportData.email}
+                Phone: ${reportData.phone}
+                Crime Type: ${reportData.crimeType}
+                Date: ${reportData.date}
+                Location: ${reportData.location}
+                Description: ${reportData.description}
+                Submitted At: ${new Date().toLocaleString()}`
+        }).then(info => {
+            console.log('Email sent:', info.response);
+        }).catch(error => {
+            console.error('Email failed:', error);
+        });
 
         console.log('Report Saved:', newReport);
 
