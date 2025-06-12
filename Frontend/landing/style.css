@@ -343,14 +343,30 @@ body {
 }
 
 .news-container {
+
+    /* Take full width of parent minus padding */
+    width: calc(100% - 0.7rem); /* 1.5rem padding on each side */
+    height: calc(100% - 1rem - 1.5rem); /* Account for heading and padding */
+    border: 2px solid #f6dede;
+
     width: calc(100% - 0.7rem);
     height: calc(100% - 1rem - 1.5rem);
     border: 2px solid #d32f2f;
+
     border-radius: 5px;
     overflow: hidden;
     position: relative;
-    background-color: #f5f5f5;
+    
+    background-color: #ffffff;
 }
+
+
+.news-source {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #c80f3a;
+    font-style: italic;
+  }
 
 /* Animation for the ticker - merged both keyframes */
 @keyframes scroll {
@@ -362,6 +378,7 @@ body {
     0% { transform: translateY(0); }
     100% { transform: translateY(-50%); }
 }
+
 
 .news-ticker {
     position: absolute;
