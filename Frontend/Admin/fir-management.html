@@ -8,76 +8,95 @@
   <link rel="stylesheet" href="/Frontend/Admin/admin.css" />
   <link rel="stylesheet" href="/Frontend/Admin/fir-management.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
   <div class="container">
     <!-- Sidebar (same as index.html) -->
-    <nav class="sidebar">
-      <div class="logo">
-        <h2>FIR Admin</h2>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-btn" id="closeNav">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <div class="logo">
+          <i data-lucide="shield-alert"></i>
+          <span>CivicEye</span>
+        </div>
       </div>
       <ul class="nav-links">
-        <li data-page="dashboard">
-          <i class="fas fa-home"></i>
-          <a href="/Frontend/Admin/admin.html" class="nav-buttons">
+        <li>
+          <a href="/Frontend/Admin/admin.html" class="active" data-page="dashboard">
+            <i data-lucide="layout-dashboard"></i>
             <span>Dashboard</span>
           </a>
         </li>
-        <li class="active" data-page="fir-management">
-          <i class="fas fa-file-alt"></i>
-          <a href="/Frontend/Admin/fir-management.html" class="nav-buttons">
+        <li>
+          <a href="/Frontend/Admin/fir-management.html" data-page="fir-management">
+            <i data-lucide="file-text"></i>
             <span>FIR Management</span>
           </a>
         </li>
-        <li data-page="user-management">
-          <i class="fas fa-users"></i>
-          <a href="#" class="nav-buttons">
+        <li>
+          <a href="#" data-page="user-management">
+            <i data-lucide="users"></i>
             <span>User Management</span>
           </a>
         </li>
-        <li data-page="hotspots">
-          <i class="fas fa-map-marker-alt"></i>
-          <a href="#" class="nav-buttons">
+        <li>
+          <a href="#" data-page="hotspots">
+            <i data-lucide="map-pin"></i>
             <span>Crime Hotspots</span>
           </a>
         </li>
-        <li data-page="officers">
-          <i class="fas fa-user-shield"></i>
-          <a href="/Frontend/Admin/officers.html" class="nav-buttons">
+        <li>
+          <a href="/Frontend/Admin/officers.html" data-page="officers">
+            <i data-lucide="user-shield"></i>
             <span>Officers</span>
           </a>
         </li>
-        <li data-page="analytics">
-          <i class="fas fa-chart-bar"></i>
-          <a href="#" class="nav-buttons">
+        <li>
+          <a href="#" data-page="analytics">
+            <i data-lucide="bar-chart-2"></i>
             <span>Analytics</span>
           </a>
         </li>
-        <li data-page="settings">
-          <i class="fas fa-cog"></i>
-          <a href="#" class="nav-buttons">
+        <li>
+          <a href="#" data-page="settings">
+            <i data-lucide="settings"></i>
             <span>Settings</span>
           </a>
         </li>
       </ul>
+      
+      </div>
     </nav>
-
-    <!-- Main Content -->
+    
     <main class="main-content">
-      <header>
-        <div class="header-content">
+      <header class="top-nav">
+        <div class="nav-left">
+          <button class="menu-btn" id="openNav">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="brand" onclick="window.location.href='#'" style="cursor: pointer">
+            <i data-lucide="shield-alert"></i>
+            <span>CivicEye</span>
+          </div>
+        </div>
+        <div class="nav-right">
           <div class="search-bar">
-            <input type="text" placeholder="Search FIRs..." />
-            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search...">
+            <i data-lucide="search"></i>
+          </div>
+          <div class="notifications">
+            <i data-lucide="bell"></i>
+            <span class="badge">3</span>
           </div>
           <div class="user-profile">
-            <div class="notifications">
-              <i class="fas fa-bell"></i>
-              <span class="badge">3</span>
-            </div>
-            <img src="https://via.placeholder.com/40" alt="Admin Profile" class="profile-img" />
             <span>Admin User</span>
+            <button id="profileBtn" class="btn btn-profile">
+              <i data-lucide="user"></i>
+            </button>
           </div>
         </div>
       </header>
@@ -128,6 +147,7 @@
     </main>
   </div>
   <script src="/Frontend/Admin/fir-management.js"></script>
+  
 </body>
 
 </html>
