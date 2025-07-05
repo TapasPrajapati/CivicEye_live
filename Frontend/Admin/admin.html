@@ -98,6 +98,86 @@
           </div>
         </header>
 
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i data-lucide="shield-alert"></i>
+                    <h2>CivicEye</h2>
+                </div>
+                <button id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <a href="/Frontend/Admin/admin.html"  class="active">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li data-page="fir-management">
+                    <i class="fas fa-file-alt"></i>
+                    <a href="/Frontend/Admin/fir-management.html" class="nav-buttons">
+                        <span>FIR Management</span>
+                    </a>
+                </li>
+                <li data-page="user-management">
+                    <i class="fas fa-users"></i>
+                    <a href="#" class="nav-buttons"><span>User Management</span></a>
+                </li>
+                <li data-page="hotspots">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <a href="#" class="nav-buttons"><span>Crime Hotspots</span></a>
+
+                </li>
+                <li data-page="officers">
+                    <i class="fas fa-user-shield"></i>
+                    <a href="/Frontend/Admin/officers.html" class="nav-buttons"><span>Officers</span></a>
+
+                </li>
+                <li data-page="analytics">
+                    <i class="fas fa-chart-bar"></i>
+                    <a href="" class="nav-buttons">
+                        <span>Analytics</span>
+
+                    </a>
+                </li>
+                <li data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <a href="" class="nav-buttons">
+
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="header-content">
+                    <div class="Header_logo">
+                        <i data-lucide="shield-alert"></i>
+                        <h2>CivicEye</h2>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="user-profile">
+                        <div class="notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </div>
+                        <!-- <img src="https://via.placeholder.com/40" alt="Admin Profile" class="profile-img"> -->
+                        <span>Admin User</span>
+                    </div>
+                </div>
+            </header>
+
+
             <!-- Dashboard Content -->
             <div class="dashboard-content">
                 <!-- Quick Stats -->
