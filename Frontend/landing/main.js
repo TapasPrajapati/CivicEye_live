@@ -322,12 +322,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Initialize immediately
-    updateNewsFeed();
+    // updateNewsFeed();
 
     // Set interval to check every 30 seconds
     const checkInterval = setInterval(updateNewsFeed, 10 * 60 * 1000);
 
     // Also refresh when window gains focus
-    window.addEventListener("focus", updateNewsFeed);
+    // window.addEventListener("focus", updateNewsFeed);
   }
 });

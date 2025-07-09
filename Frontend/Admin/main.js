@@ -1,100 +1,157 @@
-// Sidebar toggle functionality
-const sidebar = document.querySelector('.sidebar');
-const sidebarToggle = document.getElementById('sidebar-toggle');
+// Initialize Lucide icons
+lucide.createIcons();
 
-sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-});
+// Main initialization function
+function initAdminDashboard() {
+  // Set active navigation based on current page
+  setActiveNav();
 
+  // Initialize sidebar functionality
+  initSidebar();
 
+  // Initialize responsive behavior
+  initResponsiveSidebar();
 
-// Navigation handling
-document.querySelectorAll('.nav-links li').forEach(item => {
-    item.addEventListener('click', () => {
-        // Remove active class from all items
-        document.querySelectorAll('.nav-links li').forEach(i => i.classList.remove('active'));
-        // Add active class to clicked item
-        item.classList.add('active');
-        // Handle page navigation (to be implemented)
-        const page = item.dataset.page;
-        console.log(`Navigating to ${page}`);
+  // Initialize notification system
+  updateNotificationBadge();
+
+  // Set up search functionality
+  initSearch();
+
+  // Other initializations
+  updateStats();
+}
+
+// Set active navigation based on current page
+function setActiveNav() {
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll(".nav-links li a");
+
+  navLinks.forEach((link) => {
+    if (link.href && new URL(link.href).pathname === currentPath) {
+      link.classList.add("active");
+      link.parentElement.classList.add("active");
+    } else {
+      link.classList.remove("active");
+      link.parentElement.classList.remove("active");
+    }
+  });
+}
+
+// Sidebar functionality
+function initSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const openNav = document.getElementById("openNav");
+  const closeNav = document.getElementById("closeNav");
+  const mainContent = document.querySelector(".main-content");
+
+  if (openNav) {
+    openNav.addEventListener("click", () => {
+      sidebar.classList.remove("collapsed");
+      mainContent.style.marginLeft = "280px"; // Or use CSS variable --sidebar-width
     });
-});
+  }
 
-// Notifications handling
-document.querySelector('.notifications').addEventListener('click', () => {
-    // Toggle notifications panel (to be implemented)
-    console.log('Toggle notifications panel');
-});
+  if (closeNav) {
+    closeNav.addEventListener("click", () => {
+      sidebar.classList.add("collapsed");
+      mainContent.style.marginLeft = "0";
+    });
+  }
 
-// Mock data for statistics
-const mockStats = {
-    totalFIRs: {
-        today: 25,
-        thisWeek: 156,
-        thisMonth: 642
-    },
-    usersRegistered: 1234,
-    crimesResolved: 789,
-    pendingCases: 45
-};
+  // Close sidebar when clicking outside on mobile
+  document.addEventListener("click", (e) => {
+    if (
+      window.innerWidth <= 1024 &&
+      !sidebar.classList.contains("collapsed") &&
+      !sidebar.contains(e.target) &&
+      e.target !== openNav
+    ) {
+      sidebar.classList.add("collapsed");
+      mainContent.style.marginLeft = "0";
+    }
+  });
+}
 
-// Update statistics
-function updateStats() {
-    // Update statistics (to be implemented with real data)
-    console.log('Statistics updated');
+// Responsive sidebar behavior
+function initResponsiveSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+  const mainContent = document.querySelector(".main-content");
+
+  function handleResize() {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.add("collapsed");
+      mainContent.style.marginLeft = "70px";
+    } else {
+      sidebar.classList.remove("collapsed");
+      mainContent.style.marginLeft = "280px";
+    }
+  }
+
+  // Initial check
+  handleResize();
+
+  // Add resize listener
+  window.addEventListener("resize", handleResize);
+}
+
+// Notification system
+let notificationCount = 3;
+function updateNotificationBadge() {
+  const badge = document.querySelector(".badge");
+  if (badge) {
+    badge.textContent = notificationCount;
+    badge.style.display = notificationCount > 0 ? "block" : "none";
+
+    // Add click handler for notifications
+    document.querySelector(".notifications").addEventListener("click", () => {
+      console.log("Toggle notifications panel");
+      // Implement actual notification panel toggle here
+    });
+  }
 }
 
 // Search functionality
-const searchInput = document.querySelector('.search-bar input');
-searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    // Implement search functionality
-    console.log(`Searching for: ${searchTerm}`);
-});
-
-// Initialize dashboard
-function initDashboard() {
-    updateStats();
-    // Add any other initialization logic here
-}
-
-// Call initialization function when page loads
-document.addEventListener('DOMContentLoaded', initDashboard);
-
-// Responsive sidebar toggle (for mobile devices)
-function initResponsiveSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
-    
-    if (window.innerWidth <= 768) {
-        sidebar.classList.add('collapsed');
-        mainContent.style.marginLeft = '70px';
-    }
-}
-
-// Window resize handling
-window.addEventListener('resize', () => {
-    initResponsiveSidebar();
-});
-
-// Auto-update timestamps
-function updateTimestamps() {
-    const times = document.querySelectorAll('.time');
-    times.forEach(time => {
-        // Update relative time (to be implemented)
+function initSearch() {
+  const searchInput = document.querySelector(".search-bar input");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      console.log(`Searching for: ${searchTerm}`);
+      // Implement actual search functionality here
     });
+  }
 }
 
+// Mock data for statistics
+const mockStats = {
+  totalFIRs: {
+    today: 42,
+    thisWeek: 287,
+    thisMonth: 1150,
+  },
+  usersRegistered: 2543,
+  crimesResolved: 1562,
+  pendingCases: 128,
+};
+
+// Update statistics display
+function updateStats() {
+  console.log("Updating admin statistics");
+  // Implement actual stats update here
+  console.log(mockStats);
+}
+
+// Auto-update timestamps (if needed)
+function updateTimestamps() {
+  const times = document.querySelectorAll(".time");
+  times.forEach((time) => {
+    // Update relative time (implement as needed)
+  });
+}
+
+// Initialize timestamps update interval
 setInterval(updateTimestamps, 60000); // Update every minute
 
-// Mock notification system
-let notificationCount = 3;
-function updateNotificationBadge() {
-    const badge = document.querySelector('.badge');
-    badge.textContent = notificationCount;
-    badge.style.display = notificationCount > 0 ? 'block' : 'none';
-}
-
-// Initial setup
-updateNotificationBadge();
+// Initialize the dashboard when DOM is loaded
+document.addEventListener("DOMContentLoaded", initAdminDashboard);
