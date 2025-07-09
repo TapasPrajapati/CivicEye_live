@@ -351,7 +351,7 @@ body {
 
     width: calc(100% - 0.7rem);
     height: calc(100% - 1rem - 1.5rem);
-    border: 2px solid #d32f2f;
+    border: 2px solid #a01c1c;
 
     border-radius: 5px;
     overflow: hidden;
