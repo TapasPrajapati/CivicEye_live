@@ -1,342 +1,900 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Police Management System</title>
     <link rel="stylesheet" href="admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-
 <body>
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-          <button class="close-btn" id="closeNav">
-            <i data-lucide="chevron-left"></i>
-          </button>
-          <div class="logo">
-            <i data-lucide="shield-alert"></i>
-            <span>CivicEye</span>
-          </div>
-        </div>
-        <ul class="nav-links">
-          <li>
-            <a href="/Frontend/Admin/admin.html" class="active">
-              <i data-lucide="home"></i>
-              <span>Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/Admin/fir-management.html" class="active">
-              <i data-lucide="layout-dashboard"></i>
-              <span>Fir Management</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/report/report.html" class="active">
-              <i data-lucide="file-text"></i>
-              <span>User Management</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/Track_case/track.html" class="active">
-              <i data-lucide="search"></i>
-              <span>Crime Hotspot</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/Emergency/emergency.html" class="active">
-              <i data-lucide="phone"></i>
-              <span>Officers</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/help_guide/help.html" class="active">
-              <i data-lucide="help-circle"></i>
-              <span>Analytics</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/safety-tips/safety.html" class="active">
-              <i data-lucide="shield"></i>
-              <span>Settings</span>
-            </a>
-          </li>
-          <li>
-            <a href="/Frontend/Contact Us/contact-us.html"
-              ><i data-lucide="phone"></i>Contact</a
-            >
-          </li>
-          <li>
-            <a href="/Frontend/Admin/admin.html"
-              ><i data-lucide="user"></i>Admin Page</a
-            >
-          </li>
-        </ul>
-        <div class="emergency-section">
-          <div class="emergency-title">
-            <i data-lucide="phone-call"></i>
-            <span>Emergency Numbers</span>
-          </div>
-          <div class="emergency-numbers">
-            <a
-              href="tel:100"
-              class="emergency-item"
-              style="color: #ffff; text-decoration: none"
-            >
-              <span class="service">Police</span>
-              <span class="number">100</span>
-            </a>
-  
-            <a
-              href="tel:1091"
-              class="emergency-item"
-              style="color: #ffff; text-decoration: none"
-            >
-              <span class="service">Women Helpline</span>
-              <span class="number">1091</span>
-            </a>
-            <a
-              href="tel:108"
-              class="emergency-item"
-              style="color: #ffff; text-decoration: none"
-            >
-              <span class="service">Ambulance</span>
-              <span class="number">108</span>
-            </a>
-          </div>
-        </div>
-      </nav>
-      
-      <main class="main-content">
-        <header class="top-nav">
-          <div class="nav-left">
-            <button class="menu-btn" id="openNav">
-              <i data-lucide="menu"></i>
-            </button>
-            <div class="brand" onclick="window.location.href='#'" style="cursor: pointer">
-              <i data-lucide="shield-alert"></i>
-              <span>CivicEye</span>
-            </div>
-          </div>
-          <div class="nav-right">
-            <div class="search-bar">
-              <input type="text" placeholder="Search...">
-              <i data-lucide="search"></i>
-            </div>
-            <div class="notifications">
-              <i data-lucide="bell"></i>
-              <span class="badge">3</span>
-            </div>
-            <div class="user-profile">
-              <span>Admin User</span>
-              <button id="profileBtn" class="btn btn-profile">
-                <i data-lucide="user"></i>
-              </button>
-            </div>
-          </div>
-        </header>
-
-    <div class="container">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i data-lucide="shield-alert"></i>
-                    <h2>CivicEye</h2>
-                </div>
-                <button id="sidebar-toggle">
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>CivicEye</span>
+                </div>
             </div>
-            <ul class="nav-links">
-                <li class="active" data-page="dashboard">
-                    <i class="fas fa-home"></i>
-                    <a href="/Frontend/Admin/admin.html"  class="active">
+            <div class="nav-right">
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="profile-dropdown">
+                    <div class="profile-trigger">
+                        <img src="/placeholder.svg?height=32&width=32" alt="Profile" class="profile-img">
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="showPage('profile')"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#" onclick="showPage('settings')"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-page="dashboard">
+                    <a href="#" onclick="showPage('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li data-page="fir-management">
-                    <i class="fas fa-file-alt"></i>
-                    <a href="/Frontend/Admin/fir-management.html" class="nav-buttons">
+                <li class="menu-item" data-page="fir">
+                    <a href="#" onclick="showPage('fir')">
+                        <i class="fas fa-file-alt"></i>
                         <span>FIR Management</span>
                     </a>
                 </li>
-                <li data-page="user-management">
-                    <i class="fas fa-users"></i>
-                    <a href="#" class="nav-buttons"><span>User Management</span></a>
-                </li>
-                <li data-page="hotspots">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <a href="#" class="nav-buttons"><span>Crime Hotspots</span></a>
-
-                </li>
-                <li data-page="officers">
-                    <i class="fas fa-user-shield"></i>
-                    <a href="/Frontend/Admin/officers.html" class="nav-buttons"><span>Officers</span></a>
-
-                </li>
-                <li data-page="analytics">
-                    <i class="fas fa-chart-bar"></i>
-                    <a href="" class="nav-buttons">
-                        <span>Analytics</span>
-
+                <li class="menu-item" data-page="users">
+                    <a href="#" onclick="showPage('users')">
+                        <i class="fas fa-users"></i>
+                        <span>User Management</span>
                     </a>
                 </li>
-                <li data-page="settings">
-                    <i class="fas fa-cog"></i>
-                    <a href="" class="nav-buttons">
-
-                        <span>Settings</span>
+                <li class="menu-item" data-page="hotspot">
+                    <a href="#" onclick="showPage('hotspot')">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span>Crime Hotspot</span>
+                    </a>
+                </li>
+                <li class="menu-item" data-page="officers">
+                    <a href="#" onclick="showPage('officers')">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Officer Management</span>
+                    </a>
+                </li>
+                <li class="menu-item" data-page="analytics">
+                    <a href="#" onclick="showPage('analytics')">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics & Reports</span>
+                    </a>
+                </li>
+                <li class="menu-item" data-page="settings">
+                    <a href="#" onclick="showPage('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>System Settings</span>
+                    </a>
+                </li>
+                <li class="menu-item" data-page="profile">
+                    <a href="#" onclick="showPage('profile')">
+                        <i class="fas fa-user"></i>
+                        <span>Admin Profile</span>
+                    </a>
+                </li>
+                <li class="menu-item" data-page="logs">
+                    <a href="#" onclick="showPage('logs')">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Logs & Audit</span>
+                    </a>
+                </li>
+                <li class="menu-item" data-page="help">
+                    <a href="#" onclick="showPage('help')">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Support</span>
                     </a>
                 </li>
             </ul>
-        </nav>
+        </div>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header>
-                <div class="header-content">
-                    <div class="Header_logo">
-                        <i data-lucide="shield-alert"></i>
-                        <h2>CivicEye</h2>
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Dashboard Page -->
+        <div class="page active" id="dashboard">
+            <div class="page-header">
+                <h1>Admin Dashboard</h1>
+                <p>Welcome back, Admin. Here's what's happening today.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
                     </div>
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="user-profile">
-                        <div class="notifications">
-                            <i class="fas fa-bell"></i>
-                            <span class="badge">3</span>
-                        </div>
-                        <!-- <img src="https://via.placeholder.com/40" alt="Admin Profile" class="profile-img"> -->
-                        <span>Admin User</span>
+                    <div class="stat-content">
+                        <h3>Total FIRs</h3>
+                        <p class="stat-number">1,234</p>
+                        <span class="stat-change positive">+12% from last month</span>
                     </div>
                 </div>
-            </header>
+                <div class="stat-card secondary">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Active Users</h3>
+                        <p class="stat-number">856</p>
+                        <span class="stat-change positive">+5% from last month</span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Pending Cases</h3>
+                        <p class="stat-number">42</p>
+                        <span class="stat-change negative">-8% from last month</span>
+                    </div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Officers on Duty</h3>
+                        <p class="stat-number">128</p>
+                        <span class="stat-change neutral">No change</span>
+                    </div>
+                </div>
+            </div>
 
-
-            <!-- Dashboard Content -->
-            <div class="dashboard-content">
-                <!-- Quick Stats -->
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        <div class="stat-details">
-                            <h3>Total FIRs Today</h3>
-                            <p class="stat-number">25</p>
-                            <p class="stat-change positive">+15% from yesterday</p>
-                        </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <button class="btn-secondary">View All</button>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <div class="activity-icon primary">
+                                <i class="fas fa-file-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>New FIR Filed</strong></p>
+                                <p>Theft case reported at Downtown Market</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
                         </div>
-                        <div class="stat-details">
-                            <h3>Registered Users</h3>
-                            <p class="stat-number">1,234</p>
-                            <p class="stat-change positive">+5% this week</p>
+                        <div class="activity-item">
+                            <div class="activity-icon secondary">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Officer Assignment</strong></p>
+                                <p>Officer Smith assigned to Case #1234</p>
+                                <span class="activity-time">4 hours ago</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-details">
-                            <h3>Resolved Cases</h3>
-                            <p class="stat-number">789</p>
-                            <p class="stat-change positive">+8% this month</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="stat-details">
-                            <h3>Pending Cases</h3>
-                            <p class="stat-number">45</p>
-                            <p class="stat-change negative">+12% this week</p>
+                        <div class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Case Update</strong></p>
+                                <p>Investigation completed for Case #1230</p>
+                                <span class="activity-time">6 hours ago</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Activity and Notifications -->
-                <div class="dashboard-grid">
-                    <div class="recent-activity">
-                        <h2>Recent Activity</h2>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="activity-details">
-                                    <h4>New FIR Filed</h4>
-                                    <p>FIR #12345 filed by John Doe</p>
-                                    <span class="time">2 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <div class="activity-details">
-                                    <h4>Case Resolved</h4>
-                                    <p>FIR #12340 marked as resolved</p>
-                                    <span class="time">4 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div class="activity-details">
-                                    <h4>New User Registration</h4>
-                                    <p>Jane Smith registered as a new user</p>
-                                    <span class="time">5 hours ago</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Notifications</h3>
+                        <span class="notification-count">3</span>
                     </div>
-
                     <div class="notifications-panel">
-                        <h2>Notifications</h2>
-                        <div class="notification-list">
-                            <div class="notification-item urgent">
+                        <div class="notification-item urgent">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <p><strong>Urgent Case</strong></p>
+                                <p>High priority case requires immediate attention</p>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <p><strong>System Update</strong></p>
+                                <p>Scheduled maintenance tonight at 2 AM</p>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <p><strong>Meeting Reminder</strong></p>
+                                <p>Weekly briefing at 3 PM today</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIR Management Page -->
+        <div class="page" id="fir">
+            <div class="page-header">
+                <h1>FIR Management</h1>
+                <button class="btn-primary">
+                    <i class="fas fa-plus"></i> New FIR
+                </button>
+            </div>
+
+            <div class="filters-section">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search by FIR number, user, or location..." id="firSearch">
+                </div>
+                <div class="filter-controls">
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Reported">Reported</option>
+                        <option value="Under Investigation">Under Investigation</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="Theft">Theft</option>
+                        <option value="Assault">Assault</option>
+                        <option value="Fraud">Fraud</option>
+                        <option value="Vandalism">Vandalism</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="firTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('firTable', 0)">FIR No. <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('firTable', 1)">Type <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('firTable', 2)">Location <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('firTable', 3)">Reporter <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('firTable', 4)">Date <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('firTable', 5)">Status <i class="fas fa-sort"></i></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="firTableBody">
+                        <!-- Data populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- User Management Page -->
+        <div class="page" id="users">
+            <div class="page-header">
+                <h1>User Management</h1>
+                <button class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Add User
+                </button>
+            </div>
+
+            <div class="filters-section">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search by name, email, or phone..." id="userSearch">
+                </div>
+                <div class="filter-controls">
+                    <select id="userStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="userTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('userTable', 0)">Name <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('userTable', 1)">Email <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('userTable', 2)">Phone <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('userTable', 3)">Registration Date <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('userTable', 4)">Status <i class="fas fa-sort"></i></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- Data populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="btn-secondary" onclick="changePage(-1)">Previous</button>
+                <span id="pageInfo">Page 1 of 5</span>
+                <button class="btn-secondary" onclick="changePage(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Crime Hotspot Page -->
+        <div class="page" id="hotspot">
+            <div class="page-header">
+                <h1>Crime Hotspot Analysis</h1>
+                <div class="header-controls">
+                    <select>
+                        <option>Last 30 Days</option>
+                        <option>Last 3 Months</option>
+                        <option>Last Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="hotspot-grid">
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <img src="/placeholder.svg?height=400&width=600" alt="Crime Hotspot Map" class="hotspot-map">
+                        <div class="map-markers">
+                            <div class="marker high-crime" style="top: 30%; left: 40%;" title="Downtown - High Crime Area">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="marker medium-crime" style="top: 60%; left: 70%;" title="Suburb - Medium Crime Area">
                                 <i class="fas fa-exclamation-circle"></i>
-                                <div class="notification-details">
-                                    <h4>Urgent: High Priority Case</h4>
-                                    <p>New high-priority FIR requires immediate attention</p>
-                                    <span class="time">30 minutes ago</span>
-                                </div>
                             </div>
-                            <div class="notification-item">
+                            <div class="marker low-crime" style="top: 20%; left: 80%;" title="Residential - Low Crime Area">
                                 <i class="fas fa-info-circle"></i>
-                                <div class="notification-details">
-                                    <h4>System Update</h4>
-                                    <p>System maintenance scheduled for tonight</p>
-                                    <span class="time">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color high"></span>
+                            <span>High Crime (10+ incidents)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color medium"></span>
+                            <span>Medium Crime (5-9 incidents)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color low"></span>
+                            <span>Low Crime (1-4 incidents)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="crime-stats">
+                    <h3>Crime Density by Area</h3>
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            <div class="bar-item">
+                                <div class="bar-label">Downtown</div>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: 85%; background: var(--danger);"></div>
+                                    <span class="bar-value">42</span>
                                 </div>
                             </div>
-                            <div class="notification-item">
-                                <i class="fas fa-bell"></i>
-                                <div class="notification-details">
-                                    <h4>New Assignment</h4>
-                                    <p>5 new cases assigned to Officer Johnson</p>
-                                    <span class="time">3 hours ago</span>
+                            <div class="bar-item">
+                                <div class="bar-label">Industrial</div>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: 60%; background: var(--warning);"></div>
+                                    <span class="bar-value">28</span>
+                                </div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-label">Residential</div>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: 35%; background: var(--secondary);"></div>
+                                    <span class="bar-value">15</span>
+                                </div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-label">Commercial</div>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: 45%; background: var(--primary);"></div>
+                                    <span class="bar-value">20</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-    <script src="./main.js"></script>
-</body>
+        </div>
 
+        <!-- Officer Management Page -->
+        <div class="page" id="officers">
+            <div class="page-header">
+                <h1>Officer Management</h1>
+                <button class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Add Officer
+                </button>
+            </div>
+
+            <div class="officer-grid">
+                <div class="officer-roster">
+                    <h3>Officer Roster</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Badge No.</th>
+                                    <th>Name</th>
+                                    <th>Rank</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="officerTableBody">
+                                <!-- Data populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="performance-metrics">
+                    <h3>Performance Metrics</h3>
+                    <div class="metrics-list">
+                        <div class="metric-item">
+                            <div class="metric-header">
+                                <span>Cases Solved</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%; background: var(--secondary);"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-header">
+                                <span>Response Time</span>
+                                <span>92%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%; background: var(--primary);"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-header">
+                                <span>Community Rating</span>
+                                <span>78%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%; background: var(--warning);"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-header">
+                                <span>Training Completion</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%; background: var(--secondary);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics & Reports Page -->
+        <div class="page" id="analytics">
+            <div class="page-header">
+                <h1>Analytics & Reports</h1>
+                <div class="header-controls">
+                    <input type="date" id="startDate" class="date-input">
+                    <input type="date" id="endDate" class="date-input">
+                    <button class="btn-primary">Generate Report</button>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="chart-card">
+                    <h3>Crime Trends</h3>
+                    <div class="line-chart-placeholder">
+                        <canvas id="crimeChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Case Status Distribution</h3>
+                    <div class="pie-chart">
+                        <div class="pie-segment resolved" style="--percentage: 60;"></div>
+                        <div class="pie-segment investigating" style="--percentage: 25;"></div>
+                        <div class="pie-segment reported" style="--percentage: 15;"></div>
+                        <div class="pie-center">
+                            <span>Total Cases</span>
+                            <strong>1,234</strong>
+                        </div>
+                    </div>
+                    <div class="pie-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--secondary);"></span>
+                            <span>Resolved (60%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--warning);"></span>
+                            <span>Investigating (25%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--danger);"></span>
+                            <span>Reported (15%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-actions">
+                    <h3>Export Reports</h3>
+                    <div class="export-buttons">
+                        <button class="btn-secondary">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Settings Page -->
+        <div class="page" id="settings">
+            <div class="page-header">
+                <h1>System Settings</h1>
+                <button class="btn-primary">Save Changes</button>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-section">
+                    <h3>General Settings</h3>
+                    <div class="form-group">
+                        <label>System Name</label>
+                        <input type="text" value="Police Management System" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Time Zone</label>
+                        <select class="form-select">
+                            <option>UTC-5 (Eastern Time)</option>
+                            <option>UTC-6 (Central Time)</option>
+                            <option>UTC-7 (Mountain Time)</option>
+                            <option>UTC-8 (Pacific Time)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Language</label>
+                        <select class="form-select">
+                            <option>English</option>
+                            <option>Spanish</option>
+                            <option>French</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Security Settings</h3>
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <label>Two-Factor Authentication</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="twoFactor" checked>
+                                <label for="twoFactor" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="toggle-item">
+                            <label>Session Timeout (30 minutes)</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="sessionTimeout" checked>
+                                <label for="sessionTimeout" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="toggle-item">
+                            <label>Login Notifications</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="loginNotifications">
+                                <label for="loginNotifications" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="theme-switcher">
+                        <label>Theme</label>
+                        <div class="theme-options">
+                            <div class="theme-option active" data-theme="light">
+                                <div class="theme-preview light"></div>
+                                <span>Light</span>
+                            </div>
+                            <div class="theme-option" data-theme="dark">
+                                <div class="theme-preview dark"></div>
+                                <span>Dark</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Notifications</h3>
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <label>Email Notifications</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <label for="emailNotifications" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="toggle-item">
+                            <label>SMS Alerts</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="smsAlerts">
+                                <label for="smsAlerts" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div class="toggle-item">
+                            <label>Push Notifications</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="pushNotifications" checked>
+                                <label for="pushNotifications" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Profile Page -->
+        <div class="page" id="profile">
+            <div class="page-header">
+                <h1>Admin Profile</h1>
+                <button class="btn-primary">Update Profile</button>
+            </div>
+
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <img src="/placeholder.svg?height=120&width=120" alt="Profile Picture">
+                        <button class="avatar-upload">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h3>John Administrator</h3>
+                        <p>System Administrator</p>
+                        <p>Last login: Today at 9:30 AM</p>
+                    </div>
+                </div>
+
+                <div class="profile-form">
+                    <h3>Personal Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" value="John" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" value="Administrator" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" value="admin@police.gov" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" value="+1 (555) 123-4567" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select class="form-select">
+                            <option>Administration</option>
+                            <option>Operations</option>
+                            <option>Investigation</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="password-section">
+                    <h3>Change Password</h3>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" class="form-input">
+                    </div>
+                    <button class="btn-secondary">Change Password</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs & Audit Page -->
+        <div class="page" id="logs">
+            <div class="page-header">
+                <h1>Logs & Audit Trail</h1>
+                <div class="header-controls">
+                    <button class="btn-secondary">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search logs..." id="logSearch">
+                </div>
+                <div class="filter-controls">
+                    <select id="logTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="Login">Login</option>
+                        <option value="Data Access">Data Access</option>
+                        <option value="System">System</option>
+                        <option value="Error">Error</option>
+                    </select>
+                    <select id="logLevelFilter">
+                        <option value="">All Levels</option>
+                        <option value="Info">Info</option>
+                        <option value="Warning">Warning</option>
+                        <option value="Error">Error</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                    <input type="date" id="logDateFilter">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table" id="logTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('logTable', 0)">Timestamp <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('logTable', 1)">User <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('logTable', 2)">Action <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('logTable', 3)">Type <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable('logTable', 4)">Level <i class="fas fa-sort"></i></th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody">
+                        <!-- Data populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Help & Support Page -->
+        <div class="page" id="help">
+            <div class="page-header">
+                <h1>Help & Support</h1>
+                <button class="btn-primary">Contact Support</button>
+            </div>
+
+            <div class="help-grid">
+                <div class="faq-section">
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>How do I file a new FIR?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>To file a new FIR, navigate to the FIR Management page and click the "New FIR" button. Fill in all required information including incident type, location, and description.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>How can I track case status?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Case status can be tracked from the FIR Management page. Use the search function to find specific cases or filter by status to view all cases in a particular state.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>How do I reset my password?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>You can reset your password from the Admin Profile page. Navigate to the "Change Password" section and follow the prompts to update your credentials.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>How do I generate reports?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <p>Reports can be generated from the Analytics & Reports page. Select your date range and click "Generate Report". You can export reports in CSV, PDF, or Excel format.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="support-form">
+                    <h3>Submit Support Ticket</h3>
+                    <form class="ticket-form">
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" class="form-input" placeholder="Brief description of your issue">
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select class="form-select">
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                                <option>Critical</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-select">
+                                <option>Technical Issue</option>
+                                <option>Feature Request</option>
+                                <option>Bug Report</option>
+                                <option>General Question</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-textarea" rows="5" placeholder="Detailed description of your issue or request"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Attachment</label>
+                            <input type="file" class="form-input">
+                        </div>
+                        <button type="submit" class="btn-primary">Submit Ticket</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for confirmations -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirm Action</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">Are you sure you want to perform this action?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" id="confirmButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
