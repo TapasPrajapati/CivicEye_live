@@ -62,21 +62,24 @@ body {
 }
 
 .sidebar-header {
+  padding: 1.5rem;
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
+  gap: 1rem;
   margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .close-btn {
   background: none;
   border: none;
+  padding: 0;
+  margin: 5px;
+  margin-left: 18px;
+  margin-top: 14px;
   cursor: pointer;
-  color: var(--white);
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #ffffff;
+  font-size: 1.2rem;
 }
 
 .close-btn:hover {
@@ -86,16 +89,31 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--white);
+  padding-left: 0;
+  gap: 8px;
+  margin-top: 10px;
+  gap: 0.5rem;
+  color: #ffffff;
+}
+
+.logo i {
+  font-size: 1.5rem;
+}
+
+.logo span {
+  font-weight: bold;
   font-size: 1.2rem;
-  font-weight: 600;
 }
 
 .nav-links {
   list-style: none;
   margin-bottom: 30px;
 }
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
 
 .nav-links li a {
   display: flex;
