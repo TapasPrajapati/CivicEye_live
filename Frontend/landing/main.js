@@ -94,10 +94,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // News API Integration with Infinite Scroll
+  // news api keys and ticker setup
   const API_KEYS = {
     newsAPI: "a9c94c80e2f845d2ae73c571aa3fc47d",
-    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e", // Removed backticks
+    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e", 
   };
 
   const newsTicker = document.getElementById("news-ticker");
@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (hours < 24) return `${hours}h ago`;
       const days = Math.floor(hours / 24);
       return `${days}d ago`;
-    }
+    }+
 
     function initializeTicker() {
       // Clean up previous ticker if exists
@@ -322,12 +322,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Initialize immediately
-    // updateNewsFeed();
+    updateNewsFeed();
 
     // Set interval to check every 30 seconds
     const checkInterval = setInterval(updateNewsFeed, 10 * 60 * 1000);
 
     // Also refresh when window gains focus
-    // window.addEventListener("focus", updateNewsFeed);
+    window.addEventListener("focus", updateNewsFeed);
   }
 });
