@@ -134,16 +134,11 @@ node server.js
 ## Data Sources
 
 - Crime data sourced from the [National Crime Records Bureau (NCRB), India](http://ncrb.gov.in).
-- Data visualizations and stories are based on NCRB reports (2010–2014).
+- Data visualizations and stories are based on NCRB reports .
 
 ---
 
-## Credits
 
-- Project inspired by the need for accessible crime data and public safety tools in India.
-- Data cleaning and processing with Python and Pandas.
-- Icons by [parkjisun from The Noun Project](https://thenounproject.com/naripuru/collection/crimes-and-justice-outlines/).
-- Map of India courtesy [Datameet](https://github.com/datameet/maps/tree/master/States).
 
 ---
 
@@ -153,4 +148,4 @@ This project is for educational and civic use. See individual files for third-pa
 
 ---
 
-**For more details, see the in-app Help Guide or About page.** 
+**For more details, contact the app owner** 
