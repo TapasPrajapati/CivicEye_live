@@ -1,234 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Case - CivicEye</title>
-    <link rel="stylesheet" href="/Frontend/landing/style.css">
-    <link rel="stylesheet" href="/Frontend/report/report.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Case - CivicEye</title>
+  <link rel="stylesheet" href="report.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Inline CSS just for layout fix (can be moved to report.css) -->
+  <style>
+    .location-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .location-row input[type="text"],
+    .location-row select,
+    .location-row button {
+      flex: 1 1 auto;
+      min-width: 180px;
+    }
+    .location-row button {
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <button class="close-btn" id="closeNav">
-                <i data-lucide="chevron-left"></i>
+  <main class="main-content">
+    <div class="reporting-container">
+      <div class="reporting-header">
+        <h1>File a Crime Report</h1>
+        <div class="progress-steps">
+          <div class="step active" data-step="1">1. Your Information</div>
+          <div class="step" data-step="2">2. Crime Details</div>
+          <div class="step" data-step="3">3. Review & Submit</div>
+        </div>
+      </div>
+
+      <form id="crimeForm" enctype="multipart/form-data">
+        <!-- Personal Information Section -->
+        <section class="form-section active" id="section-personal">
+          <h2><i data-lucide="user" class="section-icon"></i> Your Information</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required pattern="[A-Za-z\s]{3,50}" title="Letters only, 3-50 characters" placeholder="Enter your full name">
+              <div class="input-hint">Letters only, 3-50 characters</div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="Valid email format" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" title="10-digit number" placeholder="9876543210">
+              <div class="input-hint">10-digit number only</div>
+            </div>
+          </div>
+
+          <div class="form-navigation">
+            <button type="button" class="btn-next" data-current="section-personal" data-next="section-crime">
+              Next: Crime Details <i data-lucide="arrow-right"></i>
             </button>
-            <div class="logo">
-                <i data-lucide="shield-alert"></i>
-                <span>CivicEye</span>
-            </div>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="/Frontend/landing/index.html" class="active">
-                    <i data-lucide="home"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Dashboard/Home/Home.html"  class="active">
-                    <i data-lucide="layout-dashboard"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/report/report.html"  class="active">
-                    <i data-lucide="file-text"></i>
-                    <span>Report Case</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Track_case/track.html"  class="active">
-                    <i data-lucide="search"></i>
-                    <span>Track Case</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Emergency/emergency.html"  class="active">
-                    <i data-lucide="phone"></i>
-                    <span>Emergency Contacts</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/help_guide/help.html"  class="active">
-                    <i data-lucide="help-circle"></i>
-                    <span>Help Guide</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/safety-tips/safety.html"  class="active">
-                    <i data-lucide="shield"></i>
-                    <span>Safety Tips</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Contact Us/contact-us.html"><i data-lucide="phone"></i>Contact</a>
-            </li>
-        </ul>
-        <div class="emergency-section">
-            <div class="emergency-title">
-                <i data-lucide="phone-call"></i>
-                <span>Emergency Numbers</span>
-            </div>
-            <div class="emergency-numbers">
-                <a href="tel:100" class="emergency-item" style="color: #FFFF;">
-                    <span class="service">Police</span>
-                    <span class="number">100</span>
-                </a>
-                
-                <a href="tel:1091" class="emergency-item" style="color: #FFFF;">
-                    <span class="service">Women Helpline</span>
-                    <span class="number">1091</span>
-                </a>
-                <a href="tel:108" class="emergency-item" style="color: #FFFF;">
-                    <span class="service">Ambulance</span>
-                    <span class="number">108</span>
-                </a>
-            </div>
-        </div>
-    </nav>
+          </div>
+        </section>
 
-    <main class="main-content">
-        <header class="top-nav">
-            <div class="nav-left">
-                <button class="menu-btn" id="openNav">
-                    <i data-lucide="menu"></i>
+        <!-- Crime Details Section -->
+        <section class="form-section" id="section-crime">
+          <h2><i data-lucide="alert-circle" class="section-icon"></i> Crime Details</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="crimeType">Type of Crime</label>
+              <select id="crimeType" name="crimeType" required>
+                <option value="">Select a crime type</option>
+                <option value="theft">Theft/Burglary</option>
+                <option value="assault">Assault/Violence</option>
+                <option value="harassment">Harassment</option>
+                <option value="vandalism">Vandalism</option>
+                <option value="fraud">Fraud/Scam</option>
+                <option value="cyber">Cyber Crime</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="date">Date of Incident</label>
+              <input type="date" id="date" name="date" required max="" onfocus="setMaxDate(this)">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="location">Location</label>
+              <div class="location-row">
+                <input type="text" id="location" name="location" required placeholder="Street address, city">
+
+                <select id="state" name="state" class="state-select" required>
+                  <option value="">Select State</option>
+                  <option value="AP">Andhra Pradesh</option>
+                  <option value="AR">Arunachal Pradesh</option>
+                  <option value="AS">Assam</option>
+                  <option value="BR">Bihar</option>
+                  <option value="CT">Chhattisgarh</option>
+                  <option value="GA">Goa</option>
+                  <option value="GJ">Gujarat</option>
+                  <option value="HR">Haryana</option>
+                  <option value="HP">Himachal Pradesh</option>
+                  <option value="JH">Jharkhand</option>
+                  <option value="KA">Karnataka</option>
+                  <option value="KL">Kerala</option>
+                  <option value="MP">Madhya Pradesh</option>
+                  <option value="MH">Maharashtra</option>
+                  <option value="MN">Manipur</option>
+                  <option value="ML">Meghalaya</option>
+                  <option value="MZ">Mizoram</option>
+                  <option value="NL">Nagaland</option>
+                  <option value="OD">Odisha</option>
+                  <option value="PB">Punjab</option>
+                  <option value="RJ">Rajasthan</option>
+                  <option value="SK">Sikkim</option>
+                  <option value="TN">Tamil Nadu</option>
+                  <option value="TG">Telangana</option>
+                  <option value="TR">Tripura</option>
+                  <option value="UP">Uttar Pradesh</option>
+                  <option value="UK">Uttarakhand</option>
+                  <option value="WB">West Bengal</option>
+                  <option value="AN">Andaman and Nicobar Islands</option>
+                  <option value="CH">Chandigarh</option>
+                  <option value="DN">Dadra and Nagar Haveli and Daman and Diu</option>
+                  <option value="DL">Delhi</option>
+                  <option value="JK">Jammu and Kashmir</option>
+                  <option value="LA">Ladakh</option>
+                  <option value="LD">Lakshadweep</option>
+                  <option value="PY">Puducherry</option>
+                </select>
+
+                <button type="button" class="btn-location" id="getLocation">
+                  <i data-lucide="map-pin"></i> Detect Location
                 </button>
-                <div class="brand" onclick="window.location.href='/Frontend/landing/index.html'" style="cursor: pointer;">
-                    <i data-lucide="shield-alert"></i>
-                    <span>CivicEye</span>
-                </div>
+              </div>
             </div>
-            <div class="nav-right">
-                <a href="tel:112"    style="color: #FFFF; text-decoration: none;" >
-                    <button class="btn btn-emergency">
-                        <i data-lucide="phone-call"></i>
-                        Emergency
-                    </button>
-                  </a>
-                <button class="btn btn-login">Login</button>
-                <button class="btn btn-signup">Register</button>
-            </div>
-        </header>
 
-        <div class="container">
-            <h1>Report a Crime</h1>
-            <form id="crimeForm" onsubmit="submitReport(event)" enctype="multipart/form-data">
-                <!-- Personal Information -->
-                <fieldset>
-                    <legend>Your Information</legend>
-                    <div class="form-group">
-                        <label for="name">Full Name:</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number:</label>
-                        <input type="tel" id="phone" name="phone"  required>
-                    </div>
-                </fieldset>
-    
-                <!-- Crime Details -->
-                <fieldset>
-                    <legend>Crime Details</legend>
-                    <div class="form-group">
-                        <label for="crimeType">Type of Crime:</label>
-                        <select id="crimeType" name="crimeType" required>
-                            <option value="">Select Crime Type</option>
-                            <option value="theft">Theft/Burglary</option>
-                            <option value="assault">Assault</option>
-                            <option value="vandalism">Vandalism</option>
-                            <option value="fraud">Fraud</option>
-                            <option value="cyber">Cyber Crime</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Date & Time of Incident:</label>
-                        <input type="datetime-local" id="date" name="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Location:</label>
-                        <input type="text" id="location" name="location" placeholder="Enter location or address" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Incident Description:</label>
-                        <textarea id="description" name="description" rows="5" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="evidence">Upload Evidence (photos, documents):</label>
-                        <input type="file" id="evidence" name="evidence" multiple accept="image/*,.pdf,.doc,.docx">
-                    </div>
-                    
-                </fieldset>
-    
-                <!-- Consent -->
-                <div class="consent">
-                    <input type="checkbox" id="consent" name="consent" required>
-                    <label for="consent">I confirm that the information provided is accurate to the best of my knowledge</label>
-                </div>
-    
-                <button type="submit" class="sub">Submit Report</button>
-            </form>
-    
-            <div id="confirmation" class="hidden">
-                <h2>Report Submitted Successfully!</h2>
-                <p>Your report ID: <span id="reportId"></span></p>
-                <p>We will contact you shortly regarding this matter.</p>
-                <button id="goBack" class="btn-back">Go Back</button>
+            <div class="form-group full-width">
+              <label for="description">Incident Description</label>
+              <textarea id="description" name="description" rows="5" required minlength="20" placeholder="Please provide detailed information (minimum 20 characters)..."></textarea>
+              <div class="input-hint">Minimum 20 characters required</div>
             </div>
+
+            <div class="form-group full-width">
+              <label>Evidence Upload</label>
+              <div class="file-upload-options">
+                <label for="evidence" class="upload-label">
+                  <i data-lucide="upload"></i>
+                  <span>Upload Files</span>
+                  <input type="file" id="evidence" name="evidence" multiple accept="image/*,.pdf,.doc,.docx">
+                </label>
+                <button type="button" class="btn-camera" id="openCamera">
+                  <i data-lucide="camera"></i>
+                  <span>Take Photos</span>
+                </button>
+              </div>
+              <div id="file-preview" class="file-preview"></div>
+              <div class="input-hint">Max 5 files total (images, PDFs, Word docs)</div>
+              <input type="hidden" id="camera-images" name="camera-images">
+            </div>
+          </div>
+
+          <div class="form-navigation">
+            <button type="button" class="btn-prev" data-current="section-crime" data-prev="section-personal">
+              <i data-lucide="arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn-next" data-current="section-crime" data-next="section-review">
+              Next: Review <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- Review Section -->
+        <section class="form-section" id="section-review">
+          <h2><i data-lucide="clipboard-check" class="section-icon"></i> Review Your Report</h2>
+          <div class="review-summary">
+            <div class="review-section">
+              <h3>Your Information</h3>
+              <div class="review-item" id="review-name"></div>
+              <div class="review-item" id="review-email"></div>
+              <div class="review-item" id="review-phone"></div>
+            </div>
+            <div class="review-section">
+              <h3>Crime Details</h3>
+              <div class="review-item" id="review-crimeType"></div>
+              <div class="review-item" id="review-date"></div>
+              <div class="review-item" id="review-location"></div>
+              <div class="review-item" id="review-description"></div>
+              <div class="review-item" id="review-evidence"></div>
+            </div>
+          </div>
+
+          <div class="consent-box">
+            <input type="checkbox" id="consent" name="consent" required>
+            <label for="consent">
+              I confirm that the information provided is accurate to the best of my knowledge.
+              I understand that false reports may be subject to legal consequences.
+            </label>
+          </div>
+
+          <div class="form-navigation">
+            <button type="button" class="btn-prev" data-current="section-review" data-prev="section-crime">
+              <i data-lucide="arrow-left"></i> Back
+            </button>
+            <button type="submit" class="btn-submit">
+              <i data-lucide="send"></i> Submit Report
+            </button>
+          </div>
+        </section>
+      </form>
+
+      <!-- Confirmation Modal -->
+      <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="success-animation">
+            <i data-lucide="check-circle"></i>
+          </div>
+          <h2>Report Submitted Successfully!</h2>
+          <p>Your report ID: <strong id="reportId">CE-2023-XXXXXX</strong></p>
+          <p>A confirmation has been sent to your email.</p>
+          <div class="modal-actions">
+            <button id="printReport" class="btn-secondary">
+              <i data-lucide="printer"></i> Print Report
+            </button>
+            <button id="newReport" class="btn-secondary">
+              <i data-lucide="file-plus"></i> File Another Report
+            </button>
+            <button id="goDashboard" class="btn-primary">
+              <i data-lucide="layout-dashboard"></i> Go to Dashboard
+            </button>
+          </div>
         </div>
-
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Emergency Contacts</h3>
-                    <ul>
-                        <a href="tel:100" style="color: #fff; text-decoration: none;">
-                        <li><strong>Police:</strong> 100</li>
-                        </a>
-                        <a href="tel:1091" style="color: #fff; text-decoration: none;">
-                        <li><strong>Women's Helpline:</strong> 1091</li>
-                        </a>
-                        <a href="tel:108" style="color: #fff; text-decoration: none;">
-                        <li><strong>Ambulance:</strong> 108</li>
-                        </a>
-                        <a href="tel:1098" style="color: #fff; text-decoration: none;">
-                        <li><strong>Child Helpline:</strong> 1098</li>
-                        </a>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="/Frontend/report.html">Report Case</a></li>
-                        <li><a href="/Frontend/Track_case/track.html">Track Case</a></li>
-                        <li><a href="#">Safety Tips</a></li>
-                        <li><a href="#">FAQs</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect With Us</h3>
-                    <ul>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Instagram</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2024 CivicEye. All rights reserved.</p>
-            </div>
-        </footer>
-    </main>
-  
-
-    <script src="/Frontend/landing/main.js"></script>
-    <script src="/Frontend/report/report.js"></script>
+      </div>
+    </div>
+  </main>
+  <script src="report.js"></script>
 </body>
 </html>

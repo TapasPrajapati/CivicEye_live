@@ -1,0 +1,668 @@
+[
+  {
+    "state": "1 Andhra Pradesh",
+    "crime": "IPC",
+    "rate": 299.0,
+    "year": 2022
+  },
+  {
+    "state": "Arunachal Pradesh",
+    "crime": "IPC",
+    "rate": 148.8,
+    "year": 2022
+  },
+  {
+    "state": "Assam",
+    "crime": "IPC",
+    "rate": 167.1,
+    "year": 2022
+  },
+  {
+    "state": "Bihar",
+    "crime": "IPC",
+    "rate": 168.1,
+    "year": 2022
+  },
+  {
+    "state": "Chhattisgarh",
+    "crime": "IPC",
+    "rate": 246.5,
+    "year": 2022
+  },
+  {
+    "state": "Goa",
+    "crime": "IPC",
+    "rate": 172.8,
+    "year": 2022
+  },
+  {
+    "state": "Gujarat",
+    "crime": "IPC",
+    "rate": 189.8,
+    "year": 2022
+  },
+  {
+    "state": "Haryana",
+    "crime": "IPC",
+    "rate": 418.6,
+    "year": 2022
+  },
+  {
+    "state": "Himachal Pradesh",
+    "crime": "IPC",
+    "rate": 177.8,
+    "year": 2022
+  },
+  {
+    "state": "Jharkhand",
+    "crime": "IPC",
+    "rate": 124.5,
+    "year": 2022
+  },
+  {
+    "state": "Karnataka",
+    "crime": "IPC",
+    "rate": 192.1,
+    "year": 2022
+  },
+  {
+    "state": "Kerala",
+    "crime": "IPC",
+    "rate": 661.0,
+    "year": 2022
+  },
+  {
+    "state": "Madhya Pradesh",
+    "crime": "IPC",
+    "rate": 347.6,
+    "year": 2022
+  },
+  {
+    "state": "Maharashtra",
+    "crime": "IPC",
+    "rate": 297.5,
+    "year": 2022
+  },
+  {
+    "state": "Manipur",
+    "crime": "IPC",
+    "rate": 94.6,
+    "year": 2022
+  },
+  {
+    "state": "Meghalaya",
+    "crime": "IPC",
+    "rate": 87.6,
+    "year": 2022
+  },
+  {
+    "state": "Mizoram",
+    "crime": "IPC",
+    "rate": 291.6,
+    "year": 2022
+  },
+  {
+    "state": "Nagaland",
+    "crime": "IPC",
+    "rate": 45.4,
+    "year": 2022
+  },
+  {
+    "state": "Odisha",
+    "crime": "IPC",
+    "rate": 311.2,
+    "year": 2022
+  },
+  {
+    "state": "Punjab",
+    "crime": "IPC",
+    "rate": 142.9,
+    "year": 2022
+  },
+  {
+    "state": "Rajasthan",
+    "crime": "IPC",
+    "rate": 293.5,
+    "year": 2022
+  },
+  {
+    "state": "Sikkim",
+    "crime": "IPC",
+    "rate": 80.3,
+    "year": 2022
+  },
+  {
+    "state": "Tamil Nadu",
+    "crime": "IPC",
+    "rate": 252.8,
+    "year": 2022
+  },
+  {
+    "state": "Telangana",
+    "crime": "IPC",
+    "rate": 400.1,
+    "year": 2022
+  },
+  {
+    "state": "Tripura",
+    "crime": "IPC",
+    "rate": 88.7,
+    "year": 2022
+  },
+  {
+    "state": "Uttar Pradesh",
+    "crime": "IPC",
+    "rate": 171.6,
+    "year": 2022
+  },
+  {
+    "state": "Uttarakhand",
+    "crime": "IPC",
+    "rate": 146.8,
+    "year": 2022
+  },
+  {
+    "state": "West Bengal",
+    "crime": "IPC",
+    "rate": 158.5,
+    "year": 2022
+  },
+  {
+    "state": "STATE(S)",
+    "crime": "IPC",
+    "rate": 240.7,
+    "year": 2022
+  },
+  {
+    "state": "TERRITORIES: 29 A&N Islands",
+    "crime": "IPC",
+    "rate": 114.4,
+    "year": 2022
+  },
+  {
+    "state": "Chandigarh",
+    "crime": "IPC",
+    "rate": 240.5,
+    "year": 2022
+  },
+  {
+    "state": "Delhi",
+    "crime": "IPC",
+    "rate": 1424.1,
+    "year": 2022
+  },
+  {
+    "state": "Jammu & Kashmir",
+    "crime": "IPC",
+    "rate": 191.4,
+    "year": 2022
+  },
+  {
+    "state": "Ladakh",
+    "crime": "IPC",
+    "rate": 146.8,
+    "year": 2022
+  },
+  {
+    "state": "Lakshadweep",
+    "crime": "IPC",
+    "rate": 92.8,
+    "year": 2022
+  },
+  {
+    "state": "Puducherry",
+    "crime": "IPC",
+    "rate": 199.7,
+    "year": 2022
+  },
+  {
+    "state": "UT(S) 285150 327087 334669 394.5 848.4 35.6 TOTAL ALL INDIA",
+    "crime": "IPC",
+    "rate": 258.1,
+    "year": 2022
+  },
+  {
+    "state": "1 Andhra Pradesh",
+    "crime": "SLL",
+    "rate": 69.3,
+    "year": 2022
+  },
+  {
+    "state": "Arunachal Pradesh",
+    "crime": "SLL",
+    "rate": 29.2,
+    "year": 2022
+  },
+  {
+    "state": "Assam",
+    "crime": "SLL",
+    "rate": 27.1,
+    "year": 2022
+  },
+  {
+    "state": "Bihar",
+    "crime": "SLL",
+    "rate": 108.9,
+    "year": 2022
+  },
+  {
+    "state": "Chhattisgarh",
+    "crime": "SLL",
+    "rate": 157.7,
+    "year": 2022
+  },
+  {
+    "state": "Goa",
+    "crime": "SLL",
+    "rate": 61.7,
+    "year": 2022
+  },
+  {
+    "state": "Gujarat",
+    "crime": "SLL",
+    "rate": 549.1,
+    "year": 2022
+  },
+  {
+    "state": "Haryana",
+    "crime": "SLL",
+    "rate": 391.8,
+    "year": 2022
+  },
+  {
+    "state": "Himachal Pradesh",
+    "crime": "SLL",
+    "rate": 78.2,
+    "year": 2022
+  },
+  {
+    "state": "Jharkhand",
+    "crime": "SLL",
+    "rate": 39.9,
+    "year": 2022
+  },
+  {
+    "state": "Karnataka",
+    "crime": "SLL",
+    "rate": 76.1,
+    "year": 2022
+  },
+  {
+    "state": "Kerala",
+    "crime": "SLL",
+    "rate": 613.7,
+    "year": 2022
+  },
+  {
+    "state": "Madhya Pradesh",
+    "crime": "SLL",
+    "rate": 221.7,
+    "year": 2022
+  },
+  {
+    "state": "Maharashtra",
+    "crime": "SLL",
+    "rate": 145.5,
+    "year": 2022
+  },
+  {
+    "state": "Manipur",
+    "crime": "SLL",
+    "rate": 27.6,
+    "year": 2022
+  },
+  {
+    "state": "Meghalaya",
+    "crime": "SLL",
+    "rate": 21.4,
+    "year": 2022
+  },
+  {
+    "state": "Mizoram",
+    "crime": "SLL",
+    "rate": 44.4,
+    "year": 2022
+  },
+  {
+    "state": "Nagaland",
+    "crime": "SLL",
+    "rate": 26.3,
+    "year": 2022
+  },
+  {
+    "state": "Odisha",
+    "crime": "SLL",
+    "rate": 75.5,
+    "year": 2022
+  },
+  {
+    "state": "Punjab",
+    "crime": "SLL",
+    "rate": 97.7,
+    "year": 2022
+  },
+  {
+    "state": "Rajasthan",
+    "crime": "SLL",
+    "rate": 95.4,
+    "year": 2022
+  },
+  {
+    "state": "Sikkim",
+    "crime": "SLL",
+    "rate": 39.5,
+    "year": 2022
+  },
+  {
+    "state": "Tamil Nadu",
+    "crime": "SLL",
+    "rate": 364.4,
+    "year": 2022
+  },
+  {
+    "state": "Telangana",
+    "crime": "SLL",
+    "rate": 36.8,
+    "year": 2022
+  },
+  {
+    "state": "Tripura",
+    "crime": "SLL",
+    "rate": 21.3,
+    "year": 2022
+  },
+  {
+    "state": "Uttar Pradesh",
+    "crime": "SLL",
+    "rate": 150.3,
+    "year": 2022
+  },
+  {
+    "state": "Uttarakhand",
+    "crime": "SLL",
+    "rate": 152.6,
+    "year": 2022
+  },
+  {
+    "state": "West Bengal",
+    "crime": "SLL",
+    "rate": 24.3,
+    "year": 2022
+  },
+  {
+    "state": "STATE(S)",
+    "crime": "SLL",
+    "rate": 166.8,
+    "year": 2022
+  },
+  {
+    "state": "TERRITORIES: 29 A&N Islands",
+    "crime": "SLL",
+    "rate": 280.8,
+    "year": 2022
+  },
+  {
+    "state": "Chandigarh",
+    "crime": "SLL",
+    "rate": 58.6,
+    "year": 2022
+  },
+  {
+    "state": "Delhi",
+    "crime": "SLL",
+    "rate": 94.1,
+    "year": 2022
+  },
+  {
+    "state": "Jammu & Kashmir",
+    "crime": "SLL",
+    "rate": 31.6,
+    "year": 2022
+  },
+  {
+    "state": "Ladakh",
+    "crime": "SLL",
+    "rate": 13.0,
+    "year": 2022
+  },
+  {
+    "state": "Lakshadweep",
+    "crime": "SLL",
+    "rate": 47.8,
+    "year": 2022
+  },
+  {
+    "state": "Puducherry",
+    "crime": "SLL",
+    "rate": 81.5,
+    "year": 2022
+  },
+  {
+    "state": "UT(S) 24650 21165 27455 394.5 69.6 96.9 TOTAL ALL INDIA",
+    "crime": "SLL",
+    "rate": 164.1,
+    "year": 2022
+  },
+  {
+    "state": "1 Andhra Pradesh",
+    "crime": "IPC+SLL",
+    "rate": 368.2,
+    "year": 2022
+  },
+  {
+    "state": "Arunachal Pradesh",
+    "crime": "IPC+SLL",
+    "rate": 178.0,
+    "year": 2022
+  },
+  {
+    "state": "Assam",
+    "crime": "IPC+SLL",
+    "rate": 194.2,
+    "year": 2022
+  },
+  {
+    "state": "Bihar",
+    "crime": "IPC+SLL",
+    "rate": 277.1,
+    "year": 2022
+  },
+  {
+    "state": "Chhattisgarh",
+    "crime": "IPC+SLL",
+    "rate": 404.2,
+    "year": 2022
+  },
+  {
+    "state": "Goa",
+    "crime": "IPC+SLL",
+    "rate": 234.5,
+    "year": 2022
+  },
+  {
+    "state": "Gujarat",
+    "crime": "IPC+SLL",
+    "rate": 738.9,
+    "year": 2022
+  },
+  {
+    "state": "Haryana",
+    "crime": "IPC+SLL",
+    "rate": 810.4,
+    "year": 2022
+  },
+  {
+    "state": "Himachal Pradesh",
+    "crime": "IPC+SLL",
+    "rate": 256.0,
+    "year": 2022
+  },
+  {
+    "state": "Jharkhand",
+    "crime": "IPC+SLL",
+    "rate": 164.5,
+    "year": 2022
+  },
+  {
+    "state": "Karnataka",
+    "crime": "IPC+SLL",
+    "rate": 268.1,
+    "year": 2022
+  },
+  {
+    "state": "Kerala",
+    "crime": "IPC+SLL",
+    "rate": 1274.8,
+    "year": 2022
+  },
+  {
+    "state": "Madhya Pradesh",
+    "crime": "IPC+SLL",
+    "rate": 569.3,
+    "year": 2022
+  },
+  {
+    "state": "Maharashtra",
+    "crime": "IPC+SLL",
+    "rate": 443.0,
+    "year": 2022
+  },
+  {
+    "state": "Manipur",
+    "crime": "IPC+SLL",
+    "rate": 122.3,
+    "year": 2022
+  },
+  {
+    "state": "Meghalaya",
+    "crime": "IPC+SLL",
+    "rate": 109.0,
+    "year": 2022
+  },
+  {
+    "state": "Mizoram",
+    "crime": "IPC+SLL",
+    "rate": 336.0,
+    "year": 2022
+  },
+  {
+    "state": "Nagaland",
+    "crime": "IPC+SLL",
+    "rate": 71.8,
+    "year": 2022
+  },
+  {
+    "state": "Odisha",
+    "crime": "IPC+SLL",
+    "rate": 386.7,
+    "year": 2022
+  },
+  {
+    "state": "Punjab",
+    "crime": "IPC+SLL",
+    "rate": 240.6,
+    "year": 2022
+  },
+  {
+    "state": "Rajasthan",
+    "crime": "IPC+SLL",
+    "rate": 388.8,
+    "year": 2022
+  },
+  {
+    "state": "Sikkim",
+    "crime": "IPC+SLL",
+    "rate": 119.7,
+    "year": 2022
+  },
+  {
+    "state": "Tamil Nadu",
+    "crime": "IPC+SLL",
+    "rate": 617.2,
+    "year": 2022
+  },
+  {
+    "state": "Telangana",
+    "crime": "IPC+SLL",
+    "rate": 436.9,
+    "year": 2022
+  },
+  {
+    "state": "Tripura",
+    "crime": "IPC+SLL",
+    "rate": 110.1,
+    "year": 2022
+  },
+  {
+    "state": "Uttar Pradesh",
+    "crime": "IPC+SLL",
+    "rate": 322.0,
+    "year": 2022
+  },
+  {
+    "state": "Uttarakhand",
+    "crime": "IPC+SLL",
+    "rate": 299.4,
+    "year": 2022
+  },
+  {
+    "state": "West Bengal",
+    "crime": "IPC+SLL",
+    "rate": 182.8,
+    "year": 2022
+  },
+  {
+    "state": "STATE(S)",
+    "crime": "IPC+SLL",
+    "rate": 407.6,
+    "year": 2022
+  },
+  {
+    "state": "TERRITORIES: 29 A&N Islands",
+    "crime": "IPC+SLL",
+    "rate": 395.3,
+    "year": 2022
+  },
+  {
+    "state": "Chandigarh",
+    "crime": "IPC+SLL",
+    "rate": 299.1,
+    "year": 2022
+  },
+  {
+    "state": "Delhi",
+    "crime": "IPC+SLL",
+    "rate": 1518.2,
+    "year": 2022
+  },
+  {
+    "state": "Jammu & Kashmir",
+    "crime": "IPC+SLL",
+    "rate": 223.1,
+    "year": 2022
+  },
+  {
+    "state": "Ladakh",
+    "crime": "IPC+SLL",
+    "rate": 159.9,
+    "year": 2022
+  },
+  {
+    "state": "Lakshadweep",
+    "crime": "IPC+SLL",
+    "rate": 140.6,
+    "year": 2022
+  },
+  {
+    "state": "Puducherry",
+    "crime": "IPC+SLL",
+    "rate": 281.2,
+    "year": 2022
+  },
+  {
+    "state": "UT(S) 309800 348252 362124 394.5 918.0 40.0 TOTAL ALL INDIA",
+    "crime": "IPC+SLL",
+    "rate": 422.2,
+    "year": 2022
+  }
+]
