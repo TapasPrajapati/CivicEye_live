@@ -6,29 +6,28 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db');
 
-// Import routes
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const policeRoutes = require('./routes/policeRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
+connectDB();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/uploads', express.static('uploads'));
 
-// Connect to database
-connectDB();
+// Static files (evidence uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/police', policeRoutes);
 app.use('/api/reports', reportRoutes);
 
-// Error handling middleware
+//  Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
@@ -41,5 +40,5 @@ app.use((req, res, next) => {
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
