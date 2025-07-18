@@ -1,4 +1,3 @@
-// models/Report.js
 const mongoose = require('mongoose');
 
 const reportSchema = new mongoose.Schema({
@@ -8,27 +7,29 @@ const reportSchema = new mongoose.Schema({
     crimeType: { type: String, required: true },
     date: { type: Date, required: true },
     location: { type: String, required: true },
+    state: { type: String, required: true }, // For reportId
     description: { type: String, required: true },
     evidence: [String],
     status: { 
         type: String, 
-        enum: ['pending', 'investigating', 'resolved'], 
-        default: 'pending' 
+        enum: ['registered','pending', 'investigating', 'resolved'], 
+        default: 'registered' 
     },
     assignedOfficer: { type: String, default: '' },
-    firNumber: { 
+    reportId: {  // ✅ Replaces firNumber
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     createdAt: { type: Date, default: Date.now }
 });
 
-// Generate FIR number before saving
 reportSchema.pre('save', function(next) {
-    if (!this.firNumber) {
-        const year = new Date().getFullYear().toString().slice(-2);
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        this.firNumber = `FIR${year}${randomNum}`;
+    if (!this.reportId && this.state) {
+        const stateCode = this.state.trim().slice(0, 2).toUpperCase(); 
+        const year = new Date().getFullYear(); 
+        const randomNumber = Math.floor(100000 + Math.random() * 900000); // Ex: 825771
+        this.reportId = `${stateCode}-${year}-${randomNumber}`;
     }
     next();
 });
