@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/Frontend/report/report.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/Frontend/landing/auth_passing.js"></script>
 </head>
 <body>
     <nav class="sidebar" id="sidebar">
@@ -91,28 +92,32 @@
     </nav>
 
     <main class="main-content">
-        <header class="top-nav">
-            <div class="nav-left">
-                <button class="menu-btn" id="openNav">
-                    <i data-lucide="menu"></i>
-                </button>
-                <div class="brand" onclick="window.location.href='/Frontend/landing/index.html'" style="cursor: pointer;">
-                    <i data-lucide="shield-alert"></i>
-                    <span>CivicEye</span>
-                </div>
-            </div>
-            <div class="nav-right">
-                <a href="tel:112"    style="color: #FFFF; text-decoration: none;" >
-                    <button class="btn btn-emergency">
-                        <i data-lucide="phone-call"></i>
-                        Emergency
-                    </button>
-                  </a>
-                <button class="btn btn-login">Login</button>
-                <button class="btn btn-signup">Register</button>
-            </div>
-        </header>
-
+<header class="top-nav">
+    <div class="nav-left">
+        <button class="menu-btn" id="openNav">
+            <i data-lucide="menu"></i>
+        </button>
+        <div class="brand" onclick="window.location.href='/Frontend/landing/index.html'" style="cursor: pointer;">
+            <i data-lucide="shield-alert"></i>
+            <span>CivicEye</span>
+        </div>
+    </div>
+    <div class="nav-right">
+        <a href="tel:112" style="color: #FFFF; text-decoration: none;">
+            <button class="btn btn-emergency">
+                <i data-lucide="phone-call"></i>
+                Emergency
+            </button>
+        </a>
+        <button id="openLoginBtn" class="btn btn-login">Login</button>
+        <button id="showLogin" class="btn btn-signup">Register</button>
+        <div id="profileSection" style="display: none">
+            <button id="profileBtn" class="btn btn-profile">
+                <i data-lucide="user"></i>
+            </button>
+        </div>
+    </div>
+</header>
         <div class="container">
             <h1>Report a Crime</h1>
             <form id="crimeForm" onsubmit="submitReport(event)" enctype="multipart/form-data">
@@ -230,5 +235,6 @@
 
     <script src="/Frontend/landing/main.js"></script>
     <script src="/Frontend/report/report.js"></script>
+      <script src="/Frontend/landing/auth_passing.js"></script>
 </body>
 </html>
