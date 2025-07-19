@@ -358,17 +358,117 @@ body {
     position: relative;
     
     background-color: #ffffff;
-
-  width: calc(100% - 0.7rem);
-  height: calc(100% - 1rem - 1.5rem);
-  border: 2px solid #d32f2f;
-  border-radius: 5px;
-  overflow: hidden;
-  position: relative;
-  background-color: #f5f5f5;
-
 }
 
+
+.news-source {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #c80f3a;
+    font-style: italic;
+  }
+/* Profile Modal Styles */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-modal .modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.profile-modal .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.profile-modal .close:hover {
+  color: #333;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.profile-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  margin-right: 15px;
+  font-weight: bold;
+}
+
+.profile-details {
+  margin-bottom: 25px;
+}
+
+.profile-details p {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.profile-details strong {
+  display: inline-block;
+  width: 100px;
+  color: #555;
+}
+
+.logout-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #dc2626;
+}
+
+.profile-initial {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+  font-weight: bold;
+}
 /* Animation for the ticker - merged both keyframes */
 @keyframes scroll {
   0% {

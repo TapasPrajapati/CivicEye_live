@@ -1,4 +1,8 @@
-// ------------------------ DOMContentLoaded Setup ------------------------
+// Global variables
+let capturedPhotos = [];
+let cameraStream = null;
+let isSubmitting = false;
+
 document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) lucide.createIcons();
 
@@ -9,15 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
     setupModalActions();
     checkPreviousSubmission();
 
-    const openCameraBtn = document.getElementById('openCamera');
-    if (openCameraBtn) {
-        openCameraBtn.addEventListener('click', openCameraModal);
-    }
+    // Initialize date picker with max date as today
+    const dateInput = document.getElementById('date');
+    if (dateInput) setMaxDate(dateInput);
 });
 
-// ------------------------ Camera & State Detection Logic ------------------------
-let cameraStream = null;
-let capturedPhotos = [];
+// Helper functions
+function setMaxDate(dateInput) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    dateInput.max = `${year}-${month}-${day}`;
+}
 
 async function detectStateFromGeolocation() {
     const locationInput = document.getElementById('location');
@@ -164,6 +172,7 @@ function closeCameraModal() {
         hiddenInput.value = JSON.stringify(capturedPhotos);
     }
 }
+
 function setupFormNavigation() {
     document.addEventListener('click', function(e) {
         // Handle next buttons
@@ -198,13 +207,11 @@ function validateSection(sectionId) {
     const requiredFields = section.querySelectorAll('[required]');
     let isValid = true;
 
+    // Clear previous errors
+    document.querySelectorAll('.error-message').forEach(msg => msg.remove());
+
     requiredFields.forEach(field => {
-        // Clear previous errors
         field.classList.remove('error');
-        const errorMsg = field.nextElementSibling;
-        if (errorMsg && errorMsg.classList.contains('error-message')) {
-            errorMsg.remove();
-        }
 
         // Check if field is empty
         if (!field.value.trim()) {
@@ -425,6 +432,7 @@ function formatDate(dateString) {
 
 function setupFormSubmission() {
     const crimeForm = document.getElementById('crimeForm');
+    const confirmation = document.getElementById('confirmation');
 
     crimeForm.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -448,88 +456,104 @@ function setupFormSubmission() {
         if (window.lucide) lucide.createIcons();
 
         try {
-            const formData = new FormData(crimeForm);
-
-            // Include captured camera images if any
-            const cameraImagesInput = document.getElementById('camera-images');
-            if (cameraImagesInput && cameraImagesInput.value) {
-                const cameraImages = JSON.parse(cameraImagesInput.value);
-                cameraImages.forEach((image, index) => {
-                    formData.append(`cameraImage${index}`, image);
+            const formData = new FormData(this);
+            
+            // Add captured photos to form data
+            if (capturedPhotos.length > 0) {
+                capturedPhotos.forEach((photo, index) => {
+                    const blob = dataURLtoBlob(photo);
+                    formData.append(`cameraImage_${index}`, blob, `camera_${index}.jpg`);
                 });
             }
 
-            // ✅ Submit to backend route
+            // Debug: Log form data before sending
+            for (let [key, value] of formData.entries()) {
+                console.log('Form data:', key, value);
+            }
+
             const response = await fetch('http://localhost:5000/api/reports/submit-report', {
                 method: 'POST',
-                body: formData
+                body: formData,
             });
-            
+
             if (!response.ok) {
-                throw new Error('Failed to submit report');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Server error: ${response.status}`);
             }
 
-            const result = await response.json();
+            const data = await response.json();
+            console.log('Submission successful:', data);
+            
+            // Store submission data
+            sessionStorage.setItem('reportSubmitted', 'true');
+            sessionStorage.setItem('reportId', data.reportId);
 
-            // ✅ Use backend-generated reportId
-            const reportId = result.reportId || 'N/A';
-            document.getElementById('reportId').textContent = reportId;
-            document.getElementById('confirmation-modal').classList.remove('hidden');
-            document.getElementById('confirmation-modal').classList.add('active');
-
-            // ✅ Store in session
-            sessionStorage.setItem('lastReportId', reportId);
+            // Update UI
+            crimeForm.style.display = 'none';
+            confirmation.classList.remove('hidden');
+            document.getElementById('reportId').textContent = data.reportId;
 
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while submitting the report. Please try again.');
+            console.error('Full error:', error);
+            alert(`Submission failed: ${error.message}`);
+            
+            // Show form again
+            crimeForm.style.display = 'block';
+            confirmation.classList.add('hidden');
+            
         } finally {
-            // Re-enable button
+            isSubmitting = false;
+            const submitButton = document.querySelector('.btn-submit');
             if (submitButton) {
                 submitButton.disabled = false;
-                submitButton.innerHTML = '<i data-lucide="send"></i> Submit Report';
+                submitButton.innerHTML = 'Submit Report <i data-lucide="send"></i>';
+                if (window.lucide) lucide.createIcons();
             }
-            if (window.lucide) lucide.createIcons();
         }
     });
-}
 
-
-
-function setupModalActions() {
-    document.getElementById('printReport').addEventListener('click', function() {
-        window.print();
-    });
-    
-    document.getElementById('newReport').addEventListener('click', function() {
-        document.getElementById('confirmation-modal').classList.remove('active');
+    // Back button handler
+    document.getElementById('goBack')?.addEventListener('click', function() {
+        sessionStorage.removeItem('reportSubmitted');
+        sessionStorage.removeItem('reportId');
+        document.getElementById('confirmation').classList.add('hidden');
+        document.getElementById('crimeForm').style.display = 'block';
         document.getElementById('crimeForm').reset();
         document.getElementById('section-review').classList.remove('active');
         document.getElementById('section-personal').classList.add('active');
         updateProgressSteps('section-personal');
         document.getElementById('file-preview').innerHTML = '';
-    });
-    
-    document.getElementById('goDashboard').addEventListener('click', function() {
-        window.location.href = '/Frontend/Dashboard/Home/Home.html';
+        capturedPhotos = [];
     });
 }
 
 function checkPreviousSubmission() {
-    if (sessionStorage.getItem('lastReportId')) {
-        document.getElementById('reportId').textContent = sessionStorage.getItem('lastReportId');
-        document.getElementById('confirmation-modal').classList.add('active');
+    const crimeForm = document.getElementById('crimeForm');
+    const confirmation = document.getElementById('confirmation');
+    
+    if (sessionStorage.getItem('reportSubmitted')) {
+        crimeForm.style.display = 'none';
+        confirmation.classList.remove('hidden');
+        document.getElementById('reportId').textContent = sessionStorage.getItem('reportId');
     }
 }
 
-// Helper function to set max date for date input
-function setMaxDate(dateInput) {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+function setupModalActions() {
+    document.getElementById('openCamera')?.addEventListener('click', openCameraModal);
+}
+
+function dataURLtoBlob(dataURL) {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
     
-    dateInput.max = `${year}-${month}-${day}`;
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new Blob([u8arr], { type: mime });
 }
 
 // Add animation class to Lucide loader
