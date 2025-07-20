@@ -220,11 +220,6 @@
     color: #92400e;
 }
 
-.case-status.under-review {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
 .case-status.investigation {
     background: #fce7f3;
     color: #be185d;

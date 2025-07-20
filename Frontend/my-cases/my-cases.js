@@ -100,7 +100,7 @@ class MyCasesManager {
     updateStats() {
         const totalCases = this.cases.length;
         const pendingCases = this.cases.filter(case_ => 
-            ['registered', 'pending', 'investigating'].includes(case_.status)
+            ['registered', 'approved', 'officer-assigned', 'investigating'].includes(case_.status)
         ).length;
         const resolvedCases = this.cases.filter(case_ => 
             case_.status === 'resolved'
@@ -189,7 +189,8 @@ class MyCasesManager {
     getStatusClass(status) {
         const statusMap = {
             'registered': 'pending',
-            'pending': 'pending',
+            'approved': 'pending',
+            'officer-assigned': 'investigation',
             'investigating': 'investigation',
             'resolved': 'resolved'
         };
@@ -199,7 +200,8 @@ class MyCasesManager {
     getStatusLabel(status) {
         const statusMap = {
             'registered': 'Registered',
-            'pending': 'Pending',
+            'approved': 'Approved',
+            'officer-assigned': 'Officer Assigned',
             'investigating': 'Under Investigation',
             'resolved': 'Resolved'
         };

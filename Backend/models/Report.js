@@ -12,7 +12,7 @@ const reportSchema = new mongoose.Schema({
     evidence: [String],
     status: { 
         type: String, 
-        enum: ['registered','pending', 'investigating', 'resolved'], 
+        enum: ['registered', 'approved', 'officer-assigned', 'investigating', 'resolved'], 
         default: 'registered' 
     },
     assignedOfficer: { type: String, default: '' },
