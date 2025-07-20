@@ -12,6 +12,35 @@ function setMaxDate(dateInput) {
   dateInput.max = `${year}-${month}-${day}`;
 }
 
+function setMaxTime(timeInput) {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  timeInput.max = `${hours}:${minutes}`;
+}
+
+function setDefaultDate(dateInput) {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  dateInput.value = `${year}-${month}-${day}`;
+}
+
+function setDefaultTime(timeInput) {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  timeInput.value = `${hours}:${minutes}`;
+}
+
+function updateMaxTime(timeInput) {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  timeInput.max = `${hours}:${minutes}`;
+}
+
 async function detectStateFromGeolocation() {
   const locationInput = document.getElementById("location");
   const stateSelect = document.getElementById("state");
@@ -276,6 +305,29 @@ function validateSection(sectionId) {
         }
         break;
 
+      case "time":
+        const selectedTime = field.value;
+        const now = new Date();
+        const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+        
+        // If date is today, check if time is in the future
+        const dateInput = document.getElementById("date");
+        if (dateInput && dateInput.value) {
+          const selectedDate = new Date(dateInput.value);
+          const today = new Date();
+          
+          // Reset both to midnight for comparison
+          selectedDate.setHours(0, 0, 0, 0);
+          today.setHours(0, 0, 0, 0);
+          
+          // If date is today, time cannot be in the future
+          if (selectedDate.getTime() === today.getTime() && selectedTime > currentTime) {
+            markFieldAsInvalid(field, "Time cannot be in the future for today's date");
+            isValid = false;
+          }
+        }
+        break;
+
       case "description":
         if (field.value.length < 20) {
           markFieldAsInvalid(
@@ -459,7 +511,8 @@ function populateReviewFields() {
   }`;
 
   document.getElementById("review-date").textContent = `Date: ${formatDate(
-    document.getElementById("date").value
+    document.getElementById("date").value,
+    document.getElementById("time").value
   )}`;
   document.getElementById("review-location").textContent = `Location: ${
     document.getElementById("location").value
@@ -479,10 +532,23 @@ function populateReviewFields() {
   }
 }
 
-function formatDate(dateString) {
+function formatDate(dateString, timeString) {
   if (!dateString) return "Not specified";
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+  
+  const date = new Date(dateString);
+  const options = { 
+    year: "numeric", 
+    month: "long", 
+    day: "numeric"
+  };
+  
+  let formattedDate = date.toLocaleDateString(undefined, options);
+  
+  if (timeString) {
+    formattedDate += ` at ${timeString}`;
+  }
+  
+  return formattedDate;
 }
 
 function setupFormSubmission() {
@@ -504,6 +570,12 @@ function setupFormSubmission() {
     try {
       // Prepare form data
       const formData = new FormData(this);
+
+      // Debug: Log the form data being sent
+      console.log("Form data being sent:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
 
       // Add captured photos
       capturedPhotos.forEach((photo, index) => {
@@ -573,9 +645,34 @@ document.addEventListener("DOMContentLoaded", function () {
   // Check for previous submission
   checkPreviousSubmission();
 
-  // Setup date picker
+  // Setup date and time pickers
   const dateInput = document.getElementById("date");
-  if (dateInput) setMaxDate(dateInput);
+  const timeInput = document.getElementById("time");
+  
+  if (dateInput) {
+    setMaxDate(dateInput);
+    setDefaultDate(dateInput); // Set default value
+    
+    // Update max value when user focuses on the input
+    dateInput.addEventListener('focus', () => {
+      setMaxDate(dateInput);
+    });
+    
+    // Update time restrictions when date changes
+    dateInput.addEventListener('change', () => {
+      updateTimeRestrictions();
+    });
+  }
+  
+  if (timeInput) {
+    setMaxTime(timeInput);
+    setDefaultTime(timeInput); // Set default value
+    
+    // Update max value when user focuses on the input
+    timeInput.addEventListener('focus', () => {
+      updateMaxTime(timeInput);
+    });
+  }
 
   // Initialize all handlers
   setupFormNavigation();
@@ -672,3 +769,28 @@ document.head.insertAdjacentHTML(
     </style>
 `
 );
+
+function updateTimeRestrictions() {
+  const dateInput = document.getElementById("date");
+  const timeInput = document.getElementById("time");
+  
+  if (dateInput && timeInput) {
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    
+    // Reset both to midnight for comparison
+    selectedDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate.getTime() === today.getTime()) {
+      // If today's date is selected, restrict time to current time
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      timeInput.max = `${hours}:${minutes}`;
+    } else {
+      // If future date, allow any time
+      timeInput.max = "23:59";
+    }
+  }
+}

@@ -124,6 +124,44 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
+/* DateTime input specific styling */
+input[type="datetime-local"] {
+    font-family: 'Inter', sans-serif;
+    color: #2c3e50;
+    background: #ffffff;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    background-color: #3498db;
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+    filter: invert(1);
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    background-color: #2980b9;
+}
+
+/* Time input specific styling */
+input[type="time"] {
+    font-family: 'Inter', sans-serif;
+    color: #2c3e50;
+    background: #ffffff;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    background-color: #3498db;
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+    filter: invert(1);
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+    background-color: #2980b9;
+}
+
 textarea {
     min-height: 120px;
     resize: vertical;

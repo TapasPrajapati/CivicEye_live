@@ -9,9 +9,12 @@ exports.submitReport = async (req, res) => {
         console.log('Uploaded Files:', req.files);
 
         const {
-            name, email, phone, crimeType, date,
+            name, email, phone, crimeType, date, time,
             location, state, description
         } = req.body;
+
+        // Combine date and time into a datetime string
+        const incidentDateTime = date && time ? `${date}T${time}:00` : null;
 
         const evidence = [];
 
@@ -45,7 +48,7 @@ exports.submitReport = async (req, res) => {
             email,
             phone,
             crimeType,
-            date,
+            date: incidentDateTime,
             location,
             state,
             description,
@@ -64,7 +67,7 @@ exports.submitReport = async (req, res) => {
                 Email: ${email}
                 Phone: ${phone}
                 Crime Type: ${crimeType}
-                Date: ${date}
+                Date: ${incidentDateTime || 'N/A'}
                 Location: ${location}
                 State: ${state}
                 Report ID: ${newReport.reportId}

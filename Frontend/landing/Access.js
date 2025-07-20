@@ -25,171 +25,12 @@
     console.error("Geolocation is not supported by this browser.");
   }
 
-  // Handle User Registration
-  document
-    .querySelector("#userForm .submit-btn")
-    .addEventListener("click", async (e) => {
-      e.preventDefault();
-
-      const userData = {
-        name: document.getElementById("userName").value,
-        age: document.getElementById("userAge").value,
-        mobile: document.getElementById("userMobile").value,
-        email: document.getElementById("userEmail").value,
-        password: document.getElementById("userPassword").value,
-      };
-
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/users/register/user",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          }
-        );
-
-        if (response.ok) {
-          alert("Registration successful!");
-          loginModal.classList.remove("active");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    });
-
-  // Handle Police Registration
-  document
-    .querySelector("#policeForm .submit-btn")
-    .addEventListener("click", async (e) => {
-      e.preventDefault();
-
-      const policeData = {
-        policeId: document.getElementById("policeId").value,
-        batchNo: document.getElementById("batchNo").value,
-        rank: document.getElementById("rank").value,
-        phone: document.getElementById("policePhone").value,
-        station: document.getElementById("station").value,
-        email: document.getElementById("policeEmail").value,
-        password: document.getElementById("policePassword").value,
-      };
-
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/police/register/police",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(policeData),
-          }
-        );
-
-        if (response.ok) {
-          alert("Police registration successful!");
-          loginModal.classList.remove("active");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    });
-
-  // Modal handling
-  const openLoginBtn = document.getElementById("openLoginBtn");
-  const userLoginModal = document.getElementById("userLoginModal");
-  const showLoginBtn = document.getElementById("showLogin");
-  const loginModal = document.getElementById("loginModal");
-
-  // Show login modal
-  openLoginBtn.addEventListener("click", () => {
-    userLoginModal.classList.add("active");
-  });
-
-  // Hide login modal when clicking outside
-  userLoginModal.addEventListener("click", function (e) {
-    if (e.target === userLoginModal) {
-      userLoginModal.classList.remove("active");
-    }
-  });
-
-  // Show register modal
-  showLoginBtn.addEventListener("click", function () {
-    loginModal.classList.add("active");
-  });
-
-  // Hide register modal when clicking outside
-  loginModal.addEventListener("click", function (e) {
-    if (e.target === loginModal) {
-      loginModal.classList.remove("active");
-    }
-  });
-
-  // Switch between login and register forms
-  function showLoginForm() {
-    loginModal.classList.remove("active");
-    userLoginModal.classList.add("active");
-  }
-
-  // Role toggle functionality
-  const roleToggle = document.getElementById("roleToggle");
-  const flipCard = document.getElementById("flipCard");
-
-  roleToggle.addEventListener("change", function () {
-    flipCard.classList.toggle("flipped");
-
-    const userLabel = document.querySelector(".toggle-switch span:first-child");
-    const policeLabel = document.querySelector(".toggle-switch span:last-child");
-
-    if (this.checked) {
-      userLabel.style.color = "#000080";
-      policeLabel.style.color = "#987456";
-    } else {
-      userLabel.style.color = "#000000";
-      policeLabel.style.color = "#666";
-    }
-  });
-
   // Profile elements
   const profileSection = document.getElementById("profileSection");
   const profileBtn = document.getElementById("profileBtn");
   const profileModal = document.getElementById("profileModal");
   const profileContent = document.getElementById("profileContent");
 
-  // Login form submission
- document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById("email-input").value;
-  const password = document.getElementById("password-input").value;
-
-  try {
-    const response = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      // Store auth data with session management
-      authUtils.setAuthData(data.token, data);
-      
-      alert("Login successful!");
-      userLoginModal.classList.remove("active");
-      authUtils.updateUIForLoggedInUser(data);
-      resetInactivityTimer();
-    } else {
-      alert("Invalid credentials");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-});
   // Load profile data into modal
   function loadProfileData(userData) {
     const profileContent = document.getElementById('profileContent');
@@ -318,8 +159,215 @@ async function checkAuth() {
 
   // Initialize the application when DOM is loaded
   document.addEventListener('DOMContentLoaded', async function() {
+    console.log("DOM Content Loaded - Initializing login functionality");
+    
+    // Test if elements exist
+    console.log("openLoginBtn:", document.getElementById("openLoginBtn"));
+    console.log("showLoginBtn:", document.getElementById("showLogin"));
+    console.log("userLoginModal:", document.getElementById("userLoginModal"));
+    console.log("loginModal:", document.getElementById("loginModal"));
+    
     // Initialize Lucide icons
     lucide.createIcons();
+    
+    // Modal handling - moved inside DOMContentLoaded
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const userLoginModal = document.getElementById("userLoginModal");
+    const showLoginBtn = document.getElementById("showLogin");
+    const loginModal = document.getElementById("loginModal");
+
+    // Show login modal
+    if (openLoginBtn) {
+      openLoginBtn.addEventListener("click", () => {
+        console.log("Login button clicked");
+        console.log("userLoginModal:", userLoginModal);
+        if (userLoginModal) {
+          userLoginModal.classList.add("active");
+          console.log("Modal should be visible now");
+        } else {
+          console.error("userLoginModal not found");
+        }
+      });
+    }
+
+    // Hide login modal when clicking outside
+    if (userLoginModal) {
+      userLoginModal.addEventListener("click", function (e) {
+        if (e.target === userLoginModal) {
+          userLoginModal.classList.remove("active");
+        }
+      });
+    }
+
+    // Show register modal
+    if (showLoginBtn) {
+      showLoginBtn.addEventListener("click", function () {
+        console.log("Register button clicked");
+        console.log("loginModal:", loginModal);
+        if (loginModal) {
+          loginModal.classList.add("active");
+          console.log("Register modal should be visible now");
+        } else {
+          console.error("loginModal not found");
+        }
+      });
+    }
+
+    // Hide register modal when clicking outside
+    if (loginModal) {
+      loginModal.addEventListener("click", function (e) {
+        if (e.target === loginModal) {
+          loginModal.classList.remove("active");
+        }
+      });
+    }
+
+    // Switch between login and register forms
+    function showLoginForm() {
+      loginModal.classList.remove("active");
+      userLoginModal.classList.add("active");
+    }
+    
+    // Make showLoginForm globally available
+    window.showLoginForm = showLoginForm;
+
+    // Handle User Registration
+    const userForm = document.querySelector("#userForm .submit-btn");
+    if (userForm) {
+      userForm.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const userData = {
+          name: document.getElementById("userName").value,
+          age: document.getElementById("userAge").value,
+          mobile: document.getElementById("userMobile").value,
+          email: document.getElementById("userEmail").value,
+          password: document.getElementById("userPassword").value,
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:5000/api/users/register/user",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            }
+          );
+
+          if (response.ok) {
+            alert("Registration successful!");
+            loginModal.classList.remove("active");
+          } else {
+            alert("Registration failed. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Registration failed. Please try again.");
+        }
+      });
+    }
+
+    // Handle Police Registration
+    const policeForm = document.querySelector("#policeForm .submit-btn");
+    if (policeForm) {
+      policeForm.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const policeData = {
+          policeId: document.getElementById("policeId").value,
+          batchNo: document.getElementById("batchNo").value,
+          rank: document.getElementById("rank").value,
+          phone: document.getElementById("policePhone").value,
+          station: document.getElementById("station").value,
+          email: document.getElementById("policeEmail").value,
+          password: document.getElementById("policePassword").value,
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:5000/api/police/register/police",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(policeData),
+            }
+          );
+
+          if (response.ok) {
+            alert("Police registration successful!");
+            loginModal.classList.remove("active");
+          } else {
+            alert("Registration failed. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Registration failed. Please try again.");
+        }
+      });
+    }
+
+    // Login form submission
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email-input").value;
+        const password = document.getElementById("password-input").value;
+
+        try {
+          const response = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            // Store auth data with session management
+            authUtils.setAuthData(data.token, data);
+            
+            alert("Login successful!");
+            userLoginModal.classList.remove("active");
+            authUtils.updateUIForLoggedInUser(data);
+            // Remove the resetInactivityTimer call since it's not defined
+          } else {
+            alert("Invalid credentials");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Login failed. Please try again.");
+        }
+      });
+    }
+
+    // Role toggle functionality
+    const roleToggle = document.getElementById("roleToggle");
+    const flipCard = document.getElementById("flipCard");
+
+    if (roleToggle && flipCard) {
+      roleToggle.addEventListener("change", function () {
+        flipCard.classList.toggle("flipped");
+
+        const userLabel = document.querySelector(".toggle-switch span:first-child");
+        const policeLabel = document.querySelector(".toggle-switch span:last-child");
+
+        if (this.checked) {
+          userLabel.style.color = "#000080";
+          policeLabel.style.color = "#987456";
+        } else {
+          userLabel.style.color = "#000000";
+          policeLabel.style.color = "#666";
+        }
+      });
+    }
     
     // Check authentication status
     // const userData = await checkAuth();
@@ -339,4 +387,6 @@ async function checkAuth() {
         modal.style.display = 'none';
       }
     });
+    
+    console.log("Login functionality initialization complete");
   });
