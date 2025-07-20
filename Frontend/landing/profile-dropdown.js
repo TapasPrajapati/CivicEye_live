@@ -1,114 +1,5 @@
-// auth.js - Complete Authentication System
-const authUtils = {
-  // Session configuration
-  SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
-  WARNING_TIME: 5 * 60 * 1000,     // 5 minutes before timeout
-  
-  // Store authentication data
-  setAuthData: function(token, userData) {
-    const authData = {
-      token,
-      userData,
-      timestamp: new Date().getTime()
-    };
-    sessionStorage.setItem('authData', JSON.stringify(authData));
-  },
-  
-  // Retrieve valid auth data
-  getAuthData: function() {
-    const authString = sessionStorage.getItem('authData');
-    if (!authString) return null;
-    
-    const authData = JSON.parse(authString);
-    const currentTime = new Date().getTime();
-    
-    // Check if session expired
-    if (currentTime - authData.timestamp > this.SESSION_TIMEOUT) {
-      this.clearAuthData();
-      return null;
-    }
-    
-    // Update timestamp to extend session
-    authData.timestamp = currentTime;
-    sessionStorage.setItem('authData', JSON.stringify(authData));
-    
-    return authData;
-  },
-  
-  // Clear authentication data
-  clearAuthData: function() {
-    sessionStorage.removeItem('authData');
-  },
-  
-  // Verify authentication with server
-  checkAuth: async function() {
-    const authData = this.getAuthData();
-    if (!authData) return false;
-    
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/verify", {
-        headers: { 
-          'Authorization': `Bearer ${authData.token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.ok) {
-        return authData.userData;
-      }
-    } catch (error) {
-      console.error("Auth check failed:", error);
-    }
-    
-    this.clearAuthData();
-    return false;
-  },
-  
-  // Update UI for logged-in user
-  updateUIForLoggedInUser: function(userData) {
-    // Hide login/register buttons
-    const openLoginBtn = document.getElementById("openLoginBtn");
-    const showLoginBtn = document.getElementById("showLogin");
-    if (openLoginBtn) openLoginBtn.style.display = 'none';
-    if (showLoginBtn) showLoginBtn.style.display = 'none';
-    
-    // Show profile section
-    const profileSection = document.getElementById('profileSection');
-    if (profileSection) {
-      profileSection.style.display = 'block';
-      
-      // Update profile button with user initial
-      const profileBtn = document.getElementById('profileBtn');
-      if (profileBtn) {
-        const initial = userData.data.name.charAt(0).toUpperCase();
-        profileBtn.innerHTML = `<span class="profile-initial">${initial}</span>`;
-        
-        // Create hover dropdown instead of click modal
-        this.createProfileDropdown(profileBtn, userData);
-      }
-    }
-    
-    // Auto-fill user details in forms if available
-    this.autoFillUserData(userData);
-  },
-  
-  // Auto-fill user data in forms
-  autoFillUserData: function(userData) {
-    // Report form
-    const nameField = document.getElementById('name');
-    const emailField = document.getElementById('email');
-    const phoneField = document.getElementById('phone');
-    
-    if (nameField) nameField.value = userData.data.name || '';
-    if (emailField) emailField.value = userData.data.email || '';
-    if (phoneField) phoneField.value = userData.data.mobile || userData.data.phone || '';
-    
-    // Make fields read-only if they're auto-filled
-    if (nameField && nameField.value) nameField.readOnly = true;
-    if (emailField && emailField.value) emailField.readOnly = true;
-    if (phoneField && phoneField.value) phoneField.readOnly = true;
-  },
-  
+// Profile Dropdown Functionality (Google Chrome Style)
+const profileDropdownUtils = {
   // Create profile dropdown (Google Chrome style)
   createProfileDropdown: function(profileBtn, userData) {
     // Remove existing dropdown if any
@@ -172,6 +63,11 @@ const authUtils = {
     dropdownHTML += `
       </div>
       <div class="dropdown-divider"></div>
+      <button class="dropdown-my-cases" id="dropdownMyCases">
+        <i data-lucide="folder-open"></i>
+        My Cases
+      </button>
+      <div class="dropdown-divider"></div>
       <button class="dropdown-logout" id="dropdownLogout">
         <i data-lucide="log-out"></i>
         Logout
@@ -196,7 +92,6 @@ const authUtils = {
   // Position dropdown relative to profile button
   positionDropdown: function(profileBtn, dropdown) {
     const btnRect = profileBtn.getBoundingClientRect();
-    const dropdownRect = dropdown.getBoundingClientRect();
     
     // Position dropdown to the right of the button
     dropdown.style.position = 'fixed';
@@ -260,6 +155,14 @@ const authUtils = {
       });
     }
     
+    // My Cases button
+    const myCasesBtn = dropdown.querySelector('#dropdownMyCases');
+    if (myCasesBtn) {
+      myCasesBtn.addEventListener('click', () => {
+        window.location.href = '/Frontend/my-cases/my-cases.html';
+      });
+    }
+    
     // Logout button
     const logoutBtn = dropdown.querySelector('#dropdownLogout');
     if (logoutBtn) {
@@ -269,15 +172,15 @@ const authUtils = {
     }
   },
   
-
-  
   // Handle logout
   handleLogout: function() {
     // Clear client-side data
-    this.clearAuthData();
+    if (window.authUtils) {
+      authUtils.clearAuthData();
+    }
     
     // Optional: Invalidate token on server
-    const authData = this.getAuthData();
+    const authData = window.authUtils ? authUtils.getAuthData() : null;
     if (authData && authData.token) {
       fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
@@ -291,55 +194,61 @@ const authUtils = {
     window.location.reload();
   },
   
-  // Show session expiration warning
-  showSessionWarning: function() {
-    setTimeout(() => {
-      if (this.getAuthData()) { // Only if still logged in
-        const extend = confirm('Your session will expire in 5 minutes. Would you like to stay logged in?');
-        if (extend) {
-          // Reset the session timer
-          const authData = this.getAuthData();
-          if (authData) {
-            this.setAuthData(authData.token, authData.userData);
-            this.showSessionWarning(); // Reset the warning timer
-          }
-        } else {
-          this.handleLogout();
-        }
+  // Update UI for logged-in user
+  updateUIForLoggedInUser: function(userData) {
+    // Hide login/register buttons
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const showLoginBtn = document.getElementById("showLogin");
+    if (openLoginBtn) openLoginBtn.style.display = 'none';
+    if (showLoginBtn) showLoginBtn.style.display = 'none';
+    
+    // Show profile section
+    const profileSection = document.getElementById('profileSection');
+    if (profileSection) {
+      profileSection.style.display = 'block';
+      
+      // Update profile button with user initial
+      const profileBtn = document.getElementById('profileBtn');
+      if (profileBtn) {
+        const initial = userData.data.name.charAt(0).toUpperCase();
+        profileBtn.innerHTML = `<span class="profile-initial">${initial}</span>`;
+        
+        // Create hover dropdown instead of click modal
+        this.createProfileDropdown(profileBtn, userData);
       }
-    }, this.SESSION_TIMEOUT - this.WARNING_TIME);
+    }
+    
+    // Auto-fill user details in forms if available
+    this.autoFillUserData(userData);
   },
   
-  // Initialize inactivity timer
-  initInactivityTimer: function() {
-    let inactivityTimer;
+  // Auto-fill user data in forms
+  autoFillUserData: function(userData) {
+    // Report form
+    const nameField = document.getElementById('name');
+    const emailField = document.getElementById('email');
+    const phoneField = document.getElementById('phone');
     
-    const resetTimer = () => {
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        this.handleLogout();
-      }, this.SESSION_TIMEOUT);
-    };
+    if (nameField) nameField.value = userData.data.name || '';
+    if (emailField) emailField.value = userData.data.email || '';
+    if (phoneField) phoneField.value = userData.data.mobile || userData.data.phone || '';
     
-    // Reset on user activity
-    ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
-      document.addEventListener(event, resetTimer);
-    });
-    
-    resetTimer();
+    // Make fields read-only if they're auto-filled
+    if (nameField && nameField.value) nameField.readOnly = true;
+    if (emailField && emailField.value) emailField.readOnly = true;
+    if (phoneField && phoneField.value) phoneField.readOnly = true;
   }
 };
 
-// Initialize authentication when DOM is loaded
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
-  // Initialize activity monitoring
-  authUtils.initInactivityTimer();
-  
-  // Check authentication status
-  const userData = await authUtils.checkAuth();
-  if (userData) {
-    authUtils.updateUIForLoggedInUser(userData);
-    authUtils.showSessionWarning();
+  // Check if authUtils is available
+  if (window.authUtils) {
+    // Check authentication status
+    const userData = await authUtils.checkAuth();
+    if (userData) {
+      profileDropdownUtils.updateUIForLoggedInUser(userData);
+    }
   }
   
   // Close dropdown when clicking outside
@@ -357,8 +266,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 
   // Initialize Lucide icons
-  lucide.createIcons();
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 });
 
-// Make authUtils available globally
-window.authUtils = authUtils;
+// Make profileDropdownUtils available globally
+window.profileDropdownUtils = profileDropdownUtils; 

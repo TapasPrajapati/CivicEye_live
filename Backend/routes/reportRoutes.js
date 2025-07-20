@@ -45,4 +45,10 @@ const upload = multer({
 // ✅ Report submission route
 router.post('/submit-report', upload.array('evidence', 5), reportController.submitReport);
 
+// ✅ Get user cases route
+router.get('/user-cases', reportController.getUserCases);
+
+// ✅ Debug route to get all reports (remove in production)
+router.get('/all-reports', reportController.getAllReports);
+
 module.exports = router;

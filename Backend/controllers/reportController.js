@@ -88,3 +88,69 @@ exports.submitReport = async (req, res) => {
         res.status(400).send(error.message);
     }
 };
+
+exports.getUserCases = async (req, res) => {
+    try {
+        // Get user email from the request (you might want to get this from JWT token)
+        const userEmail = req.query.email || req.body.email;
+        
+        console.log('Looking for cases with email:', userEmail);
+        
+        if (!userEmail) {
+            return res.status(400).json({ message: 'User email is required' });
+        }
+
+        // First, let's see all reports in the database
+        const allReports = await Report.find({}).select('email reportId createdAt');
+        console.log('All reports in database:', allReports.map(r => ({ email: r.email, reportId: r.reportId })));
+
+        // Find all reports for this user
+        const userCases = await Report.find({ email: userEmail })
+            .sort({ createdAt: -1 }) // Most recent first
+            .select('-__v'); // Exclude version field
+
+        console.log('Found cases for user:', userCases.length);
+
+        // Transform the data to match frontend expectations
+        const cases = userCases.map(report => ({
+            reportId: report.reportId,
+            crimeType: report.crimeType,
+            date: report.date,
+            time: report.time || 'N/A',
+            location: report.location,
+            state: report.state,
+            description: report.description,
+            status: report.status || 'registered', // Default to registered if no status
+            evidence: report.evidence || [],
+            createdAt: report.createdAt
+        }));
+
+        res.status(200).json({
+            message: 'User cases retrieved successfully',
+            cases: cases,
+            debug: {
+                requestedEmail: userEmail,
+                totalReportsInDB: allReports.length,
+                userReportsFound: userCases.length
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching user cases:', error);
+        res.status(500).json({ message: 'Failed to fetch user cases' });
+    }
+};
+
+exports.getAllReports = async (req, res) => {
+    try {
+        const allReports = await Report.find({}).select('email reportId name crimeType createdAt');
+        
+        res.status(200).json({
+            message: 'All reports retrieved',
+            reports: allReports,
+            count: allReports.length
+        });
+    } catch (error) {
+        console.error('Error fetching all reports:', error);
+        res.status(500).json({ message: 'Failed to fetch all reports' });
+    }
+};

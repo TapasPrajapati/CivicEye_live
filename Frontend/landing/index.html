@@ -6,11 +6,14 @@
     <title>CivicEye - Emergency Reporting System</title>
     <link rel="stylesheet" href="/Frontend/landing/style.css" />
     <link rel="stylesheet" href="loginanimation.css">
+    <link rel="stylesheet" href="profile-dropdown.css">
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="auth_passing.js"></script>
+    <script src="profile-dropdown.js"></script>
   </head>
 <body>
     <nav class="sidebar" id="sidebar">
@@ -60,17 +63,23 @@
             <span>Help Guide</span>
           </a>
         </li>
-        <li>
-          <a href="/Frontend/safety-tips/safety.html" class="active">
-            <i data-lucide="shield"></i>
-            <span>Safety Tips</span>
-          </a>
-        </li>
-        <li>
-          <a href="/Frontend/Contact Us/contact-us.html"
-            ><i data-lucide="phone"></i>Contact</a
-          >
-        </li>
+                    <li>
+                <a href="/Frontend/safety-tips/safety.html" class="active">
+                    <i data-lucide="shield"></i>
+                    <span>Safety Tips</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/my-cases/my-cases.html" class="active">
+                    <i data-lucide="folder-open"></i>
+                    <span>My Cases</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Contact Us/contact-us.html"
+                    ><i data-lucide="phone"></i>Contact</a
+                >
+            </li>
       </ul>
       <div class="emergency-section">
         <div class="emergency-title">
@@ -422,7 +431,7 @@
         </div>
       </div>
       <div class="login-modal" id="loginModal">
-        <div class="modal-box">
+        <div class="modal-box">image.png
           <div class="container">
             <div class="toggle-switch">
               <span>User</span>
