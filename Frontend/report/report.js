@@ -12,6 +12,31 @@ function setMaxDate(dateInput) {
   dateInput.max = `${year}-${month}-${day}`;
 }
 
+function setMaxTime(timeInput) {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  timeInput.max = `${hours}:${minutes}`;
+}
+
+function updateTimeMaxValue() {
+  const timeInput = document.getElementById("time");
+  const dateInput = document.getElementById("date");
+  
+  if (timeInput && dateInput) {
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    
+    // If selected date is today, set max time to current time
+    if (selectedDate.toDateString() === today.toDateString()) {
+      setMaxTime(timeInput);
+    } else {
+      // If selected date is in the past, allow any time
+      timeInput.max = "";
+    }
+  }
+}
+
 async function detectStateFromGeolocation() {
   const locationInput = document.getElementById("location");
   const stateSelect = document.getElementById("state");
@@ -273,6 +298,31 @@ function validateSection(sectionId) {
         if (selectedDate > today) {
           markFieldAsInvalid(field, "Date cannot be in the future");
           isValid = false;
+        }
+        break;
+
+      case "time":
+        const timeInput = field;
+        const dateInput = document.getElementById("date");
+        
+        if (dateInput && dateInput.value) {
+          const selectedDate = new Date(dateInput.value);
+          const selectedTime = timeInput.value;
+          
+          // Create a combined date-time object
+          const [hours, minutes] = selectedTime.split(':');
+          const combinedDateTime = new Date(selectedDate);
+          combinedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+          
+          const now = new Date();
+          
+          // If the selected date is today, check if time is in the future
+          const isToday = selectedDate.toDateString() === now.toDateString();
+          
+          if (isToday && combinedDateTime > now) {
+            markFieldAsInvalid(field, "Time cannot be in the future");
+            isValid = false;
+          }
         }
         break;
 
@@ -575,7 +625,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Setup date picker
   const dateInput = document.getElementById("date");
-  if (dateInput) setMaxDate(dateInput);
+  if (dateInput) {
+    setMaxDate(dateInput);
+    
+    // Add event listener to update time max value when date changes
+    dateInput.addEventListener("change", updateTimeMaxValue);
+  }
+
+  // Setup time picker
+  const timeInput = document.getElementById("time");
+  if (timeInput) {
+    // Set initial max time if date is today
+    updateTimeMaxValue();
+    
+    // Add event listener for real-time validation
+    timeInput.addEventListener("change", function() {
+      const dateInput = document.getElementById("date");
+      if (dateInput && dateInput.value) {
+        const selectedDate = new Date(dateInput.value);
+        const selectedTime = this.value;
+        
+        // Create a combined date-time object
+        const [hours, minutes] = selectedTime.split(':');
+        const combinedDateTime = new Date(selectedDate);
+        combinedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        
+        const now = new Date();
+        
+        // If the selected date is today, check if time is in the future
+        const isToday = selectedDate.toDateString() === now.toDateString();
+        
+        // Clear previous error
+        this.classList.remove("error");
+        const existingError = this.parentNode.querySelector(".error-message");
+        if (existingError) existingError.remove();
+        
+        if (isToday && combinedDateTime > now) {
+          markFieldAsInvalid(this, "Time cannot be in the future");
+        }
+      }
+    });
+  }
 
   // Initialize all handlers
   setupFormNavigation();

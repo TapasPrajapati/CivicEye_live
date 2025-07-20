@@ -136,6 +136,7 @@ class MyCasesManager {
         const statusClass = this.getStatusClass(case_.status);
         const crimeTypeLabel = this.getCrimeTypeLabel(case_.crimeType);
         const formattedDate = this.formatDate(case_.date);
+        const formattedTime = this.formatTime(case_.date);
         
         return `
             <div class="case-card">
@@ -162,7 +163,7 @@ class MyCasesManager {
                     </div>
                     <div class="case-detail">
                         <span class="case-detail-label">Time</span>
-                        <span class="case-detail-value">${case_.time}</span>
+                        <span class="case-detail-value">${formattedTime}</span>
                     </div>
                 </div>
                 
@@ -227,6 +228,22 @@ class MyCasesManager {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
+        });
+    }
+    
+    formatTime(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        
+        // Check if the time is midnight (00:00:00) which might indicate no specific time was set
+        if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0) {
+            return 'N/A';
+        }
+        
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
         });
     }
     

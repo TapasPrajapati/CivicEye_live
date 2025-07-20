@@ -337,7 +337,11 @@ async function checkAuth() {
             alert("Login successful!");
             userLoginModal.classList.remove("active");
             authUtils.updateUIForLoggedInUser(data);
-            // Remove the resetInactivityTimer call since it's not defined
+            
+            // Refresh the page after successful login
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000); // 1 second delay to show the success message
           } else {
             alert("Invalid credentials");
           }
