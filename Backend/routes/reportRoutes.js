@@ -48,6 +48,9 @@ router.post('/submit-report', upload.array('evidence', 5), reportController.subm
 // ✅ Get user cases route
 router.get('/user-cases', reportController.getUserCases);
 
+// ✅ Get single report by ID (NEW - for tracking)
+router.get('/:reportId', reportController.getReportById);
+
 // ✅ Debug route to get all reports (remove in production)
 router.get('/all-reports', reportController.getAllReports);
 

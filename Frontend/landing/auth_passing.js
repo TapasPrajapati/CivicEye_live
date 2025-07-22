@@ -1,4 +1,4 @@
-// auth.js - Complete Authentication System
+// auth_passing.js - Authentication System
 const authUtils = {
   // Session configuration
   SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
@@ -83,7 +83,7 @@ const authUtils = {
         const initial = userData.data.name.charAt(0).toUpperCase();
         profileBtn.innerHTML = `<span class="profile-initial">${initial}</span>`;
         
-        // Create hover dropdown instead of click modal
+        // Create hover dropdown
         this.createProfileDropdown(profileBtn, userData);
       }
     }
@@ -94,7 +94,6 @@ const authUtils = {
   
   // Auto-fill user data in forms
   autoFillUserData: function(userData) {
-    // Report form
     const nameField = document.getElementById('name');
     const emailField = document.getElementById('email');
     const phoneField = document.getElementById('phone');
@@ -109,18 +108,15 @@ const authUtils = {
     if (phoneField && phoneField.value) phoneField.readOnly = true;
   },
   
-  // Create profile dropdown (Google Chrome style)
+  // Create profile dropdown
   createProfileDropdown: function(profileBtn, userData) {
-    // Remove existing dropdown if any
     const existingDropdown = document.getElementById('profileDropdown');
     if (existingDropdown) existingDropdown.remove();
     
-    // Create dropdown container
     const dropdown = document.createElement('div');
     dropdown.id = 'profileDropdown';
     dropdown.className = 'profile-dropdown';
     
-    // Create dropdown content
     const initial = userData.data.name.charAt(0).toUpperCase();
     let dropdownHTML = `
       <div class="dropdown-header">
@@ -181,24 +177,16 @@ const authUtils = {
     dropdown.innerHTML = dropdownHTML;
     document.body.appendChild(dropdown);
     
-    // Position dropdown relative to profile button
+    // Position dropdown
     this.positionDropdown(profileBtn, dropdown);
     
     // Add event listeners
-    this.setupDropdownEvents(profileBtn, dropdown, userData);
-    
-    // Initialize Lucide icons
-    if (window.lucide) {
-      lucide.createIcons();
-    }
+    this.setupDropdownEvents(profileBtn, dropdown);
   },
   
   // Position dropdown relative to profile button
   positionDropdown: function(profileBtn, dropdown) {
     const btnRect = profileBtn.getBoundingClientRect();
-    const dropdownRect = dropdown.getBoundingClientRect();
-    
-    // Position dropdown to the right of the button
     dropdown.style.position = 'fixed';
     dropdown.style.top = `${btnRect.bottom + 8}px`;
     dropdown.style.right = `${window.innerWidth - btnRect.right}px`;
@@ -206,11 +194,10 @@ const authUtils = {
   },
   
   // Setup dropdown event listeners
-  setupDropdownEvents: function(profileBtn, dropdown, userData) {
+  setupDropdownEvents: function(profileBtn, dropdown) {
     let isVisible = false;
     let hideTimeout;
     
-    // Show dropdown on hover
     profileBtn.addEventListener('mouseenter', () => {
       clearTimeout(hideTimeout);
       dropdown.style.display = 'block';
@@ -219,7 +206,6 @@ const authUtils = {
       isVisible = true;
     });
     
-    // Hide dropdown when mouse leaves
     profileBtn.addEventListener('mouseleave', () => {
       hideTimeout = setTimeout(() => {
         if (!dropdown.matches(':hover')) {
@@ -233,12 +219,10 @@ const authUtils = {
       }, 100);
     });
     
-    // Keep dropdown visible when hovering over it
     dropdown.addEventListener('mouseenter', () => {
       clearTimeout(hideTimeout);
     });
     
-    // Hide dropdown when mouse leaves dropdown
     dropdown.addEventListener('mouseleave', () => {
       dropdown.style.opacity = '0';
       dropdown.style.transform = 'translateY(-10px)';
@@ -269,14 +253,10 @@ const authUtils = {
     }
   },
   
-
-  
   // Handle logout
   handleLogout: function() {
-    // Clear client-side data
     this.clearAuthData();
     
-    // Optional: Invalidate token on server
     const authData = this.getAuthData();
     if (authData && authData.token) {
       fetch("http://localhost:5000/api/auth/logout", {
@@ -287,21 +267,19 @@ const authUtils = {
       }).catch(error => console.error("Logout error:", error));
     }
     
-    // Reload the page
     window.location.reload();
   },
   
   // Show session expiration warning
   showSessionWarning: function() {
     setTimeout(() => {
-      if (this.getAuthData()) { // Only if still logged in
+      if (this.getAuthData()) {
         const extend = confirm('Your session will expire in 5 minutes. Would you like to stay logged in?');
         if (extend) {
-          // Reset the session timer
           const authData = this.getAuthData();
           if (authData) {
             this.setAuthData(authData.token, authData.userData);
-            this.showSessionWarning(); // Reset the warning timer
+            this.showSessionWarning();
           }
         } else {
           this.handleLogout();
@@ -321,7 +299,6 @@ const authUtils = {
       }, this.SESSION_TIMEOUT);
     };
     
-    // Reset on user activity
     ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
       document.addEventListener(event, resetTimer);
     });
@@ -332,10 +309,8 @@ const authUtils = {
 
 // Initialize authentication when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
-  // Initialize activity monitoring
   authUtils.initInactivityTimer();
   
-  // Check authentication status
   const userData = await authUtils.checkAuth();
   if (userData) {
     authUtils.updateUIForLoggedInUser(userData);
@@ -347,7 +322,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const profileDropdown = document.getElementById('profileDropdown');
     const profileBtn = document.getElementById('profileBtn');
     
-    if (profileDropdown && !profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+    if (profileDropdown && profileBtn && !profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
       profileDropdown.style.opacity = '0';
       profileDropdown.style.transform = 'translateY(-10px)';
       setTimeout(() => {
@@ -357,7 +332,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 
   // Initialize Lucide icons
-  lucide.createIcons();
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 });
 
 // Make authUtils available globally
