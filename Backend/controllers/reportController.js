@@ -3,154 +3,149 @@ const path = require('path');
 const Report = require('../models/Report');
 const transporter = require('../config/email');
 
+// Submit new report
 exports.submitReport = async (req, res) => {
     try {
-        console.log('Request Body:', req.body);
-        console.log('Uploaded Files:', req.files);
-
-        const {
-            name, email, phone, crimeType, date, time,
-            location, state, description
-        } = req.body;
-
-        // Combine date and time into a datetime string
-        const incidentDateTime = date && time ? `${date}T${time}:00` : null;
-
+        const { name, email, phone, crimeType, date, time, location, state, description } = req.body;
+        
+        // Process evidence files
         const evidence = [];
-
         if (req.files && req.files.length > 0) {
-            req.files.forEach(file => {
-                evidence.push(file.filename); 
-            });
+            req.files.forEach(file => evidence.push(file.filename));
         }
 
+        // Process base64 images
         const base64Images = Object.entries(req.body)
             .filter(([key]) => key.startsWith('cameraImage'))
             .map(([_, val]) => val);
-
+        
         base64Images.forEach((base64Data, index) => {
             const cleanBase64 = base64Data.replace(/^data:image\/\w+;base64,/, '');
             const buffer = Buffer.from(cleanBase64, 'base64');
             const fileName = `camera_${Date.now()}_${index}.jpg`;
-            const filePath = path.join('uploads', fileName);
-
-            fs.writeFileSync(filePath, buffer); 
-            evidence.push(fileName); // Add filename to evidence list
+            fs.writeFileSync(path.join('uploads', fileName), buffer);
+            evidence.push(fileName);
         });
 
-        const random6Digits = Math.floor(100000 + Math.random() * 900000);
-        const year = new Date().getFullYear();
-        const reportId = `${state}-${year}-${random6Digits}`;
-
+        // Generate report ID
+        const reportId = `${state}-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
+        
+        // Create and save report
         const newReport = new Report({
-            reportId, 
-            name,
-            email,
-            phone,
-            crimeType,
-            date: incidentDateTime,
-            location,
-            state,
-            description,
-            evidence
+            reportId, name, email, phone, crimeType,
+            date: date && time ? `${date}T${time}:00` : null,
+            location, state, description, evidence
         });
-
+        
         await newReport.save();
 
-        // ✅ 4. Send email confirmation
-        transporter.sendMail({
+        // Send confirmation email
+        await transporter.sendMail({
             from: process.env.EMAIL_USER,
-            to: 'pesak481@gmail.com',
-            subject: `New Report Submitted: ${newReport.reportId}`,
-            text: `A new report has been filed.\n\nDetails:\n
-                Name: ${name}
-                Email: ${email}
-                Phone: ${phone}
-                Crime Type: ${crimeType}
-                Date: ${incidentDateTime || 'N/A'}
-                Location: ${location}
-                State: ${state}
-                Report ID: ${newReport.reportId}
-                Submitted At: ${new Date().toLocaleString()}
-            `
-        }).then(info => {
-            console.log('Email sent:', info.response);
-        }).catch(error => {
-            console.error('Email failed:', error);
+            to: email,
+            subject: `Report Submitted: ${reportId}`,
+            text: `Thank you for submitting your report.\n\nReport ID: ${reportId}`
         });
 
         res.status(201).json({
+            success: true,
             message: 'Report submitted successfully',
-            reportId: newReport.reportId
+            reportId
         });
+
     } catch (error) {
         console.error('Report submission failed:', error);
-        res.status(400).send(error.message);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
-exports.getUserCases = async (req, res) => {
+// Get report by ID
+exports.getReportById = async (req, res) => {
     try {
-        // Get user email from the request (you might want to get this from JWT token)
-        const userEmail = req.query.email || req.body.email;
+        const report = await Report.findOne({ reportId: req.params.reportId });
         
-        console.log('Looking for cases with email:', userEmail);
-        
-        if (!userEmail) {
-            return res.status(400).json({ message: 'User email is required' });
+        if (!report) {
+            return res.status(404).json({
+                success: false,
+                message: `Report ${req.params.reportId} not found`
+            });
         }
 
-        // First, let's see all reports in the database
-        const allReports = await Report.find({}).select('email reportId createdAt');
-        console.log('All reports in database:', allReports.map(r => ({ email: r.email, reportId: r.reportId })));
-
-        // Find all reports for this user
-        const userCases = await Report.find({ email: userEmail })
-            .sort({ createdAt: -1 }) // Most recent first
-            .select('-__v'); // Exclude version field
-
-        console.log('Found cases for user:', userCases.length);
-
-        // Transform the data to match frontend expectations
-        const cases = userCases.map(report => ({
-            reportId: report.reportId,
-            crimeType: report.crimeType,
-            date: report.date,
-            time: report.time || 'N/A',
-            location: report.location,
-            state: report.state,
-            description: report.description,
-            status: report.status || 'registered', // Default to registered if no status
-            evidence: report.evidence || [],
-            createdAt: report.createdAt
-        }));
-
         res.status(200).json({
-            message: 'User cases retrieved successfully',
-            cases: cases,
-            debug: {
-                requestedEmail: userEmail,
-                totalReportsInDB: allReports.length,
-                userReportsFound: userCases.length
+            success: true,
+            data: {
+                reportId: report.reportId,
+                name: report.name,
+                email: report.email,
+                phone: report.phone,
+                crimeType: report.crimeType,
+                date: report.date,
+                location: report.location,
+                state: report.state,
+                description: report.description,
+                status: report.status || 'registered',
+                evidence: report.evidence || [],
+                createdAt: report.createdAt,
+                assignedOfficer: report.assignedOfficer || ''
             }
         });
     } catch (error) {
-        console.error('Error fetching user cases:', error);
-        res.status(500).json({ message: 'Failed to fetch user cases' });
+        console.error('Error fetching report:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
     }
 };
 
+// Get user cases
+exports.getUserCases = async (req, res) => {
+    try {
+        const userEmail = req.query.email || req.body.email;
+        if (!userEmail) return res.status(400).json({ message: 'Email required' });
+
+        const cases = await Report.find({ email: userEmail })
+            .sort({ createdAt: -1 })
+            .select('-__v')
+            .lean();
+
+        res.status(200).json({
+            success: true,
+            cases: cases.map(c => ({
+                ...c,
+                status: c.status || 'registered',
+                evidence: c.evidence || []
+            }))
+        });
+    } catch (error) {
+        console.error('Error fetching user cases:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch cases'
+        });
+    }
+};
+
+// Get all reports (admin)
 exports.getAllReports = async (req, res) => {
     try {
-        const allReports = await Report.find({}).select('email reportId name crimeType createdAt');
-        
+        const reports = await Report.find({})
+            .select('reportId name email crimeType status createdAt')
+            .lean();
+
         res.status(200).json({
-            message: 'All reports retrieved',
-            reports: allReports,
-            count: allReports.length
+            success: true,
+            reports,
+            count: reports.length
         });
     } catch (error) {
         console.error('Error fetching all reports:', error);
-        res.status(500).json({ message: 'Failed to fetch all reports' });
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
     }
 };

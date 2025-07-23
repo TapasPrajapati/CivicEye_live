@@ -3,233 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Case Status - Community Safety</title>
-    <link rel="stylesheet" href="/Frontend/Track_case/style.css">
-    <link rel="stylesheet" href="/Frontend/landing/style.css">
-    <link rel="stylesheet" href="/Frontend/landing/profile-dropdown.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="/Frontend/landing/auth_passing.js"></script>
-    <script src="/Frontend/landing/profile-dropdown.js"></script>
+    <title>Track Your Case</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/Frontend/Track_case/track.css">
 </head>
 <body>
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <button class="close-btn" id="closeNav">
-                <i data-lucide="chevron-left"></i>
-            </button>
-            <div class="logo">
-                <i data-lucide="shield-alert"></i>
-                <span>CivicEye</span>
-            </div>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="/Frontend/landing/index.html" class="active">
-                    <i data-lucide="home"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Dashboard/Home/Home.html"  class="active">
-                    <i data-lucide="layout-dashboard"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/report/report.html"  class="active">
-                    <i data-lucide="file-text"></i>
-                    <span>Report Case</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Track_case/track.html"  class="active">
-                    <i data-lucide="search"></i>
-                    <span>Track Case</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/Emergency/emergency.html"  class="active">
-                    <i data-lucide="phone"></i>
-                    <span>Emergency Contacts</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/help_guide/help.html"  class="active">
-                    <i data-lucide="help-circle"></i>
-                    <span>Help Guide</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/safety-tips/safety.html"  class="active">
-                    <i data-lucide="shield"></i>
-                    <span>Safety Tips</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/Frontend/Contact Us/contact-us.html"><i data-lucide="phone"></i>Contact</a>
-            </li>
-        </ul>
-        <div class="emergency-section">
-            <div class="emergency-title">
-                <i data-lucide="phone-call"></i>
-                <span>Emergency Numbers</span>
-            </div>
-            <div class="emergency-numbers">
-                <a href="tel:100" class="emergency-item" style="color: #FFFF;">
-                    <span class="service">Police</span>
-                    <span class="number">100</span>
-                </a>
-                
-                <a href="tel:1091" class="emergency-item" style="color: #FFFF;">
-                    <span class="service">Women Helpline</span>
-                    <span class="number">1091</span>
-                </a>
-                <a href="tel:102" class="emergency-item" style="color: #FFFF;">
-                    <span class="service">Ambulance</span>
-                    <span class="number">102</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <!-- <header class="top-nav">
-            <div class="nav-left">
-                <button class="menu-btn" id="openNav">
-                    <i data-lucide="menu"></i>
-                </button>
-                <div class="brand" onclick="window.location.href='/Frontend/landing/index.html'" style="cursor: pointer;">
-                    <i data-lucide="shield-alert"></i>
-                    <span>CivicEye</span>
-                </div>
-            </div>
-            <div class="nav-right">
-                <a href="tel:112"    style="color: #FFFF; text-decoration: none;" >
-                    <button class="btn btn-emergency">
-                        <i data-lucide="phone-call"></i>
-                        Emergency
-                    </button>
-                  </a>
-                <button class="btn btn-login">Login</button>
-                <button class="btn btn-signup">Register</button>
-            </div>
-        </header> -->
-        <header class="top-nav">
-    <div class="nav-left">
-        <button class="menu-btn" id="openNav">
-            <i data-lucide="menu"></i>
-        </button>
-        <div class="brand" onclick="window.location.href='/Frontend/landing/index.html'" style="cursor: pointer;">
-            <i data-lucide="shield-alert"></i>
-            <span>CivicEye</span>
-        </div>
-    </div>
-    <div class="nav-right">
-        <a href="tel:112" style="color: #FFFF; text-decoration: none;">
-            <button class="btn btn-emergency">
-                <i data-lucide="phone-call"></i>
-                Emergency
-            </button>
-        </a>
-        <button id="openLoginBtn" class="btn btn-login">Login</button>
-        <button id="showLogin" class="btn btn-signup">Register</button>
-        <div id="profileSection" style="display: none">
-            <button id="profileBtn" class="btn btn-profile">
-                <i data-lucide="user"></i>
-            </button>
-        </div>
-    </div>
-</header>
     <div class="container">
-        <h1>Track Your Case Status</h1>
-        
-        <div class="tracker-form">
-    <input type="text" id="caseId" placeholder="Enter your Case ID">
-    <button onclick="trackCase(event)">Track Case</button>
-</div>
+        <section id="tracker-form-section" class="animated-section">
+            <div class="tracker-header">
+                <h1>Track Your Case Status</h1>
+                <p class="subtitle">Enter your case ID to check the current status of your report</p>
+            </div>
+            <div class="tracker-form">
+                <div class="form-group">
+                    <input type="text" id="case-id-input" placeholder="Enter your case ID (e.g. GJ-2023-123456)" aria-label="Case ID">
+                    <button id="track-case-btn" class="btn btn-primary">
+                        <span class="btn-text">Track Case</span>
+                        <span class="btn-spinner hidden"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                </div>
+                <div id="error-message" class="error-message hidden" role="alert"></div>
+            </div>
+        </section>
 
-<div id="caseStatus" class="hidden">
-    <div class="case-details">
-        <h2>Case ID: <span id="displayCaseId"></span></h2>
-        <p>Date Filed: <span id="caseDate"></span></p>
-        <p>Crime Type: <span id="crimeTypeDisplay"></span></p>
+        <section id="case-status-section" class="hidden">
+            <div class="case-status-container">
+                <div class="status-header">
+                    <h2>Case Status</h2>
+                    <div class="header-right">
+                        <div class="case-id-display">Case ID: <span id="display-case-id" class="case-id-value"></span></div>
+                        <button id="download-case-btn" class="btn btn-download">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Reporter Name</div>
+                        <div id="reporter-name" class="detail-value"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Crime Type</div>
+                        <div id="crime-type" class="detail-value"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Date Reported</div>
+                        <div id="date-reported" class="detail-value"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Location</div>
+                        <div id="location" class="detail-value">
+                            <div class="location-details">
+                                <span id="location-text"></span>
+                                <button id="view-map-btn" class="btn-map hidden"><i class="fas fa-map-marker-alt"></i> View Map</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div id="current-status" class="detail-value status-badge"></div>
+                    </div>
+                </div>
+
+                <div class="status-progress">
+                    <div class="progress-container">
+                        <div class="progress-steps">
+                            <div id="step-registered" class="progress-step">
+                                <div class="step-icon"><i class="fas fa-check"></i></div>
+                                <div class="step-label">Registered</div>
+                                <div class="step-details"></div>
+                            </div>
+                            <div id="step-approved" class="progress-step">
+                                <div class="step-icon"><i class="fas fa-check"></i></div>
+                                <div class="step-label">Approved</div>
+                                <div class="step-details"></div>
+                            </div>
+                            <div id="step-officer-assigned" class="progress-step">
+                                <div class="step-icon"><i class="fas fa-check"></i></div>
+                                <div class="step-label">Officer Assigned</div>
+                                <div class="step-details"></div>
+                            </div>
+                            <div id="step-investigating" class="progress-step">
+                                <div class="step-icon"><i class="fas fa-user-shield"></i></div>
+                                <div class="step-label">Investigating</div>
+                                <div class="step-details"></div>
+                            </div>
+                            <div id="step-resolved" class="progress-step">
+                                <div class="step-icon"><i class="fas fa-flag"></i></div>
+                                <div class="step-label">Resolved</div>
+                                <div class="step-details"></div>
+                            </div>
+                        </div>
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+
+                <div class="status-timeline">
+                    <h3>Status History</h3>
+                    <div id="timeline" class="timeline">
+                        <div class="timeline-placeholder">Loading history...</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="back-to-search-btn" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Back to Search
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 
-            <div class="status-timeline">
-                <div class="status-step status-filed active">
-                    <div class="status-icon">✓</div>
-                    <h3>Case Filed</h3>
-                    <p>Your case has been successfully registered</p>
-                </div>
-
-                <div class="status-step status-review active">
-                    <div class="status-icon">⏳</div>
-                    <h3>Under Review</h3>
-                    <p>Case is being reviewed by authorities</p>
-                </div>
-
-                <div class="status-step status-investigation">
-                    <div class="status-icon">🔍</div>
-                    <h3>Investigation</h3>
-                    <p>Investigation in progress</p>
-                </div>
-
-                <div class="status-step status-resolved">
-                    <div class="status-icon">✔</div>
-                    <h3>Resolved</h3>
-                    <p>Case has been resolved</p>
-                </div>
-
-                <div class="progress-line"></div>
-            </div>
-        </div>
-    </div>
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Emergency Contacts</h3>
-                <ul>
-                    <a href="tel:100" style="color: #fff; text-decoration: none;">
-                    <li><strong>Police:</strong> 100</li>
-                    </a>
-                    <a href="tel:1091" style="color: #fff; text-decoration: none;">
-                    <li><strong>Women's Helpline:</strong> 1091</li>
-                    </a>
-                    <a href="tel:108" style="color: #fff; text-decoration: none;">
-                    <li><strong>Ambulance:</strong> 108 </li>
-                    </a>
-                    <a href="tel:1098" style="color: #fff; text-decoration: none;">
-                    <li><strong>Child Helpline:</strong> 1098</li>
-                    </a>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="/Frontend/report.html">Report Case</a></li>
-                    <li><a href="/Frontend/Track_case/track.html">Track Case</a></li>
-                    <li><a href="#">Safety Tips</a></li>
-                    <li><a href="#">FAQs</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <ul>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2024 CivicEye. All rights reserved.</p>
-        </div>
-    </footer>
-</main>
-
-    <script src="script.js"></script>
-    <script src="/Frontend/landing/main.js"></script>
+    <script src="/Frontend/Track_case/track.js"></script>
 </body>
 </html>
