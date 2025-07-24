@@ -18,9 +18,9 @@
   --high-priority: #f72585;
   --medium-priority: #f8961e;
   --low-priority: #4cc9f0;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
 
@@ -31,7 +31,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #f5f7fa;
   color: var(--dark);
   line-height: 1.6;
@@ -40,35 +40,79 @@ body {
 
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes slideDown {
-  from { max-height: 0; opacity: 0; }
-  to { max-height: 500px; opacity: 1; }
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-5px); }
-  40%, 80% { transform: translateX(5px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes progress {
-  from { width: 0; }
-  to { width: var(--progress-width); }
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--progress-width);
+  }
 }
 
 /* ===== LAYOUT ===== */
@@ -243,7 +287,7 @@ body {
 
 .case-id-value {
   color: var(--dark);
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 0.9375rem;
   background: var(--light);
   padding: 0.25rem 0.5rem;
@@ -475,7 +519,7 @@ body {
 }
 
 .timeline-event::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -0.75rem;
   top: 1.25rem;
@@ -571,7 +615,8 @@ body {
     max-width: 100%;
   }
 
-  .tracker-form, .case-status-container {
+  .tracker-form,
+  .case-status-container {
     box-shadow: none;
     border: 1px solid #ddd;
     page-break-inside: avoid;
@@ -591,20 +636,20 @@ body {
   .container {
     padding: 1.25rem;
   }
-  
+
   .tracker-form {
     padding: 1.75rem;
   }
-  
+
   .case-status-container {
     padding: 1.75rem;
   }
-  
+
   .detail-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
-  
+
   .form-group {
     flex-direction: column;
   }
@@ -628,8 +673,9 @@ body {
     flex-direction: column;
     gap: 0.75rem;
   }
-  
-  .btn, .btn-outline {
+
+  .btn,
+  .btn-outline {
     width: 100%;
   }
 
@@ -649,23 +695,23 @@ body {
   .tracker-header h1 {
     font-size: 1.75rem;
   }
-  
+
   .status-header h2 {
     font-size: 1.5rem;
   }
-  
+
   .progress-step {
     width: 100%;
   }
-  
+
   .step-label {
     max-width: none;
   }
-  
+
   .timeline {
     padding-left: 1.5rem;
   }
-  
+
   .timeline-event::before {
     left: -0.5rem;
   }

@@ -78,7 +78,7 @@
     padding: 20px;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s;
     position: relative;
 }
@@ -86,6 +86,7 @@
 h1 {
     text-align: center;
 }
+
 .status-icon {
     width: 40px;
     height: 40px;
@@ -101,7 +102,8 @@ h1 {
 
 /* Status Colors */
 .status-filed .status-icon {
-    border-color: #8e44ad;  /* Changed to purple */
+    border-color: #8e44ad;
+    /* Changed to purple */
     color: #8e44ad;
 }
 
@@ -153,12 +155,12 @@ h1 {
         flex-direction: column;
         gap: 30px;
     }
-    
+
     .status-step {
         width: 100%;
         flex: 1 0 auto;
     }
-    
+
     .progress-line {
         display: none;
     }

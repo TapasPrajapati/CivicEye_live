@@ -174,16 +174,16 @@
     min-width: 260px;
     max-width: 280px;
   }
-  
+
   .dropdown-header {
     padding: 12px;
   }
-  
+
   .dropdown-details {
     padding: 8px 12px;
   }
-  
+
   .dropdown-logout {
     padding: 10px 12px;
   }
-} 
+}

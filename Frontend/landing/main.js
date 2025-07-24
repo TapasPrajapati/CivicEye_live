@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // News API Integration with Infinite Scroll
   const API_KEYS = {
     newsAPI: "a9c94c80e2f845d2ae73c571aa3fc47d",
-    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e", 
+    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e",
   };
 
   const newsTicker = document.getElementById("news-ticker");
@@ -238,9 +238,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const timeAgo = getTimeAgo(item.timestamp);
 
       element.innerHTML = `
-            <span class="breaking-news">${
-              item.isBreaking ? "BREAKING" : "UPDATE"
-            }</span>
+            <span class="breaking-news">${item.isBreaking ? "BREAKING" : "UPDATE"
+        }</span>
             <span class="headline-text">${item.title}</span>
             <span class="news-meta">
                 <span class="news-source">${item.source}</span>

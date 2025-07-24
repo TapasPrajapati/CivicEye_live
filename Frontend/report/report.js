@@ -22,11 +22,11 @@ function setMaxTime(timeInput) {
 function updateTimeMaxValue() {
   const timeInput = document.getElementById("time");
   const dateInput = document.getElementById("date");
-  
+
   if (timeInput && dateInput) {
     const selectedDate = new Date(dateInput.value);
     const today = new Date();
-    
+
     // If selected date is today, set max time to current time
     if (selectedDate.toDateString() === today.toDateString()) {
       setMaxTime(timeInput);
@@ -100,26 +100,23 @@ function openCameraModal() {
                     <button id="capture-btn" class="btn-primary"><i data-lucide="camera"></i> Capture</button>
                     <button id="close-camera" class="btn-secondary"><i data-lucide="x"></i> Close</button>
                 </div>
-                ${
-                  capturedPhotos.length > 0
-                    ? `
+                ${capturedPhotos.length > 0
+      ? `
                 <div class="camera-gallery">
                     ${capturedPhotos
-                      .map(
-                        (photo, index) => `
-                        <img src="${photo}" class="camera-thumbnail ${
-                          index === capturedPhotos.length - 1 ? "active" : ""
-                        }" 
-                             data-index="${index}" alt="Captured photo ${
-                          index + 1
-                        }">
+        .map(
+          (photo, index) => `
+                        <img src="${photo}" class="camera-thumbnail ${index === capturedPhotos.length - 1 ? "active" : ""
+            }" 
+                             data-index="${index}" alt="Captured photo ${index + 1
+            }">
                     `
-                      )
-                      .join("")}
+        )
+        .join("")}
                 </div>
                 `
-                    : ""
-                }
+      : ""
+    }
             </div>
         </div>
     `;
@@ -182,9 +179,8 @@ function updateCameraGallery() {
   gallery.innerHTML = capturedPhotos
     .map(
       (photo, index) => `
-        <img src="${photo}" class="camera-thumbnail ${
-        index === capturedPhotos.length - 1 ? "active" : ""
-      }" 
+        <img src="${photo}" class="camera-thumbnail ${index === capturedPhotos.length - 1 ? "active" : ""
+        }" 
              data-index="${index}" alt="Captured photo ${index + 1}">
     `
     )
@@ -304,21 +300,21 @@ function validateSection(sectionId) {
       case "time":
         const timeInput = field;
         const dateInput = document.getElementById("date");
-        
+
         if (dateInput && dateInput.value) {
           const selectedDate = new Date(dateInput.value);
           const selectedTime = timeInput.value;
-          
+
           // Create a combined date-time object
-          const [hours, minutes] = selectedTime.split(':');
+          const [hours, minutes] = selectedTime.split(":");
           const combinedDateTime = new Date(selectedDate);
           combinedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-          
+
           const now = new Date();
-          
+
           // If the selected date is today, check if time is in the future
           const isToday = selectedDate.toDateString() === now.toDateString();
-          
+
           if (isToday && combinedDateTime > now) {
             markFieldAsInvalid(field, "Time cannot be in the future");
             isValid = false;
@@ -493,30 +489,24 @@ function setupGeolocation() {
 }
 
 function populateReviewFields() {
-  document.getElementById("review-name").textContent = `Name: ${
-    document.getElementById("name").value
-  }`;
-  document.getElementById("review-email").textContent = `Email: ${
-    document.getElementById("email").value
-  }`;
-  document.getElementById("review-phone").textContent = `Phone: ${
-    document.getElementById("phone").value
-  }`;
+  document.getElementById("review-name").textContent = `Name: ${document.getElementById("name").value
+    }`;
+  document.getElementById("review-email").textContent = `Email: ${document.getElementById("email").value
+    }`;
+  document.getElementById("review-phone").textContent = `Phone: ${document.getElementById("phone").value
+    }`;
 
   const crimeTypeSelect = document.getElementById("crimeType");
-  document.getElementById("review-crimeType").textContent = `Crime Type: ${
-    crimeTypeSelect.options[crimeTypeSelect.selectedIndex].text
-  }`;
+  document.getElementById("review-crimeType").textContent = `Crime Type: ${crimeTypeSelect.options[crimeTypeSelect.selectedIndex].text
+    }`;
 
   document.getElementById("review-date").textContent = `Date: ${formatDate(
     document.getElementById("date").value
   )}`;
-  document.getElementById("review-location").textContent = `Location: ${
-    document.getElementById("location").value
-  }`;
-  document.getElementById("review-description").textContent = `Description: ${
-    document.getElementById("description").value
-  }`;
+  document.getElementById("review-location").textContent = `Location: ${document.getElementById("location").value
+    }`;
+  document.getElementById("review-description").textContent = `Description: ${document.getElementById("description").value
+    }`;
 
   const fileInput = document.getElementById("evidence");
   if (fileInput.files.length > 0) {
@@ -627,7 +617,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const dateInput = document.getElementById("date");
   if (dateInput) {
     setMaxDate(dateInput);
-    
+
     // Add event listener to update time max value when date changes
     dateInput.addEventListener("change", updateTimeMaxValue);
   }
@@ -637,29 +627,29 @@ document.addEventListener("DOMContentLoaded", function () {
   if (timeInput) {
     // Set initial max time if date is today
     updateTimeMaxValue();
-    
+
     // Add event listener for real-time validation
-    timeInput.addEventListener("change", function() {
+    timeInput.addEventListener("change", function () {
       const dateInput = document.getElementById("date");
       if (dateInput && dateInput.value) {
         const selectedDate = new Date(dateInput.value);
         const selectedTime = this.value;
-        
+
         // Create a combined date-time object
-        const [hours, minutes] = selectedTime.split(':');
+        const [hours, minutes] = selectedTime.split(":");
         const combinedDateTime = new Date(selectedDate);
         combinedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-        
+
         const now = new Date();
-        
+
         // If the selected date is today, check if time is in the future
         const isToday = selectedDate.toDateString() === now.toDateString();
-        
+
         // Clear previous error
         this.classList.remove("error");
         const existingError = this.parentNode.querySelector(".error-message");
         if (existingError) existingError.remove();
-        
+
         if (isToday && combinedDateTime > now) {
           markFieldAsInvalid(this, "Time cannot be in the future");
         }

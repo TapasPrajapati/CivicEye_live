@@ -8,7 +8,8 @@
   --text: #1f2937;
   --text-light: #6b7280;
   --white: #ffffff;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --transition: all 0.3s ease;
   --sidebar-width: 280px;
   --navbar-height: 64px;
@@ -943,7 +944,11 @@ input:checked + .toggle-label:before {
   height: 200px;
   margin: 2rem auto;
   border-radius: 50%;
-  background: conic-gradient(var(--secondary) 0deg 216deg, var(--warning) 216deg 306deg, var(--danger) 306deg 360deg);
+  background: conic-gradient(
+    var(--secondary) 0deg 216deg,
+    var(--warning) 216deg 306deg,
+    var(--danger) 306deg 360deg
+  );
 }
 
 .pie-center {

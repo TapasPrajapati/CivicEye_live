@@ -343,30 +343,31 @@ body {
 }
 
 .news-container {
+  /* Take full width of parent minus padding */
+  width: calc(100% - 0.7rem);
+  /* 1.5rem padding on each side */
+  height: calc(100% - 1rem - 1.5rem);
+  /* Account for heading and padding */
+  border: 2px solid #f6dede;
 
-    /* Take full width of parent minus padding */
-    width: calc(100% - 0.7rem); /* 1.5rem padding on each side */
-    height: calc(100% - 1rem - 1.5rem); /* Account for heading and padding */
-    border: 2px solid #f6dede;
+  width: calc(100% - 0.7rem);
+  height: calc(100% - 1rem - 1.5rem);
+  border: 2px solid #a01c1c;
 
-    width: calc(100% - 0.7rem);
-    height: calc(100% - 1rem - 1.5rem);
-    border: 2px solid #a01c1c;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
 
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-    
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
-
 .news-source {
-    margin-left: auto;
-    font-size: 0.8rem;
-    color: #c80f3a;
-    font-style: italic;
-  }
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: #c80f3a;
+  font-style: italic;
+}
+
 /* Profile Dropdown Styles (Google Chrome Style) */
 .profile-dropdown {
   position: fixed;
@@ -518,24 +519,26 @@ body {
     min-width: 260px;
     max-width: 280px;
   }
-  
+
   .dropdown-header {
     padding: 12px;
   }
-  
+
   .dropdown-details {
     padding: 8px 12px;
   }
-  
+
   .dropdown-logout {
     padding: 10px 12px;
   }
 }
+
 /* Animation for the ticker - merged both keyframes */
 @keyframes scroll {
   0% {
     transform: translateY(0);
   }
+
   100% {
     transform: translateY(-50%);
   }
@@ -545,6 +548,7 @@ body {
   0% {
     transform: translateY(0);
   }
+
   100% {
     transform: translateY(-50%);
   }
@@ -557,10 +561,12 @@ body {
 }
 
 .ticker-headline {
-  height: 100px; /* Using the more specific pixel value */
+  height: 100px;
+  /* Using the more specific pixel value */
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem; /* Compromise between 1.2rem/1rem and 0 20px */
+  padding: 0.75rem 1rem;
+  /* Compromise between 1.2rem/1rem and 0 20px */
   border-bottom: 1px solid #e0e0e0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: white;
@@ -575,7 +581,8 @@ body {
 .breaking-news {
   font-weight: bold;
   color: #d32f2f;
-  margin-right: 0.75rem; /* Compromise between 0.5rem and 10px */
+  margin-right: 0.75rem;
+  /* Compromise between 0.5rem and 10px */
   font-size: 0.9rem;
   flex-shrink: 0;
 }
@@ -601,7 +608,8 @@ body {
   font-size: 0.8rem;
   color: #666;
   font-style: italic;
-  margin-left: auto; /* Keeps source on right side */
+  margin-left: auto;
+  /* Keeps source on right side */
 }
 
 .news-time {
@@ -814,11 +822,11 @@ body {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #2196f3;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(26px);
 }
 
@@ -887,7 +895,7 @@ input:checked + .slider:before {
     transform: translateX(0);
   }
 
-  .sidebar.open + .main-content {
+  .sidebar.open+.main-content {
     margin-left: 280px;
   }
 
