@@ -64,9 +64,8 @@ const authUtils = {
     return false;
   },
 
-  // Update UI for logged-in user
   updateUIForLoggedInUser: function (userData) {
-    // Hide login/register buttons
+
     const openLoginBtn = document.getElementById("openLoginBtn");
     const showLoginBtn = document.getElementById("showLogin");
     if (openLoginBtn) openLoginBtn.style.display = "none";
