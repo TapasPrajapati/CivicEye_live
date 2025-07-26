@@ -148,4 +148,4 @@ This project is for educational and civic use. See individual files for third-pa
 
 ---
 
-**For more details, contact the app owner** 
+**For more details, contact the app owner and team.vigneshgaddam100@gmail.com** 
