@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const reportSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -10,6 +10,7 @@ const reportSchema = new mongoose.Schema({
     state: { type: String, required: true }, // For reportId
     description: { type: String, required: true },
     evidence: [String],
+    firId: { type: Number, unique: true },
     status: { 
         type: String, 
         enum: ['registered', 'approved', 'officer-assigned', 'investigating', 'resolved'], 
@@ -34,4 +35,5 @@ reportSchema.pre('save', function(next) {
     next();
 });
 
+reportSchema.plugin(AutoIncrement, { inc_field: 'firId' });
 module.exports = mongoose.model('Report', reportSchema);
