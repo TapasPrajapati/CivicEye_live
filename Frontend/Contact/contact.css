@@ -1,0 +1,259 @@
+/* Consolidated CSS for CivicEye contact page */
+
+/* Define color variables for consistent theming */
+:root {
+  --primary: #1e40af; /* Main action buttons */
+  --primary-light: #3b82f6; /* Hover states */
+  --secondary: #10b981; /* Success states, submit button */
+  --warning: #f59e0b; /* Not used in this design */
+  --danger: #dc2626; /* Error messages */
+  --background: #f3f4f6; /* Page background */
+  --text: #1f2937; /* Primary text */
+  --text-light: #6b7280; /* Secondary text */
+  --white: #ffffff; /* Form and card backgrounds */
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Card shadow */
+  --transition: all 0.3s ease; /* Smooth transitions */
+}
+
+/* Global resets and typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+h1, h2 {
+  color: var(--text);
+}
+
+button {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* Animation for fade-in on page load */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Hero section styles */
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(to bottom, var(--background), var(--white));
+  animation: fadeIn 0.5s ease-out;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+.hero-btn {
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.hero-btn:hover {
+  background: var(--primary-light);
+  transform: scale(1.05);
+}
+
+/* Split-column layout */
+.main-page-content {
+  max-width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.split-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Equal 50/50 split on desktop */
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Contact form styles */
+.form-container {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.form-container h2 {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--text-light);
+  border-radius: 4px;
+  background: var(--white);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 5px var(--primary-light);
+}
+
+.submit-btn {
+  background: var(--secondary);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.submit-btn:hover {
+  background: var(--primary);
+}
+
+.submit-btn.loading::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--white);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 0.5rem;
+}
+
+.form-message {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.form-message.success {
+  color: var(--secondary);
+}
+
+.form-message.error {
+  color: var(--danger);
+}
+
+/* FAQ section styles */
+.faq-container {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.faq-container h2 {
+  margin-bottom: 1.5rem;
+}
+
+#faq-search {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--text-light);
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  transition: var(--transition);
+}
+
+#faq-search:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  transform: scale(1.02);
+}
+
+.faq-item {
+  margin-bottom: 0.5rem;
+}
+
+.faq-question {
+  width: 100%;
+  text-align: left;
+  background: var(--background);
+  padding: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.faq-question:hover {
+  background: var(--primary-light);
+  color: var(--white);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1rem;
+  color: var(--text-light);
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-answer.active {
+  max-height: 200px; /* Adjust based on content */
+  padding: 1rem;
+}
+
+.faq-item.highlight {
+  background: var(--secondary);
+  color: var(--white);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .split-section {
+    grid-template-columns: 1fr; /* Stack columns on mobile */
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+}
