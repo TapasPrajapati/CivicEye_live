@@ -95,10 +95,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // News API Integration with Infinite Scroll
-  const API_KEYS = {
-    newsAPI: "a9c94c80e2f845d2ae73c571aa3fc47d",
-    gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e",
-  };
+  // const API_KEYS = {
+  //   newsAPI: "a9c94c80e2f845d2ae73c571aa3fc47d",
+  //   gNewsAPI: "0c3ae25fc00868efc577222f72dbe04e",
+  // };
 
   const newsTicker = document.getElementById("news-ticker");
 
