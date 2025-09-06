@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastFetchTime = 0;
     let cleanupTicker = null; // To store cleanup function
 
-    async function fetchWithTimeout(url, options = {}, timeout = 8000) {
+    async function fetchWithTimeout(url, options = {}, timeout = 20000) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
 
