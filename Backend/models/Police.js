@@ -8,7 +8,11 @@ const policeSchema = new mongoose.Schema({
     station: String,
     email: String,
     password: String,
-    isAdmin: { type: Boolean, default: false }
+    isAdmin: { type: Boolean, default: false },
+    resetCode: String,
+    resetCodeExpires: Date,
+    resetToken: String,
+    resetTokenExpires: Date
 });
 
 module.exports = mongoose.model('Police', policeSchema);
