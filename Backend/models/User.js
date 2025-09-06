@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema({
     age: Number,
     mobile: String,
     email: String,
-    password: String
+    password: String,
+    resetCode: String,
+    resetCodeExpires: Date,
+    resetToken: String,
+    resetTokenExpires: Date
 });
 
 module.exports = mongoose.model('User', userSchema);
