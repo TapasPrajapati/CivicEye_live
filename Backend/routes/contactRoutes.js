@@ -1,6 +1,6 @@
-import express from 'express';
-import { submitContactForm } from '../controllers/contactController.js';
-import rateLimit from 'express-rate-limit';
+const express = require('express');
+const rateLimit = require('express-rate-limit');
+const { submitContactForm } = require('../controllers/contactController');
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ const contactLimiter = rateLimit({
 
 router.post('/contact', contactLimiter, submitContactForm);
 
-export default router;
+module.exports = router;
