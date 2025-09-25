@@ -5,13 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CivicEye - Emergency Reporting System</title>
-  <link rel="stylesheet" href="/Frontend/landing/style.css" />
-  <link rel="stylesheet" href="/Frontend/landing/loginanimation.css">
-  <link rel="stylesheet" href="/Frontend/landing/profile-dropdown.css">
+  <link rel="stylesheet" href="./landing/style.css" />
+  <link rel="stylesheet" href="./landing/loginanimation.css">
+  <link rel="stylesheet" href="./landing/profile-dropdown.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="/Frontend/landing/auth_passing.js"></script>
-  <script src="/Frontend/landing/profile-dropdown.js"></script>
+  <script src="./landing/auth_passing.js"></script>
+  <script src="./landing/profile-dropdown.js"></script>
 </head>
 
 <body>
@@ -33,44 +33,44 @@
         </a>
       </li>
       <li>
-        <a href="/Frontend/Dashboard/dashboard.html" class="active">
+        <a href="./Dashboard/dashboard.html" class="active">
           <i data-lucide="layout-dashboard"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a href="/Frontend/report/report.html" class="active">
+        <a href="./report/report.html" class="active">
           <i data-lucide="file-text"></i>
           <span>Report Case</span>
         </a>
       </li>
       <li>
-        <a href="/Frontend/Track_case/track.html" class="active">
+        <a href="./Track_case/track.html" class="active">
           <i data-lucide="search"></i>
           <span>Track Case</span>
         </a>
       </li>
       <li>
-        <a href="/Frontend/Emergency/emergency.html" class="active">
+        <a href="./Emergency/emergency.html" class="active">
           <i data-lucide="phone"></i>
           <span>Emergency Contacts</span>
         </a>
       </li>
       <li>
-        <a href="/Frontend/help_guide/help.html" class="active">
+        <a href="./help_guide/help.html" class="active">
           <i data-lucide="help-circle"></i>
           <span>Help Guide</span>
         </a>
       </li>
       <li>
-        <a href="/Frontend/safety-tips/safety.html" class="active">
+        <a href="./safety-tips/safety.html" class="active">
           <i data-lucide="shield"></i>
           <span>Safety Tips</span>
         </a>
       </li>
 
       <li>
-        <a href="/Frontend/Contact/contact.html"><i data-lucide="phone"></i>Contact</a>
+        <a href="./Contact/contact.html"><i data-lucide="phone"></i>Contact</a>
       </li>
     </ul>
     <div class="emergency-section">
@@ -135,7 +135,7 @@
           </p>
         </div>
       </div>
-      <button class="btn btn-report" onclick="window.location.href='/Frontend/report/report.html'">
+      <button class="btn btn-report" onclick="window.location.href='./report/report.html'">
         <i data-lucide="file-plus"></i>
         Report Now
       </button>
@@ -145,15 +145,15 @@
       <section class="quick-actions">
         <h2>Quick Actions</h2>
         <div class="action-buttons">
-          <button class="action-btn" onclick="window.location.href = '/Frontend/Dashboard/dashboard.html'">
+          <button class="action-btn" onclick="window.location.href = './Dashboard/dashboard.html'">
             <i data-lucide="layout-dashboard"></i>
             <span>Dashboard</span>
           </button>     
-          <button class="action-btn" onclick="window.location.href ='/Frontend/Track_case/track.html'">
+          <button class="action-btn" onclick="window.location.href ='./Track_case/track.html'">
             <i data-lucide="search"></i>
             <span>Track Case</span>
           </button>
-          <button class="action-btn" onclick="window.location.href = '/Frontend/Emergency/emergency.html'">
+          <button class="action-btn" onclick="window.location.href = './Emergency/emergency.html'">
             <i data-lucide="phone"></i>
             <span>Emergency</span>
           </button>
@@ -226,7 +226,7 @@
 
       <!-- Map Section -->
       <section class="map-section">
-        <h2>Curent User Location</h2>
+        <h2>Current User Location</h2>
         <div class="map-container">
           <iframe id="mapIframe"
             src="https://maps.google.com/maps?q=28.123456789012345,77.12345678901234&z=15&output=embed"
@@ -252,7 +252,7 @@
 
             <div class="frg_pss">
               <label class="label_input" for="password-input">Password</label>
-              <a href="/Frontend/Forgotpassword/forgotpassword.html">Forgot password?</a>
+              <a href="./Forgotpassword/forgotpassword.html">Forgot password?</a>
             </div>
             <input spellcheck="false" class="input" type="text" name="password" id="password-input" required />
             <button class="submit" type="submit">Submit</button>
@@ -295,7 +295,7 @@
       </div>
     </div>
     <div class="login-modal" id="loginModal">
-      <div class="modal-box">image.png
+      <div class="modal-box">
         <div class="container">
           <div class="toggle-switch">
             <span>User</span>
@@ -397,10 +397,10 @@
         <div class="footer-section">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="/Frontend/report/report.html">Report Case</a></li>
-            <li><a href="/Frontend/Track_case/track.html">Track Case</a></li>
-            <li><a href="/Frontend/safety-tips/safety.html">Safety Tips</a></li>
-            <li><a href="/Frontend/Contact/contact.html">Contact</a></li>
+            <li><a href="./report/report.html">Report Case</a></li>
+            <li><a href="./Track_case/track.html">Track Case</a></li>
+            <li><a href="./safety-tips/safety.html">Safety Tips</a></li>
+            <li><a href="./Contact/contact.html">Contact</a></li>
           </ul>
         </div>
         <div class="footer-section">

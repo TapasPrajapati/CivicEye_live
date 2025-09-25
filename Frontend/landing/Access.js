@@ -1,407 +1,357 @@
-// Geolocation functionality
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    function (position) {
-      var lat = position.coords.latitude;
-      var lng = position.coords.longitude;
-      var mapUrl =
-        "https://maps.google.com/maps?q=" +
-        lat +
-        "," +
-        lng +
-        "&z=15&output=embed";
-      document.getElementById("mapIframe").src = mapUrl;
-    },
-    function (error) {
-      console.error("Error getting location: ", error);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0,
+// auth_passing.js - Authentication System
+// Backend API URL - UPDATED FOR PRODUCTION
+const API_BASE_URL = "https://civiceye-4-q1te.onrender.com";
+
+const authUtils = {
+  // Session configuration
+  SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
+  WARNING_TIME: 5 * 60 * 1000, // 5 minutes before timeout
+
+  // Store authentication data
+  setAuthData: function (token, userData) {
+    const authData = {
+      token,
+      userData,
+      timestamp: new Date().getTime(),
+    };
+    sessionStorage.setItem("authData", JSON.stringify(authData));
+  },
+
+  // Retrieve valid auth data
+  getAuthData: function () {
+    const authString = sessionStorage.getItem("authData");
+    if (!authString) return null;
+
+    const authData = JSON.parse(authString);
+    const currentTime = new Date().getTime();
+
+    // Check if session expired
+    if (currentTime - authData.timestamp > this.SESSION_TIMEOUT) {
+      this.clearAuthData();
+      return null;
     }
-  );
-} else {
-  console.error("Geolocation is not supported by this browser.");
-}
 
-// Profile elements
-const profileSection = document.getElementById("profileSection");
-const profileBtn = document.getElementById("profileBtn");
-const profileModal = document.getElementById("profileModal");
-const profileContent = document.getElementById("profileContent");
+    // Update timestamp to extend session
+    authData.timestamp = currentTime;
+    sessionStorage.setItem("authData", JSON.stringify(authData));
 
-// Load profile data into modal
-function loadProfileData(userData) {
-  const profileContent = document.getElementById("profileContent");
-  if (!profileContent) return;
+    return authData;
+  },
 
-  let html = `
-      <div class="profile-header">
-        <div class="profile-icon">${userData.data.name
-      .charAt(0)
-      .toUpperCase()}</div>
-        <h2>${userData.data.name}</h2>
-      </div>
-      <div class="profile-details">
-        <p><strong>Email:</strong> ${userData.data.email}</p>
-    `;
+  // Clear authentication data
+  clearAuthData: function () {
+    sessionStorage.removeItem("authData");
+  },
 
-  // Add police-specific fields if user is police
-  if (userData.type === "police") {
-    html += `
-        <p><strong>Rank:</strong> ${userData.data.rank || "N/A"}</p>
-        <p><strong>Station:</strong> ${userData.data.station || "N/A"}</p>
-        <p><strong>Police ID:</strong> ${userData.data.policeId || "N/A"}</p>
-      `;
-  } else {
-    // Add user-specific fields
-    html += `
-        <p><strong>Mobile:</strong> ${userData.data.mobile || userData.data.phone || "N/A"
-      }</p>
-        ${userData.data.age
-        ? `<p><strong>Age:</strong> ${userData.data.age}</p>`
-        : ""
+  // Verify authentication with server
+  checkAuth: async function () {
+    const authData = this.getAuthData();
+    if (!authData) return false;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify`, {
+        headers: {
+          Authorization: `Bearer ${authData.token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        return authData.userData;
       }
-      `;
-  }
+    } catch (error) {
+      console.error("Auth check failed:", error);
+    }
 
-  html += `
+    this.clearAuthData();
+    return false;
+  },
+
+  updateUIForLoggedInUser: function (userData) {
+
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const showLoginBtn = document.getElementById("showLogin");
+    if (openLoginBtn) openLoginBtn.style.display = "none";
+    if (showLoginBtn) showLoginBtn.style.display = "none";
+
+    // Show profile section
+    const profileSection = document.getElementById("profileSection");
+    if (profileSection) {
+      profileSection.style.display = "block";
+
+      // Update profile button with user initial
+      const profileBtn = document.getElementById("profileBtn");
+      if (profileBtn) {
+        const initial = userData.data.name.charAt(0).toUpperCase();
+        profileBtn.innerHTML = `<span class="profile-initial">${initial}</span>`;
+
+        // Create hover dropdown
+        this.createProfileDropdown(profileBtn, userData);
+      }
+    }
+
+    // Auto-fill user details in forms if available
+    this.autoFillUserData(userData);
+  },
+
+  // Auto-fill user data in forms
+  autoFillUserData: function (userData) {
+    const nameField = document.getElementById("name");
+    const emailField = document.getElementById("email");
+    const phoneField = document.getElementById("phone");
+
+    if (nameField) nameField.value = userData.data.name || "";
+    if (emailField) emailField.value = userData.data.email || "";
+    if (phoneField)
+      phoneField.value = userData.data.mobile || userData.data.phone || "";
+
+    // Make fields read-only if they're auto-filled
+    if (nameField && nameField.value) nameField.readOnly = true;
+    if (emailField && emailField.value) emailField.readOnly = true;
+    if (phoneField && phoneField.value) phoneField.readOnly = true;
+  },
+
+  // Create profile dropdown
+  createProfileDropdown: function (profileBtn, userData) {
+    const existingDropdown = document.getElementById("profileDropdown");
+    if (existingDropdown) existingDropdown.remove();
+
+    const dropdown = document.createElement("div");
+    dropdown.id = "profileDropdown";
+    dropdown.className = "profile-dropdown";
+
+    const initial = userData.data.name.charAt(0).toUpperCase();
+    let dropdownHTML = `
+      <div class="dropdown-header">
+        <div class="dropdown-avatar">
+          <span class="avatar-initial">${initial}</span>
+        </div>
+        <div class="dropdown-user-info">
+          <div class="user-name">${userData.data.name}</div>
+          <div class="user-email">${userData.data.email}</div>
+        </div>
+        <button class="dropdown-close" id="dropdownClose">
+          <i data-lucide="x"></i>
+        </button>
       </div>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
+      <div class="dropdown-divider"></div>
+      <div class="dropdown-details">
     `;
 
-  profileContent.innerHTML = html;
+    if (userData.type === "police") {
+      dropdownHTML += `
+        <div class="detail-item">
+          <span class="detail-label">Rank:</span>
+          <span class="detail-value">${userData.data.rank || "N/A"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Station:</span>
+          <span class="detail-value">${userData.data.station || "N/A"}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Police ID:</span>
+          <span class="detail-value">${userData.data.policeId || "N/A"}</span>
+        </div>
+      `;
+    } else {
+      dropdownHTML += `
+        <div class="detail-item">
+          <span class="detail-label">Mobile:</span>
+          <span class="detail-value">${userData.data.mobile || userData.data.phone || "N/A"
+        }</span>
+        </div>
+        ${userData.data.age
+          ? `
+        <div class="detail-item">
+          <span class="detail-label">Age:</span>
+          <span class="detail-value">${userData.data.age}</span>
+        </div>
+        `
+          : ""
+        }
+      `;
+    }
 
-  // Add logout event listener
-  document.getElementById("logoutBtn")?.addEventListener("click", handleLogout);
-}
+    dropdownHTML += `
+      </div>
+      <div class="dropdown-divider"></div>
+      <button class="dropdown-logout" id="dropdownLogout">
+        <i data-lucide="log-out"></i>
+        Logout
+      </button>
+    `;
 
-// Handle logout functionality
-function handleLogout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userData");
+    dropdown.innerHTML = dropdownHTML;
+    document.body.appendChild(dropdown);
 
-  // Show login/register buttons
-  document.querySelectorAll(".login-btn, .register-btn").forEach((btn) => {
-    btn.style.display = "block";
-  });
+    // Position dropdown
+    this.positionDropdown(profileBtn, dropdown);
 
-  // Hide profile section
-  const profileSection = document.getElementById("profileSection");
-  if (profileSection) profileSection.style.display = "none";
+    // Add event listeners
+    this.setupDropdownEvents(profileBtn, dropdown);
+  },
 
-  // Close any open modals
-  const profileModal = document.getElementById("profileModal");
-  if (profileModal) profileModal.style.display = "none";
+  // Position dropdown relative to profile button
+  positionDropdown: function (profileBtn, dropdown) {
+    const btnRect = profileBtn.getBoundingClientRect();
+    dropdown.style.position = "fixed";
+    dropdown.style.top = `${btnRect.bottom + 8}px`;
+    dropdown.style.right = `${window.innerWidth - btnRect.right}px`;
+    dropdown.style.zIndex = "1001";
+  },
 
-  document.getElementById("userLoginModal").classList.remove("active");
+  // Setup dropdown event listeners
+  setupDropdownEvents: function (profileBtn, dropdown) {
+    let isVisible = false;
+    let hideTimeout;
 
-  // Reload the page to reset UI
-  window.location.reload();
-}
-
-// Check authentication status
-// Enhanced checkAuth function
-async function checkAuth() {
-  const token = localStorage.getItem("token");
-  const userData = localStorage.getItem("userData");
-
-  if (!token || !userData) return false;
-
-  try {
-    const response = await fetch("http://localhost:5000/api/auth/verify", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+    profileBtn.addEventListener("mouseenter", () => {
+      clearTimeout(hideTimeout);
+      dropdown.style.display = "block";
+      dropdown.style.opacity = "1";
+      dropdown.style.transform = "translateY(0)";
+      isVisible = true;
     });
 
-    if (response.ok) {
-      return JSON.parse(userData);
-    } else {
-      // Clear invalid token
-      localStorage.removeItem("token");
-      localStorage.removeItem("userData");
-      return false;
-    }
-  } catch (error) {
-    console.error("Auth check failed:", error);
-    return false;
-  }
-}
-// Update UI for logged in user
-function updateUIForLoggedInUser(userData) {
-  // Hide login/register buttons
-  const openLoginBtn = document.getElementById("openLoginBtn");
-  const showLoginBtn = document.getElementById("showLogin");
-  if (openLoginBtn) openLoginBtn.style.display = "none";
-  if (showLoginBtn) showLoginBtn.style.display = "none";
-
-  // Show profile section
-  const profileSection = document.getElementById("profileSection");
-  if (profileSection) {
-    profileSection.style.display = "block";
-
-    // Update profile icon
-    const profileIcon = document.getElementById("profileIcon");
-    if (profileIcon) {
-      profileIcon.textContent = userData.data.name.charAt(0).toUpperCase();
-      profileIcon.onclick = () => {
-        const profileModal = document.getElementById("profileModal");
-        if (profileModal) {
-          profileModal.style.display = "block";
-          loadProfileData(userData);
+    profileBtn.addEventListener("mouseleave", () => {
+      hideTimeout = setTimeout(() => {
+        if (!dropdown.matches(":hover")) {
+          dropdown.style.opacity = "0";
+          dropdown.style.transform = "translateY(-10px)";
+          setTimeout(() => {
+            dropdown.style.display = "none";
+          }, 200);
+          isVisible = false;
         }
-      };
+      }, 100);
+    });
+
+    dropdown.addEventListener("mouseenter", () => {
+      clearTimeout(hideTimeout);
+    });
+
+    dropdown.addEventListener("mouseleave", () => {
+      dropdown.style.opacity = "0";
+      dropdown.style.transform = "translateY(-10px)";
+      setTimeout(() => {
+        dropdown.style.display = "none";
+      }, 200);
+      isVisible = false;
+    });
+
+    // Close button
+    const closeBtn = dropdown.querySelector("#dropdownClose");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        dropdown.style.opacity = "0";
+        dropdown.style.transform = "translateY(-10px)";
+        setTimeout(() => {
+          dropdown.style.display = "none";
+        }, 200);
+      });
     }
-  }
 
-  // Update navigation based on user type
-  if (userData.type === "police") {
-    // Show police-specific navigation items if needed
-  }
-}
+    // Logout button
+    const logoutBtn = dropdown.querySelector("#dropdownLogout");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        this.handleLogout();
+      });
+    }
+  },
 
-// Initialize the application when DOM is loaded
+  // Handle logout
+  handleLogout: function () {
+    this.clearAuthData();
+
+    const authData = this.getAuthData();
+    if (authData && authData.token) {
+      fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authData.token}`,
+        },
+      }).catch((error) => console.error("Logout error:", error));
+    }
+
+    window.location.reload();
+  },
+
+  // Show session expiration warning
+  showSessionWarning: function () {
+    setTimeout(() => {
+      if (this.getAuthData()) {
+        const extend = confirm(
+          "Your session will expire in 5 minutes. Would you like to stay logged in?"
+        );
+        if (extend) {
+          const authData = this.getAuthData();
+          if (authData) {
+            this.setAuthData(authData.token, authData.userData);
+            this.showSessionWarning();
+          }
+        } else {
+          this.handleLogout();
+        }
+      }
+    }, this.SESSION_TIMEOUT - this.WARNING_TIME);
+  },
+
+  // Initialize inactivity timer
+  initInactivityTimer: function () {
+    let inactivityTimer;
+
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        this.handleLogout();
+      }, this.SESSION_TIMEOUT);
+    };
+
+    ["click", "mousemove", "keypress", "scroll", "touchstart"].forEach(
+      (event) => {
+        document.addEventListener(event, resetTimer);
+      }
+    );
+
+    resetTimer();
+  },
+};
+
+// Initialize authentication when DOM is loaded
 document.addEventListener("DOMContentLoaded", async function () {
-  console.log("DOM Content Loaded - Initializing login functionality");
+  authUtils.initInactivityTimer();
 
-  // Test if elements exist
-  console.log("openLoginBtn:", document.getElementById("openLoginBtn"));
-  console.log("showLoginBtn:", document.getElementById("showLogin"));
-  console.log("userLoginModal:", document.getElementById("userLoginModal"));
-  console.log("loginModal:", document.getElementById("loginModal"));
+  const userData = await authUtils.checkAuth();
+  if (userData) {
+    authUtils.updateUIForLoggedInUser(userData);
+    authUtils.showSessionWarning();
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function (e) {
+    const profileDropdown = document.getElementById("profileDropdown");
+    const profileBtn = document.getElementById("profileBtn");
+
+    if (
+      profileDropdown &&
+      profileBtn &&
+      !profileBtn.contains(e.target) &&
+      !profileDropdown.contains(e.target)
+    ) {
+      profileDropdown.style.opacity = "0";
+      profileDropdown.style.transform = "translateY(-10px)";
+      setTimeout(() => {
+        profileDropdown.style.display = "none";
+      }, 200);
+    }
+  });
 
   // Initialize Lucide icons
-  lucide.createIcons();
-
-  // Modal handling - moved inside DOMContentLoaded
-  const openLoginBtn = document.getElementById("openLoginBtn");
-  const userLoginModal = document.getElementById("userLoginModal");
-  const showLoginBtn = document.getElementById("showLogin");
-  const loginModal = document.getElementById("loginModal");
-
-  // Show login modal
-  if (openLoginBtn) {
-    openLoginBtn.addEventListener("click", () => {
-      console.log("Login button clicked");
-      console.log("userLoginModal:", userLoginModal);
-      if (userLoginModal) {
-        userLoginModal.classList.add("active");
-        console.log("Modal should be visible now");
-      } else {
-        console.error("userLoginModal not found");
-      }
-    });
+  if (window.lucide) {
+    lucide.createIcons();
   }
-
-  // Hide login modal when clicking outside
-  if (userLoginModal) {
-    userLoginModal.addEventListener("click", function (e) {
-      if (e.target === userLoginModal) {
-        userLoginModal.classList.remove("active");
-      }
-    });
-  }
-
-  // Show register modal
-  if (showLoginBtn) {
-    showLoginBtn.addEventListener("click", function () {
-      console.log("Register button clicked");
-      console.log("loginModal:", loginModal);
-      if (loginModal) {
-        loginModal.classList.add("active");
-        console.log("Register modal should be visible now");
-      } else {
-        console.error("loginModal not found");
-      }
-    });
-  }
-
-  // Hide register modal when clicking outside
-  if (loginModal) {
-    loginModal.addEventListener("click", function (e) {
-      if (e.target === loginModal) {
-        loginModal.classList.remove("active");
-      }
-    });
-  }
-
-  // Switch between login and register forms
-  function showLoginForm() {
-    loginModal.classList.remove("active");
-    userLoginModal.classList.add("active");
-  }
-
-  // Make showLoginForm globally available
-  window.showLoginForm = showLoginForm;
-
-  // Handle User Registration
-  const userForm = document.querySelector("#userForm .submit-btn");
-  if (userForm) {
-    userForm.addEventListener("click", async (e) => {
-      e.preventDefault();
-
-      const userData = {
-        name: document.getElementById("userName").value,
-        age: document.getElementById("userAge").value,
-        mobile: document.getElementById("userMobile").value,
-        email: document.getElementById("userEmail").value,
-        password: document.getElementById("userPassword").value,
-      };
-
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/users/register/user",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          }
-        );
-
-        if (response.ok) {
-          alert("Registration successful!");
-          loginModal.classList.remove("active");
-          window.location.href = "index.html";
-        } else {
-          alert("Registration failed. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Registration failed. Please try again.");
-      }
-    });
-  }
-
-  // Handle Police Registration
-  const policeForm = document.querySelector("#policeForm .submit-btn");
-  if (policeForm) {
-    policeForm.addEventListener("click", async (e) => {
-      e.preventDefault();
-
-      const policeData = {
-        policeId: document.getElementById("policeId").value,
-        batchNo: document.getElementById("batchNo").value,
-        rank: document.getElementById("rank").value,
-        phone: document.getElementById("policePhone").value,
-        station: document.getElementById("station").value,
-        email: document.getElementById("policeEmail").value,
-        password: document.getElementById("policePassword").value,
-      };
-
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/police/register/police",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(policeData),
-          }
-        );
-
-        if (response.ok) {
-          alert("Police registration successful!");
-          loginModal.classList.remove("active");
-        } else {
-          alert("Registration failed. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Registration failed. Please try again.");
-      }
-    });
-  }
-
-  // Login form submission
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById("email-input").value;
-      const password = document.getElementById("password-input").value;
-
-      try {
-        const response = await fetch("http://localhost:5000/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          // Store auth data with session management
-          authUtils.setAuthData(data.token, data);
-
-          alert("Login successful!");
-          userLoginModal.classList.remove("active");
-          authUtils.updateUIForLoggedInUser(data);
-
-          // Refresh the page after successful login
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 1000);// 1 second delay to show the success message
-        } else {
-          alert("Invalid credentials");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Login failed. Please try again.");
-      }
-    });
-  }
-
-  // Role toggle functionality
-  const roleToggle = document.getElementById("roleToggle");
-  const flipCard = document.getElementById("flipCard");
-
-  if (roleToggle && flipCard) {
-    roleToggle.addEventListener("change", function () {
-      flipCard.classList.toggle("flipped");
-
-      const userLabel = document.querySelector(
-        ".toggle-switch span:first-child"
-      );
-      const policeLabel = document.querySelector(
-        ".toggle-switch span:last-child"
-      );
-
-      if (this.checked) {
-        userLabel.style.color = "#000080";
-        policeLabel.style.color = "#987456";
-      } else {
-        userLabel.style.color = "#000000";
-        policeLabel.style.color = "#666";
-      }
-    });
-  }
-
-  // Check authentication status
-  // const userData = await checkAuth();
-  // if (userData) {
-  //   updateUIForLoggedInUser(userData);
-  // }
-
-  // Close profile modal when clicking X
-  document.querySelector(".close")?.addEventListener("click", function () {
-    document.getElementById("profileModal").style.display = "none";
-  });
-
-  // Close profile modal when clicking outside
-  window.addEventListener("click", function (event) {
-    const modal = document.getElementById("profileModal");
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-
-  console.log("Login functionality initialization complete");
 });
+
+// Make authUtils available globally
+window.authUtils = authUtils;
