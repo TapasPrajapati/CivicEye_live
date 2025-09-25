@@ -46,7 +46,7 @@ const authUtils = {
     if (!authData) return false;
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/verify", {
+      const response = await fetch("https://civiceye-4-q1te.onrender.com/api/auth/verify", {
         headers: {
           Authorization: `Bearer ${authData.token}`,
           "Content-Type": "application/json",
@@ -263,7 +263,7 @@ const authUtils = {
 
     const authData = this.getAuthData();
     if (authData && authData.token) {
-      fetch("http://localhost:5000/api/auth/logout", {
+      fetch("https://civiceye-4-q1te.onrender.com/api/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${authData.token}`,

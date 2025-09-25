@@ -186,7 +186,7 @@ const profileDropdownUtils = {
     // Optional: Invalidate token on server
     const authData = window.authUtils ? authUtils.getAuthData() : null;
     if (authData && authData.token) {
-      fetch("http://localhost:5000/api/auth/logout", {
+      fetch("https://civiceye-4-q1te.onrender.com/api/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${authData.token}`,
