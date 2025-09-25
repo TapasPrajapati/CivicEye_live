@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (response.ok) {
           alert("Registration successful!");
           loginModal.classList.remove("active");
-          window.location.href = "/Frontend/landing/index.html";
+          window.location.href = "index.html";
         } else {
           alert("Registration failed. Please try again.");
         }
@@ -347,7 +347,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           // Refresh the page after successful login
           setTimeout(() => {
-            window.location.href = "/Frontend/landing/index.html";
+            window.location.href = "index.html";
           }, 1000);// 1 second delay to show the success message
         } else {
           alert("Invalid credentials");

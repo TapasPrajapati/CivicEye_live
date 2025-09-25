@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const statusOrder = [
             "registered",
             "approved",
-            "officer-assigned",
+            "Officer Assigned",
             "investigating",
             "resolved",
         ];
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
             case "approved":
                 return caseData.approvedBy
                     ? `Approved by ${caseData.approvedBy}`
-                    : "Pending approval";
+                    : "Approed by Vignesh";
             case "officer-assigned":
                 return caseData.assignedOfficer
                     ? `Assigned to ${caseData.assignedOfficer}`
