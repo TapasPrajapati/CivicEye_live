@@ -12,48 +12,6 @@ const newsData = [
     publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
   },
   {
-    title: "Cybercrime unit successfully recovers ₹2.5 crores in online fraud investigation",
-    source: "Cyber Crime Cell",
-    isBreaking: true,
-    url: "#",
-    publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
-  },
-  {
-    title: "Community policing program launches in 15 new residential areas",
-    source: "City Administration",
-    isBreaking: false,
-    url: "#",
-    publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
-  },
-  {
-    title: "Anti-corruption drive leads to arrest of government official in bribery case",
-    source: "Anti-Corruption Bureau",
-    isBreaking: false,
-    url: "#",
-    publishedAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), // 8 hours ago
-  },
-  {
-    title: "New emergency response system reduces police response time by 40%",
-    source: "Emergency Services",
-    isBreaking: false,
-    url: "#",
-    publishedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), // 12 hours ago
-  },
-  {
-    title: "Drug trafficking network dismantled in joint operation by multiple agencies",
-    source: "Narcotics Control Bureau",
-    isBreaking: false,
-    url: "#",
-    publishedAt: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(), // 18 hours ago
-  },
-  {
-    title: "Women's safety mobile app sees 200% increase in usage after recent updates",
-    source: "Women Safety Initiative",
-    isBreaking: false,
-    url: "#",
-    publishedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
-  },
-  {
     title: "Traffic police implement AI-based system for better traffic management",
     source: "Traffic Department",
     isBreaking: false,
