@@ -75,10 +75,10 @@ class MyCasesManager {
                 return;
             }
 
+            const API_BASE = "https://civiceye-4-q1te.onrender.com";
+
             const response = await fetch(
-                `http://localhost:5000/api/reports/user-cases?email=${encodeURIComponent(
-                    userEmail
-                )}`,
+                `${API_BASE}/api/reports/user-cases?email=${encodeURIComponent(userEmail)}`,
                 {
                     method: "GET",
                     headers: {
