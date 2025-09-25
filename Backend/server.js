@@ -7,7 +7,7 @@ const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
-const policeRoutes = require('./routes/policeRoutes');
+const policeRoutes = require('./routes/PoliceRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
