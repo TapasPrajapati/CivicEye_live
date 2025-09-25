@@ -1,10 +1,10 @@
-// auth_passing.js - Authentication System
+// Fixed auth_passing.js - Use ONLY sessionStorage consistently
 const authUtils = {
   // Session configuration
   SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
   WARNING_TIME: 5 * 60 * 1000, // 5 minutes before timeout
 
-  // Store authentication data
+  // Store authentication data (ONLY sessionStorage)
   setAuthData: function (token, userData) {
     const authData = {
       token,
@@ -12,6 +12,7 @@ const authUtils = {
       timestamp: new Date().getTime(),
     };
     sessionStorage.setItem("authData", JSON.stringify(authData));
+    console.log("Auth data stored in sessionStorage:", authData);
   },
 
   // Retrieve valid auth data
@@ -19,31 +20,45 @@ const authUtils = {
     const authString = sessionStorage.getItem("authData");
     if (!authString) return null;
 
-    const authData = JSON.parse(authString);
-    const currentTime = new Date().getTime();
+    try {
+      const authData = JSON.parse(authString);
+      const currentTime = new Date().getTime();
 
-    // Check if session expired
-    if (currentTime - authData.timestamp > this.SESSION_TIMEOUT) {
+      // Check if session expired
+      if (currentTime - authData.timestamp > this.SESSION_TIMEOUT) {
+        console.log("Session expired, clearing auth data");
+        this.clearAuthData();
+        return null;
+      }
+
+      // Update timestamp to extend session
+      authData.timestamp = currentTime;
+      sessionStorage.setItem("authData", JSON.stringify(authData));
+
+      return authData;
+    } catch (error) {
+      console.error("Error parsing auth data:", error);
       this.clearAuthData();
       return null;
     }
-
-    // Update timestamp to extend session
-    authData.timestamp = currentTime;
-    sessionStorage.setItem("authData", JSON.stringify(authData));
-
-    return authData;
   },
 
   // Clear authentication data
   clearAuthData: function () {
     sessionStorage.removeItem("authData");
+    // Also clear any old localStorage data for migration
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    console.log("Auth data cleared");
   },
 
   // Verify authentication with server
   checkAuth: async function () {
     const authData = this.getAuthData();
-    if (!authData) return false;
+    if (!authData) {
+      console.log("No auth data found");
+      return false;
+    }
 
     try {
       const response = await fetch("https://civiceye-4-q1te.onrender.com/api/auth/verify", {
@@ -54,7 +69,10 @@ const authUtils = {
       });
 
       if (response.ok) {
+        console.log("Auth verification successful");
         return authData.userData;
+      } else {
+        console.log("Auth verification failed:", response.status);
       }
     } catch (error) {
       console.error("Auth check failed:", error);
@@ -65,7 +83,9 @@ const authUtils = {
   },
 
   updateUIForLoggedInUser: function (userData) {
+    console.log("Updating UI for logged in user:", userData);
 
+    // Hide login/register buttons
     const openLoginBtn = document.getElementById("openLoginBtn");
     const showLoginBtn = document.getElementById("showLogin");
     if (openLoginBtn) openLoginBtn.style.display = "none";
@@ -97,15 +117,18 @@ const authUtils = {
     const emailField = document.getElementById("email");
     const phoneField = document.getElementById("phone");
 
-    if (nameField) nameField.value = userData.data.name || "";
-    if (emailField) emailField.value = userData.data.email || "";
-    if (phoneField)
-      phoneField.value = userData.data.mobile || userData.data.phone || "";
-
-    // Make fields read-only if they're auto-filled
-    if (nameField && nameField.value) nameField.readOnly = true;
-    if (emailField && emailField.value) emailField.readOnly = true;
-    if (phoneField && phoneField.value) phoneField.readOnly = true;
+    if (nameField && userData.data.name) {
+      nameField.value = userData.data.name;
+      nameField.readOnly = true;
+    }
+    if (emailField && userData.data.email) {
+      emailField.value = userData.data.email;
+      emailField.readOnly = true;
+    }
+    if (phoneField && (userData.data.mobile || userData.data.phone)) {
+      phoneField.value = userData.data.mobile || userData.data.phone;
+      phoneField.readOnly = true;
+    }
   },
 
   // Create profile dropdown
@@ -154,18 +177,14 @@ const authUtils = {
       dropdownHTML += `
         <div class="detail-item">
           <span class="detail-label">Mobile:</span>
-          <span class="detail-value">${userData.data.mobile || userData.data.phone || "N/A"
-        }</span>
+          <span class="detail-value">${userData.data.mobile || userData.data.phone || "N/A"}</span>
         </div>
-        ${userData.data.age
-          ? `
+        ${userData.data.age ? `
         <div class="detail-item">
           <span class="detail-label">Age:</span>
           <span class="detail-value">${userData.data.age}</span>
         </div>
-        `
-          : ""
-        }
+        ` : ""}
       `;
     }
 
@@ -259,70 +278,46 @@ const authUtils = {
 
   // Handle logout
   handleLogout: function () {
+    console.log("Logging out user");
+    
+    // Clear auth data first
     this.clearAuthData();
 
-    const authData = this.getAuthData();
-    if (authData && authData.token) {
-      fetch("https://civiceye-4-q1te.onrender.com/api/auth/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${authData.token}`,
-        },
-      }).catch((error) => console.error("Logout error:", error));
-    }
+    // Show login/register buttons
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const showLoginBtn = document.getElementById("showLogin");
+    if (openLoginBtn) openLoginBtn.style.display = "block";
+    if (showLoginBtn) showLoginBtn.style.display = "block";
 
-    window.location.reload();
-  },
+    // Hide profile section
+    const profileSection = document.getElementById("profileSection");
+    if (profileSection) profileSection.style.display = "none";
 
-  // Show session expiration warning
-  showSessionWarning: function () {
+    // Remove dropdown
+    const dropdown = document.getElementById("profileDropdown");
+    if (dropdown) dropdown.remove();
+
+    // Close any open modals
+    const modals = document.querySelectorAll(".login-modal");
+    modals.forEach(modal => modal.classList.remove("active"));
+
+    // Reload the page to reset everything
     setTimeout(() => {
-      if (this.getAuthData()) {
-        const extend = confirm(
-          "Your session will expire in 5 minutes. Would you like to stay logged in?"
-        );
-        if (extend) {
-          const authData = this.getAuthData();
-          if (authData) {
-            this.setAuthData(authData.token, authData.userData);
-            this.showSessionWarning();
-          }
-        } else {
-          this.handleLogout();
-        }
-      }
-    }, this.SESSION_TIMEOUT - this.WARNING_TIME);
-  },
-
-  // Initialize inactivity timer
-  initInactivityTimer: function () {
-    let inactivityTimer;
-
-    const resetTimer = () => {
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        this.handleLogout();
-      }, this.SESSION_TIMEOUT);
-    };
-
-    ["click", "mousemove", "keypress", "scroll", "touchstart"].forEach(
-      (event) => {
-        document.addEventListener(event, resetTimer);
-      }
-    );
-
-    resetTimer();
-  },
+      window.location.reload();
+    }, 500);
+  }
 };
 
 // Initialize authentication when DOM is loaded
 document.addEventListener("DOMContentLoaded", async function () {
-  authUtils.initInactivityTimer();
+  console.log("Initializing authentication system");
 
   const userData = await authUtils.checkAuth();
   if (userData) {
+    console.log("User is logged in:", userData);
     authUtils.updateUIForLoggedInUser(userData);
-    authUtils.showSessionWarning();
+  } else {
+    console.log("User is not logged in");
   }
 
   // Close dropdown when clicking outside

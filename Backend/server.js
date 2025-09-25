@@ -10,7 +10,8 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const policeRoutes = require('./routes/PoliceRoutes');
 const reportRoutes = require('./routes/reportRoutes');
-const contactRoutes = require('./routes/contactRoutes'); // ✅ NEW
+const contactRoutes = require('./routes/contactRoutes');
+const newsRoutes = require('./routes/newsRoutes'); 
 
 const app = express();
 connectDB();
@@ -18,7 +19,10 @@ connectDB();
 // ✅ Allowed origins (no trailing slash)
 const allowedOrigins = [
   'http://127.0.0.1:5504',
-  'https://civic-eye-gules.vercel.app'
+  'https://civic-eye-gules.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://localhost:8080'
 ];
 
 // Enhanced CORS configuration
@@ -49,7 +53,18 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/police', policeRoutes);
 app.use('/api/reports', reportRoutes);
-app.use('/api/contact', contactRoutes); // ✅ NEW
+app.use('/api/contact', contactRoutes);
+app.use('/api/news', newsRoutes); // ✅ ADD THIS
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'CivicEye Backend is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
 
 // Global Error Handler
 app.use((err, req, res, next) => {
@@ -75,4 +90,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`✅ Allowed Origins: ${allowedOrigins.join(', ')}`);
+  console.log(`📰 News API endpoint: http://localhost:${PORT}/api/news/crime-news`);
 });

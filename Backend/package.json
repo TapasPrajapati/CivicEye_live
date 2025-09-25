@@ -20,7 +20,8 @@
     "mongoose-sequence": "^6.0.1",
     "multer": "^2.0.0",
     "nodemailer": "^7.0.3",
-    "pdfkit": "^0.17.1"
+    "pdfkit": "^0.17.1",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

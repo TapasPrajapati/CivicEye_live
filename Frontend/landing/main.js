@@ -101,12 +101,13 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const newsTicker = document.getElementById("news-ticker");
+  const API_BASE_URL = "https://civiceye-4-q1te.onrender.com"; // Your backend URL
 
   if (newsTicker) {
     let currentNewsItems = [];
     let isFetching = false;
     let lastFetchTime = 0;
-    let cleanupTicker = null; // To store cleanup function
+    let cleanupTicker = null;
 
     async function fetchWithTimeout(url, options = {}, timeout = 20000) {
       const controller = new AbortController();
@@ -125,45 +126,26 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    async function fetchNewsAPI() {
+    // Updated to fetch news through your backend
+    async function fetchNewsFromBackend() {
       try {
-        const response = await fetchWithTimeout(
-          `https://newsapi.org/v2/top-headlines?q=crime&country=in&pageSize=15&apiKey=${API_KEYS.newsAPI}`
-        );
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/news/crime-news`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
-        return (
-          data.articles?.map((article) => ({
-            title: article.title,
-            source: "NewsAPI",
-            isBreaking: true,
-            url: article.url,
-            timestamp: new Date(article.publishedAt),
-          })) || []
-        );
+        
+        return data.articles?.map(article => ({
+          title: article.title,
+          source: article.source || "News Source",
+          isBreaking: article.isBreaking || false,
+          url: article.url || "#",
+          timestamp: new Date(article.publishedAt || Date.now()),
+        })) || [];
       } catch (error) {
-        console.error("NewsAPI Error:", error);
-        return [];
-      }
-    }
-
-    async function fetchGNews() {
-      try {
-        const response = await fetchWithTimeout(
-          `https://gnews.io/api/v4/top-headlines?q=crime&country=in&max=15&token=${API_KEYS.gNewsAPI}`
-        );
-        const data = await response.json();
-        return (
-          data.articles?.map((article) => ({
-            // Fixed variable name from articles to article
-            title: article.title,
-            source: "GNews",
-            isBreaking: false,
-            url: article.url,
-            timestamp: new Date(article.publishedAt),
-          })) || []
-        );
-      } catch (error) {
-        console.error("GNews Error:", error);
+        console.error("Backend news fetch error:", error);
         return [];
       }
     }
@@ -171,21 +153,33 @@ document.addEventListener("DOMContentLoaded", function () {
     function getFallbackNews() {
       return [
         {
-          title:
-            "Local authorities report decrease in street crimes this month",
+          title: "Local authorities report decrease in street crimes this month",
           source: "Local News",
           isBreaking: false,
           url: "#",
           timestamp: new Date(),
         },
         {
-          title:
-            "Cybercrime task force makes major arrest in financial fraud case",
+          title: "Cybercrime task force makes major arrest in financial fraud case",
           source: "Police Bulletin",
           isBreaking: true,
           url: "#",
           timestamp: new Date(),
         },
+        {
+          title: "Community policing initiative shows positive results",
+          source: "City Update",
+          isBreaking: false,
+          url: "#",
+          timestamp: new Date(),
+        },
+        {
+          title: "New safety measures implemented in downtown area",
+          source: "Safety Alert",
+          isBreaking: false,
+          url: "#",
+          timestamp: new Date(),
+        }
       ];
     }
 
@@ -194,37 +188,31 @@ document.addEventListener("DOMContentLoaded", function () {
       isFetching = true;
 
       try {
-        console.log("Fetching latest crime news...");
-        const [newsApiResults, gNewsResults] = await Promise.allSettled([
-          fetchNewsAPI(),
-          fetchGNews(),
-        ]);
+        console.log("Fetching latest crime news from backend...");
+        const newsItems = await fetchNewsFromBackend();
+        
+        console.log(`Fetched ${newsItems.length} news items`);
 
-        const combinedNews = [
-          ...(newsApiResults.status === "fulfilled"
-            ? newsApiResults.value
-            : []),
-          ...(gNewsResults.status === "fulfilled" ? gNewsResults.value : []),
-        ];
-
-        console.log(`Fetched ${combinedNews.length} news items`);
-
-        if (combinedNews.length === 0) {
+        if (newsItems.length === 0) {
           console.log("Using fallback news");
           return getFallbackNews();
         }
 
-        const uniqueNews = combinedNews.filter(
+        // Remove duplicates based on title
+        const uniqueNews = newsItems.filter(
           (item, index, self) =>
             index === self.findIndex((t) => t.title === item.title)
         );
 
+        // Sort by timestamp (newest first)
         uniqueNews.sort((a, b) => b.timestamp - a.timestamp);
-        uniqueNews.slice(0, 3).forEach((item) => (item.isBreaking = true));
+        
+        // Mark first 2 items as breaking news
+        uniqueNews.slice(0, 2).forEach((item) => (item.isBreaking = true));
 
         return uniqueNews;
       } catch (error) {
-        console.error("Error combining news:", error);
+        console.error("Error fetching news:", error);
         return getFallbackNews();
       } finally {
         isFetching = false;
@@ -232,20 +220,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
+    // Rest of the ticker functions remain the same
     function createTickerItem(item) {
       const element = document.createElement("div");
       element.className = "ticker-headline";
       const timeAgo = getTimeAgo(item.timestamp);
 
       element.innerHTML = `
-            <span class="breaking-news">${item.isBreaking ? "BREAKING" : "UPDATE"
-        }</span>
-            <span class="headline-text">${item.title}</span>
-            <span class="news-meta">
-                <span class="news-source">${item.source}</span>
-                <span class="news-time">${timeAgo}</span>
-            </span>
-        `;
+        <span class="breaking-news">${item.isBreaking ? "BREAKING" : "UPDATE"}</span>
+        <span class="headline-text">${item.title}</span>
+        <span class="news-meta">
+          <span class="news-source">${item.source}</span>
+          <span class="news-time">${timeAgo}</span>
+        </span>
+      `;
 
       element.addEventListener("click", () => {
         if (item.url && item.url !== "#") {
@@ -268,13 +256,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function initializeTicker() {
-      // Clean up previous ticker if exists
       if (cleanupTicker) cleanupTicker();
 
       newsTicker.innerHTML = "";
       const tickerWrapper = document.createElement("div");
       tickerWrapper.className = "ticker-wrapper";
 
+      // Double the content for seamless scrolling
       currentNewsItems.forEach((item) =>
         tickerWrapper.appendChild(createTickerItem(item))
       );
@@ -284,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       newsTicker.appendChild(tickerWrapper);
 
-      const duration = currentNewsItems.length * 3;
+      const duration = Math.max(currentNewsItems.length * 4, 20); // Minimum 20s
       tickerWrapper.style.animation = `ticker-scroll ${duration}s linear infinite`;
 
       const handleMouseEnter = () =>
@@ -295,7 +283,6 @@ document.addEventListener("DOMContentLoaded", function () {
       newsTicker.addEventListener("mouseenter", handleMouseEnter);
       newsTicker.addEventListener("mouseleave", handleMouseLeave);
 
-      // Store cleanup function
       cleanupTicker = () => {
         newsTicker.removeEventListener("mouseenter", handleMouseEnter);
         newsTicker.removeEventListener("mouseleave", handleMouseLeave);
@@ -304,13 +291,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function updateNewsFeed() {
       const timeSinceLastFetch = Date.now() - lastFetchTime;
-      const minRefreshInterval = 2 * 60 * 1000;
+      const minRefreshInterval = 5 * 60 * 1000; // 5 minutes
 
-      if (timeSinceLastFetch < minRefreshInterval) {
+      if (timeSinceLastFetch < minRefreshInterval && currentNewsItems.length > 0) {
         console.log(
-          `Skipping fetch - ${Math.floor(
-            timeSinceLastFetch / 1000
-          )}s since last fetch`
+          `Skipping fetch - ${Math.floor(timeSinceLastFetch / 1000)}s since last fetch`
         );
         return;
       }
@@ -323,10 +308,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize immediately
     updateNewsFeed();
 
-    // Set interval to check every 30 seconds
+    // Set interval to check every 10 minutes
     const checkInterval = setInterval(updateNewsFeed, 10 * 60 * 1000);
 
-    // Also refresh when window gains focus
-    window.addEventListener("focus", updateNewsFeed);
+    // Refresh when window gains focus (if it's been a while)
+    window.addEventListener("focus", () => {
+      const timeSinceLastFetch = Date.now() - lastFetchTime;
+      if (timeSinceLastFetch > 5 * 60 * 1000) { // 5 minutes
+        updateNewsFeed();
+      }
+    });
+
+    // Cleanup on page unload
+    window.addEventListener("beforeunload", () => {
+      clearInterval(checkInterval);
+      if (cleanupTicker) cleanupTicker();
+    });
   }
 });
