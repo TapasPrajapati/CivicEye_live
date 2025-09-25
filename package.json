@@ -15,7 +15,7 @@
     "nodemon": "^3.1.10",
     "path": "^0.12.7",
     "pdfkit": "^0.17.1",
-    "vite-starter": "^5.0.0"
+    "vite-starter": "file:"
   },
   "devDependencies": {
     "vite": "^7.0.5"
