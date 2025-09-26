@@ -419,6 +419,36 @@
     </footer>
   </main>
   <script src="./landing/Access.js"></script>
+  <script>
+    async function loadNews() {
+      try {
+        // Use your deployed Render backend URL
+        const res = await fetch("https://civiceye-4-q1te.onrender.com/api/news/crime-news");
+        const data = await res.json();
+        const ticker = document.getElementById("news-ticker");
+        ticker.innerHTML = "";
+
+        if (data.articles && data.articles.length > 0) {
+          data.articles.forEach(article => {
+            const div = document.createElement("div");
+            div.className = "ticker-headline";
+            div.innerHTML = `
+              <span class="breaking-news">${article.isBreaking ? "BREAKING:" : "NEWS:"}</span>
+              <span class="headline-text">${article.title}</span>
+            `;
+            ticker.appendChild(div);
+          });
+        } else {
+          ticker.innerHTML = "<p>No news available</p>";
+        }
+      } catch (err) {
+        console.error("Failed to load news:", err);
+        document.getElementById("news-ticker").innerHTML = "<p>Unable to load news</p>";
+      }
+    }
+    loadNews();
+  </script>
+  </script>
 </body>
 
 </html>
