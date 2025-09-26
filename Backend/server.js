@@ -54,7 +54,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/police', policeRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/news', newsRoutes); // ✅ ADD THIS
+app.use('/api/news', newsRoutes); 
 
 // Health check endpoint
 app.get('/health', (req, res) => {
