@@ -1,30 +1,30 @@
-// Fixed Access.js - Use ONLY authUtils for consistency
-// Geolocation functionality (unchanged)
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    function (position) {
-      var lat = position.coords.latitude;
-      var lng = position.coords.longitude;
-      var mapUrl =
-        "https://maps.google.com/maps?q=" +
-        lat +
-        "," +
-        lng +
-        "&z=15&output=embed";
-      document.getElementById("mapIframe").src = mapUrl;
-    },
-    function (error) {
-      console.error("Error getting location: ", error);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0,
-    }
-  );
-} else {
-  console.error("Geolocation is not supported by this browser.");
-}
+// // Fixed Access.js - Use ONLY authUtils for consistency
+// // Geolocation functionality (unchanged)
+// if (navigator.geolocation) {
+//   navigator.geolocation.getCurrentPosition(
+//     function (position) {
+//       var lat = position.coords.latitude;
+//       var lng = position.coords.longitude;
+//       var mapUrl =
+//         "https://maps.google.com/maps?q=" +
+//         lat +
+//         "," +
+//         lng +
+//         "&z=15&output=embed";
+//       document.getElementById("mapIframe").src = mapUrl;
+//     },
+//     function (error) {
+//       console.error("Error getting location: ", error);
+//     },
+//     {
+//       enableHighAccuracy: true,
+//       timeout: 10000,
+//       maximumAge: 0,
+//     }
+//   );
+// } else {
+//   console.error("Geolocation is not supported by this browser.");
+// }
 
 // Backend API URL
 const API_BASE_URL = "https://civiceye-4-q1te.onrender.com";
