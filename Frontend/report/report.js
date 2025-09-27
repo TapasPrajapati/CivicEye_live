@@ -27,11 +27,9 @@ function updateTimeMaxValue() {
     const selectedDate = new Date(dateInput.value);
     const today = new Date();
 
-    // If selected date is today, set max time to current time
     if (selectedDate.toDateString() === today.toDateString()) {
       setMaxTime(timeInput);
     } else {
-      // If selected date is in the past, allow any time
       timeInput.max = "";
     }
   }
@@ -174,12 +172,10 @@ function capturePhoto() {
   const ctx = canvas.getContext("2d");
   ctx.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
 
-  // Convert to JPEG with good quality but reasonable file size
   const dataURL = canvas.toDataURL("image/jpeg", 0.8);
   
-  // Check file size (approximate)
-  const sizeInBytes = Math.round(dataURL.length * 0.75); // Base64 is ~33% larger than binary
-  if (sizeInBytes > 5 * 1024 * 1024) { // 5MB limit
+  const sizeInBytes = Math.round(dataURL.length * 0.75);
+  if (sizeInBytes > 5 * 1024 * 1024) {
     alert("Image too large. Please try again with better lighting or closer to subject.");
     return;
   }
@@ -230,7 +226,6 @@ function closeCameraModal() {
 
 function setupFormNavigation() {
   document.addEventListener("click", function (e) {
-    // Handle next buttons
     if (e.target.closest(".btn-next")) {
       const btn = e.target.closest(".btn-next");
       const currentSection = btn.dataset.current;
@@ -239,14 +234,12 @@ function setupFormNavigation() {
       if (validateSection(currentSection)) {
         switchSection(currentSection, nextSection);
 
-        // If going to review section, populate the review fields
         if (nextSection === "section-review") {
           populateReviewFields();
         }
       }
     }
 
-    // Handle previous buttons
     if (e.target.closest(".btn-prev")) {
       const btn = e.target.closest(".btn-prev");
       const currentSection = btn.dataset.current;
@@ -262,20 +255,17 @@ function validateSection(sectionId) {
   const requiredFields = section.querySelectorAll("[required]");
   let isValid = true;
 
-  // Clear previous errors
   document.querySelectorAll(".error-message").forEach((msg) => msg.remove());
 
   requiredFields.forEach((field) => {
     field.classList.remove("error");
 
-    // Check if field is empty
     if (!field.value.trim()) {
       markFieldAsInvalid(field, "This field is required");
       isValid = false;
       return;
     }
 
-    // Field-specific validations
     switch (field.id) {
       case "name":
         if (!/^[A-Za-z\s]{3,50}$/.test(field.value)) {
@@ -305,7 +295,6 @@ function validateSection(sectionId) {
         const selectedDate = new Date(field.value);
         const today = new Date();
 
-        // Reset both to midnight for fair comparison
         selectedDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
 
@@ -323,14 +312,12 @@ function validateSection(sectionId) {
           const selectedDate = new Date(dateInput.value);
           const selectedTime = timeInput.value;
 
-          // Create a combined date-time object
           const [hours, minutes] = selectedTime.split(":");
           const combinedDateTime = new Date(selectedDate);
           combinedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
 
           const now = new Date();
 
-          // If the selected date is today, check if time is in the future
           const isToday = selectedDate.toDateString() === now.toDateString();
 
           if (isToday && combinedDateTime > now) {
@@ -353,7 +340,6 @@ function validateSection(sectionId) {
   });
 
   if (!isValid) {
-    // Scroll to first error
     const firstError = section.querySelector(".error");
     if (firstError) {
       firstError.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -412,7 +398,6 @@ function setupFileUpload() {
     }
 
     Array.from(this.files).forEach((file) => {
-      // Check file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
         alert(
           `File "${file.name}" exceeds 10MB limit. Please choose smaller files.`
@@ -421,7 +406,6 @@ function setupFileUpload() {
         return;
       }
 
-      // Check file type
       const allowedTypes = [
         "image/jpeg",
         "image/png",
@@ -479,7 +463,7 @@ function removeFile(fileName) {
 }
 
 function setupGeolocation() {
-  document.getElementById("getLocation").addEventListener("click", function () {
+  document.getElementById("getLocation")?.addEventListener("click", function () {
     const locationInput = document.getElementById("location");
     locationInput.placeholder = "Locating...";
 
@@ -507,33 +491,26 @@ function setupGeolocation() {
 }
 
 function populateReviewFields() {
-  document.getElementById("review-name").textContent = `Name: ${document.getElementById("name").value
-    }`;
-  document.getElementById("review-email").textContent = `Email: ${document.getElementById("email").value
-    }`;
-  document.getElementById("review-phone").textContent = `Phone: ${document.getElementById("phone").value
-    }`;
+  document.getElementById("review-name").textContent = `Name: ${document.getElementById("name").value}`;
+  document.getElementById("review-email").textContent = `Email: ${document.getElementById("email").value}`;
+  document.getElementById("review-phone").textContent = `Phone: ${document.getElementById("phone").value}`;
 
   const crimeTypeSelect = document.getElementById("crimeType");
-  document.getElementById("review-crimeType").textContent = `Crime Type: ${crimeTypeSelect.options[crimeTypeSelect.selectedIndex].text
-    }`;
+  document.getElementById("review-crimeType").textContent = `Crime Type: ${crimeTypeSelect.options[crimeTypeSelect.selectedIndex].text}`;
 
   document.getElementById("review-date").textContent = `Date: ${formatDate(
     document.getElementById("date").value
   )}`;
-  document.getElementById("review-location").textContent = `Location: ${document.getElementById("location").value
-    }`;
-  document.getElementById("review-description").textContent = `Description: ${document.getElementById("description").value
-    }`;
+  document.getElementById("review-location").textContent = `Location: ${document.getElementById("location").value}`;
+  document.getElementById("review-description").textContent = `Description: ${document.getElementById("description").value}`;
 
   const fileInput = document.getElementById("evidence");
-  if (fileInput.files.length > 0) {
-    document.getElementById(
-      "review-evidence"
-    ).textContent = `Files Attached: ${fileInput.files.length}`;
+  const totalFiles = fileInput.files.length + capturedPhotos.length;
+  
+  if (totalFiles > 0) {
+    document.getElementById("review-evidence").textContent = `Files Attached: ${totalFiles} (${fileInput.files.length} uploaded, ${capturedPhotos.length} camera photos)`;
   } else {
-    document.getElementById("review-evidence").textContent =
-      "No files attached";
+    document.getElementById("review-evidence").textContent = "No files attached";
   }
 }
 
@@ -543,66 +520,103 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
 
+// UPDATED FORM SUBMISSION FUNCTION
 function setupFormSubmission() {
   const crimeForm = document.getElementById("crimeForm");
 
   crimeForm.addEventListener("submit", async function (e) {
-    e.preventDefault(); // Crucial to prevent default form submission
+    e.preventDefault();
     if (isSubmitting) return;
     isSubmitting = true;
 
-    // Show loading state
+    console.log("Form submission started");
+
     const submitButton = this.querySelector(".btn-submit");
     const originalButtonText = submitButton.innerHTML;
     submitButton.disabled = true;
-    submitButton.innerHTML =
-      '<i data-lucide="loader" class="animate-spin"></i> Submitting...';
+    submitButton.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Submitting...';
     lucide.createIcons();
 
     try {
-      // Prepare form data
+      // Create FormData from form
       const formData = new FormData(this);
 
-      // Add captured photos as individual files with proper naming
-      capturedPhotos.forEach((photo, index) => {
-        const blob = dataURLtoBlob(photo);
-        formData.append(`photo_${index}`, blob, `camera_evidence_${index}.jpg`);
-      });
+      // Add captured photos if any
+      console.log('Captured photos count:', capturedPhotos.length);
+      
+      if (capturedPhotos.length > 0) {
+        // Add photos as individual files with proper naming
+        capturedPhotos.forEach((photo, index) => {
+          try {
+            const blob = dataURLtoBlob(photo);
+            formData.append(`photo_${index}`, blob, `camera_${Date.now()}_${index}.jpg`);
+            console.log(`Added photo_${index} to FormData`);
+          } catch (photoError) {
+            console.error(`Error processing photo ${index}:`, photoError);
+          }
+        });
 
-      console.log('Submitting form with captured photos:', capturedPhotos.length);
-      console.log('Form data entries:', Array.from(formData.entries()).map(([key, value]) => [key, typeof value === 'object' ? 'File object' : value]));
+        // Also add as JSON string for backend fallback
+        formData.set('camera-images', JSON.stringify(capturedPhotos));
+      } else {
+        formData.set('camera-images', '[]');
+      }
 
-      // Submit to server with proper timeout and error handling
+      // Log FormData contents for debugging
+      console.log('FormData contents:');
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File || value instanceof Blob) {
+          console.log(`${key}: File/Blob - ${value.name || 'unnamed'} (${value.size} bytes)`);
+        } else {
+          console.log(`${key}: ${typeof value === 'string' && value.length > 100 ? value.substring(0, 100) + '...' : value}`);
+        }
+      }
+
+      // Submit to server
+      console.log('Sending request to server...');
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
+      
       const response = await fetch(
         "https://civiceye-4-q1te.onrender.com/api/reports/submit-report",
         {
           method: "POST",
           body: formData,
-          // Add timeout configuration
-          signal: AbortSignal.timeout(60000), // 60 second timeout
-          headers: {
-            // Don't set Content-Type header - let browser set it for FormData with boundary
-          },
+          signal: controller.signal
         }
       );
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
+      clearTimeout(timeoutId);
+      
+      console.log('Response received:', response.status, response.statusText);
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Server error response:', errorText);
-        throw new Error(`Server error: ${response.status} - ${errorText}`);
+        throw new Error(`Server returned ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('Success response:', data);
+      console.log('Success response data:', data);
 
       if (data.success) {
-        // Show confirmation modal
-        showConfirmationModal(data.reportId);
+        alert(`Report submitted successfully!\n\nReport ID: ${data.reportId}\nEvidence files: ${data.evidenceCount || 0}`);
+        
+        // Try to show confirmation modal
+        try {
+          showConfirmationModal(data.reportId);
+        } catch (modalError) {
+          console.error('Error showing modal:', modalError);
+          // Fallback behavior
+          if (confirm('Would you like to submit another report?')) {
+            resetForm();
+          } else {
+            window.location.href = '/Frontend/Dashboard/dashboard.html';
+          }
+        }
 
-        // Store submission in session storage
+        // Store submission data
         sessionStorage.setItem(
           "lastSubmission",
           JSON.stringify({
@@ -612,34 +626,71 @@ function setupFormSubmission() {
           })
         );
 
-        console.log('Report submitted successfully:', data.reportId);
       } else {
         throw new Error(data.message || 'Submission failed');
       }
 
     } catch (error) {
-      console.error("Submission failed:", error);
+      console.error("Form submission error:", error);
       
       let errorMessage = "Report submission failed. Please try again.";
       
-      if (error.name === 'TimeoutError') {
-        errorMessage = "Request timed out. Please check your connection and try again.";
-      } else if (error.message.includes('Network')) {
+      if (error.name === 'AbortError') {
+        errorMessage = "Request timed out. Please check your internet connection and try again.";
+      } else if (error.message.includes('Failed to fetch')) {
         errorMessage = "Network error. Please check your internet connection.";
+      } else if (error.message.includes('500')) {
+        errorMessage = "Server error. Please try again in a few moments.";
       } else if (error.message) {
         errorMessage = error.message;
       }
       
       alert(`Error: ${errorMessage}`);
+      
     } finally {
       // Reset button state
       submitButton.disabled = false;
       submitButton.innerHTML = originalButtonText;
       lucide.createIcons();
       isSubmitting = false;
+      console.log("Form submission completed");
     }
   });
 }
+
+// Enhanced dataURLtoBlob function
+function dataURLtoBlob(dataURL) {
+  try {
+    if (!dataURL || !dataURL.includes('data:image/')) {
+      throw new Error('Invalid data URL');
+    }
+    
+    const arr = dataURL.split(",");
+    if (arr.length < 2) {
+      throw new Error('Malformed data URL');
+    }
+    
+    const mime = arr[0].match(/:(.*?);/);
+    if (!mime) {
+      throw new Error('Cannot determine MIME type');
+    }
+    
+    const mimeType = mime[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new Blob([u8arr], { type: mimeType });
+  } catch (error) {
+    console.error('Error converting dataURL to blob:', error);
+    throw new Error('Failed to process captured image: ' + error.message);
+  }
+}
+
 function checkPreviousSubmission() {
   const crimeForm = document.getElementById("crimeForm");
   const confirmationModal = document.getElementById("confirmation-modal");
@@ -652,50 +703,40 @@ function checkPreviousSubmission() {
     crimeForm.classList.add("hidden");
     confirmationModal.classList.remove("hidden");
     confirmationModal.classList.add("active");
-    document.getElementById("reportId").textContent = data.id;
+    const reportIdElement = document.getElementById("reportId");
+    if (reportIdElement) {
+      reportIdElement.textContent = data.id;
+    }
   }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize icons
   if (window.lucide) lucide.createIcons();
 
-  // Check for previous submission
   checkPreviousSubmission();
 
-  // Setup date picker
   const dateInput = document.getElementById("date");
   if (dateInput) {
     setMaxDate(dateInput);
-
-    // Add event listener to update time max value when date changes
     dateInput.addEventListener("change", updateTimeMaxValue);
   }
 
-  // Setup time picker
   const timeInput = document.getElementById("time");
   if (timeInput) {
-    // Set initial max time if date is today
     updateTimeMaxValue();
-
-    // Add event listener for real-time validation
     timeInput.addEventListener("change", function () {
       const dateInput = document.getElementById("date");
       if (dateInput && dateInput.value) {
         const selectedDate = new Date(dateInput.value);
         const selectedTime = this.value;
 
-        // Create a combined date-time object
         const [hours, minutes] = selectedTime.split(":");
         const combinedDateTime = new Date(selectedDate);
         combinedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
 
         const now = new Date();
-
-        // If the selected date is today, check if time is in the future
         const isToday = selectedDate.toDateString() === now.toDateString();
 
-        // Clear previous error
         this.classList.remove("error");
         const existingError = this.parentNode.querySelector(".error-message");
         if (existingError) existingError.remove();
@@ -707,41 +748,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Initialize all handlers
   setupFormNavigation();
   setupFileUpload();
   setupGeolocation();
   setupFormSubmission();
-  setupModalActions(); // Add this line
+  setupModalActions();
 
-  // Setup camera if needed
   document
     .getElementById("openCamera")
     ?.addEventListener("click", openCameraModal);
 });
 
 function setupModalActions() {
-  // Print Report button
   document.getElementById("printReport")?.addEventListener("click", () => {
     window.print();
   });
 
-  // New Report button
   document.getElementById("newReport")?.addEventListener("click", () => {
     resetForm();
   });
 
-  // Go to Dashboard button
   document.getElementById("goDashboard")?.addEventListener("click", () => {
     window.location.href = "/Frontend/landing/index.html";
   });
 
-  // Camera button (if you have one)
-  document
-    .getElementById("openCamera")
-    ?.addEventListener("click", openCameraModal);
-
-  // Close modal when clicking on background
   const modal = document.getElementById("confirmation-modal");
   modal?.addEventListener("click", (e) => {
     if (e.target === modal) {
@@ -749,13 +779,15 @@ function setupModalActions() {
     }
   });
 }
-function showConfirmationModal(reportId) {
-  // Hide form
-  document.getElementById("crimeForm").classList.add("hidden");
 
-  // Show modal and set report ID
+function showConfirmationModal(reportId) {
+  const crimeForm = document.getElementById("crimeForm");
   const modal = document.getElementById("confirmation-modal");
   const reportIdElement = document.getElementById("reportId");
+  
+  if (crimeForm) {
+    crimeForm.classList.add("hidden");
+  }
   
   if (reportIdElement) {
     reportIdElement.textContent = reportId;
@@ -765,22 +797,17 @@ function showConfirmationModal(reportId) {
     modal.classList.remove("hidden");
     modal.classList.add("active");
     
-    // Add success message with evidence count
     const lastSubmission = sessionStorage.getItem("lastSubmission");
     if (lastSubmission) {
       const data = JSON.parse(lastSubmission);
-      const successMessage = document.createElement("p");
-      successMessage.innerHTML = `
-        <strong>Report Details:</strong><br>
-        Report ID: ${reportId}<br>
-        Evidence Files: ${data.evidenceCount || 0}<br>
-        Submitted: ${new Date(data.time).toLocaleString()}
-      `;
-      
-      // Add to modal if there's a details section
       const detailsSection = modal.querySelector(".report-details");
       if (detailsSection) {
-        detailsSection.innerHTML = successMessage.innerHTML;
+        detailsSection.innerHTML = `
+          <strong>Report Details:</strong><br>
+          Report ID: ${reportId}<br>
+          Evidence Files: ${data.evidenceCount || 0}<br>
+          Submitted: ${new Date(data.time).toLocaleString()}
+        `;
       }
     }
   }
@@ -789,46 +816,50 @@ function showConfirmationModal(reportId) {
 }
 
 function resetForm() {
-  // Hide modal
-  document.getElementById("confirmation-modal").classList.remove("active");
-  document.getElementById("confirmation-modal").classList.add("hidden");
+  const confirmationModal = document.getElementById("confirmation-modal");
+  const crimeForm = document.getElementById("crimeForm");
+  
+  if (confirmationModal) {
+    confirmationModal.classList.remove("active");
+    confirmationModal.classList.add("hidden");
+  }
 
-  // Reset form
-  document.getElementById("crimeForm").reset();
-  document.getElementById("crimeForm").classList.remove("hidden");
+  if (crimeForm) {
+    crimeForm.reset();
+    crimeForm.classList.remove("hidden");
+  }
 
-  // Reset form state
-  document.getElementById("section-review").classList.remove("active");
-  document.getElementById("section-personal").classList.add("active");
+  const sectionReview = document.getElementById("section-review");
+  const sectionPersonal = document.getElementById("section-personal");
+  
+  if (sectionReview) {
+    sectionReview.classList.remove("active");
+  }
+  if (sectionPersonal) {
+    sectionPersonal.classList.add("active");
+  }
+  
   updateProgressSteps("section-personal");
 
-  // Clear file previews
-  document.getElementById("file-preview").innerHTML = "";
+  const filePreview = document.getElementById("file-preview");
+  if (filePreview) {
+    filePreview.innerHTML = "";
+  }
+  
   capturedPhotos = [];
 
-  // Reset file input
-  document.getElementById("evidence").value = "";
-}
-function dataURLtoBlob(dataURL) {
-  try {
-    const arr = dataURL.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new Blob([u8arr], { type: mime });
-  } catch (error) {
-    console.error('Error converting dataURL to blob:', error);
-    throw new Error('Failed to process captured image');
+  const evidenceInput = document.getElementById("evidence");
+  if (evidenceInput) {
+    evidenceInput.value = "";
   }
+  
+  // Clear session storage
+  sessionStorage.removeItem("lastSubmission");
+  
+  console.log("Form reset completed");
 }
 
-// Add animation class to Lucide loader
+// Add animation styles
 document.head.insertAdjacentHTML(
   "beforeend",
   `
