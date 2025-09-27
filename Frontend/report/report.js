@@ -553,7 +553,7 @@ function setupFormSubmission() {
 
       // Submit to server
       const response = await fetch(
-        "http://localhost:5000/api/reports/submit-report",
+        "https://civiceye-4-q1te.onrender.com/api/reports/submit-report",
         {
           method: "POST",
           body: formData,
