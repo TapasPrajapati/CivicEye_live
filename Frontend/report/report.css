@@ -410,49 +410,7 @@ textarea {
     text-align: center;
     animation: modalIn 0.3s ease-out;
     font-size: 1rem;
-}.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
 }
-
-.modal-backdrop.active {
-    display: block;
-}
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    display: none;
-}
-
-.modal.active {
-    display: block;
-}
-
-.error-animation {
-    text-align: center;
-    font-size: 4rem;
-    color: #ff4444;
-    margin-bottom: 1rem;
-}
-
-.modal-info {
-    background: #fff3cd;
-    border: 1px solid #ffeaa7;
-    border-radius: 4px;
-    padding: 1rem;
-    margin: 1rem 0;
-}
-
 #confirmation-modal {
     position: fixed;
     top: 0;
