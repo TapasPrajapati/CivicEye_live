@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Simple and robust Report schema
+// Simplified Report schema with looser validation
 const reportSchema = new mongoose.Schema({
     reportId: {
         type: String,
@@ -19,75 +19,58 @@ const reportSchema = new mongoose.Schema({
         required: [true, 'Email is required'],
         lowercase: true,
         trim: true,
-        index: true,
-        match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
+        index: true
     },
     phone: {
         type: String,
         required: [true, 'Phone number is required'],
-        trim: true,
-        match: [/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number']
+        trim: true
     },
     crimeType: {
         type: String,
         required: [true, 'Crime type is required'],
-        trim: true,
-        enum: {
-            values: [
-                'theft', 'burglary', 'robbery', 'assault', 'vandalism', 
-                'fraud', 'harassment', 'domestic_violence', 'drug_offense', 
-                'cybercrime', 'traffic_violation', 'noise_complaint', 'other'
-            ],
-            message: 'Invalid crime type'
-        }
+        trim: true
+        // Removed strict enum validation - accept any crime type
     },
     date: {
         type: Date,
-        default: null,
-        validate: {
-            validator: function(value) {
-                return !value || value <= new Date();
-            },
-            message: 'Date cannot be in the future'
-        }
+        default: null
+        // Removed strict date validation - let controller handle it
     },
     location: {
         type: String,
         required: [true, 'Location is required'],
         trim: true,
-        maxlength: [500, 'Location cannot exceed 500 characters']
+        maxlength: [1000, 'Location cannot exceed 1000 characters']
     },
     state: {
         type: String,
         required: [true, 'State is required'],
         trim: true,
         uppercase: true,
-        maxlength: [3, 'State code cannot exceed 3 characters']
+        maxlength: [10, 'State code cannot exceed 10 characters']
     },
     description: {
         type: String,
         required: [true, 'Description is required'],
         trim: true,
-        minlength: [20, 'Description must be at least 20 characters'],
-        maxlength: [2000, 'Description cannot exceed 2000 characters']
+        minlength: [10, 'Description must be at least 10 characters'],
+        maxlength: [5000, 'Description cannot exceed 5000 characters']
     },
     evidence: {
         type: [String],
         default: [],
         validate: {
             validator: function(arr) {
-                return arr.length <= 10;
+                return arr.length <= 20; // Increased limit
             },
-            message: 'Maximum 10 evidence files allowed'
+            message: 'Maximum 20 evidence files allowed'
         }
     },
     status: {
         type: String,
-        enum: {
-            values: ['registered', 'under_review', 'investigating', 'resolved', 'closed'],
-            message: 'Invalid status'
-        },
-        default: 'registered'
+        default: 'registered',
+        trim: true
     },
     assignedOfficer: {
         type: String,
@@ -96,11 +79,8 @@ const reportSchema = new mongoose.Schema({
     },
     priority: {
         type: String,
-        enum: {
-            values: ['low', 'medium', 'high', 'urgent'],
-            message: 'Invalid priority level'
-        },
-        default: 'medium'
+        default: 'medium',
+        trim: true
     },
     notes: {
         type: [String],
@@ -111,7 +91,7 @@ const reportSchema = new mongoose.Schema({
         default: Date.now
     }
 }, {
-    timestamps: true, // Automatically adds createdAt and updatedAt
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
@@ -134,7 +114,7 @@ reportSchema.pre('save', function(next) {
     next();
 });
 
-// Index for better query performance
+// Indexes for better query performance
 reportSchema.index({ email: 1, createdAt: -1 });
 reportSchema.index({ state: 1, crimeType: 1 });
 reportSchema.index({ status: 1, createdAt: -1 });
@@ -145,37 +125,9 @@ reportSchema.statics.findByUser = function(email) {
     return this.find({ email: email.toLowerCase() }).sort({ createdAt: -1 });
 };
 
-// Static method to get basic statistics
-reportSchema.statics.getBasicStats = async function() {
-    const stats = await this.aggregate([
-        {
-            $group: {
-                _id: '$status',
-                count: { $sum: 1 }
-            }
-        }
-    ]);
-    
-    const result = {
-        total: 0,
-        registered: 0,
-        under_review: 0,
-        investigating: 0,
-        resolved: 0,
-        closed: 0
-    };
-    
-    stats.forEach(stat => {
-        result[stat._id] = stat.count;
-        result.total += stat.count;
-    });
-    
-    return result;
-};
-
 // Instance method to add evidence
 reportSchema.methods.addEvidence = function(filename) {
-    if (this.evidence.length >= 10) {
+    if (this.evidence.length >= 20) {
         throw new Error('Maximum evidence files limit reached');
     }
     this.evidence.push(filename);
