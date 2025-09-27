@@ -5,8 +5,7 @@ const reportSchema = new mongoose.Schema({
     reportId: {
         type: String,
         required: [true, 'Report ID is required'],
-        unique: true,
-        index: true
+        unique: true
     },
     name: {
         type: String,
