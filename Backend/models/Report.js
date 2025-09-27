@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
-// Simplified Report schema with looser validation
+// Simplified Report schema with proper index definitions
 const reportSchema = new mongoose.Schema({
     reportId: {
         type: String,
         required: [true, 'Report ID is required'],
-        unique: true
+        unique: true,  // KEEP THIS - it creates the unique index
+        index: true    // This is fine for basic indexing
     },
     name: {
         type: String,
@@ -18,7 +19,7 @@ const reportSchema = new mongoose.Schema({
         required: [true, 'Email is required'],
         lowercase: true,
         trim: true,
-        index: true
+        index: true    // Single index definition
     },
     phone: {
         type: String,
@@ -29,12 +30,10 @@ const reportSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Crime type is required'],
         trim: true
-        // Removed strict enum validation - accept any crime type
     },
     date: {
         type: Date,
         default: null
-        // Removed strict date validation - let controller handle it
     },
     location: {
         type: String,
@@ -61,7 +60,7 @@ const reportSchema = new mongoose.Schema({
         default: [],
         validate: {
             validator: function(arr) {
-                return arr.length <= 20; // Increased limit
+                return arr.length <= 20;
             },
             message: 'Maximum 20 evidence files allowed'
         }
@@ -113,11 +112,17 @@ reportSchema.pre('save', function(next) {
     next();
 });
 
-// Indexes for better query performance
-reportSchema.index({ email: 1, createdAt: -1 });
-reportSchema.index({ state: 1, crimeType: 1 });
-reportSchema.index({ status: 1, createdAt: -1 });
-reportSchema.index({ reportId: 1 }, { unique: true });
+// REMOVE DUPLICATE INDEX DEFINITIONS - Keep only compound indexes
+// Only define indexes that are NOT already defined in the field definitions
+
+// Compound indexes for better query performance
+reportSchema.index({ email: 1, createdAt: -1 });        // User cases query
+reportSchema.index({ state: 1, crimeType: 1 });         // Regional reports
+reportSchema.index({ status: 1, createdAt: -1 });       // Admin dashboard
+reportSchema.index({ createdAt: -1 });                  // General sorting
+
+// REMOVE THIS DUPLICATE LINE - it's already handled by unique: true in the field
+// reportSchema.index({ reportId: 1 }, { unique: true });
 
 // Static method to get reports by email
 reportSchema.statics.findByUser = function(email) {
@@ -142,14 +147,14 @@ reportSchema.methods.updateStatus = function(newStatus, note = '') {
     return this.save();
 };
 
-// Error handling middleware
-reportSchema.post('save', function(error, doc, next) {
-    if (error.name === 'MongoServerError' && error.code === 11000) {
-        next(new Error('Report ID already exists. Please try again.'));
-    } else {
-        next(error);
-    }
-});
+// Remove the error handling middleware that causes issues
+// reportSchema.post('save', function(error, doc, next) {
+//     if (error.name === 'MongoServerError' && error.code === 11000) {
+//         next(new Error('Report ID already exists. Please try again.'));
+//     } else {
+//         next(error);
+//     }
+// });
 
 // Create and export the model
 const Report = mongoose.model('Report', reportSchema);
