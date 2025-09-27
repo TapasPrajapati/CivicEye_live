@@ -356,6 +356,10 @@ function markFieldAsInvalid(field, message) {
   errorMsg.textContent = message;
   field.parentNode.insertBefore(errorMsg, field.nextSibling);
 }
+const isHealthy = await checkBackendHealth();
+if (!isHealthy) {
+  alert("Server is starting up, this may take 30-60 seconds. Please wait...");
+}
 
 function switchSection(currentId, nextId) {
   document.getElementById(currentId).classList.remove("active");
@@ -731,10 +735,6 @@ async function checkBackendHealth() {
 }
 
 // Call before form submission
-const isHealthy = await checkBackendHealth();
-if (!isHealthy) {
-  alert("Server is starting up, this may take 30-60 seconds. Please wait...");
-}
 
 // Enhanced dataURLtoBlob function
 function dataURLtoBlob(dataURL) {
