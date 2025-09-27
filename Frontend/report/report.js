@@ -521,141 +521,302 @@ function formatDate(dateString) {
 }
 
 // UPDATED FORM SUBMISSION FUNCTION
+// FIXED FORM SUBMISSION FUNCTION
 function setupFormSubmission() {
-  const crimeForm = document.getElementById("crimeForm");
+    const crimeForm = document.getElementById("crimeForm");
 
-  crimeForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    if (isSubmitting) return;
-    isSubmitting = true;
+    crimeForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (isSubmitting) return;
+        isSubmitting = true;
 
-    console.log("Form submission started");
+        console.log("Form submission started");
 
-    const submitButton = this.querySelector(".btn-submit");
-    const originalButtonText = submitButton.innerHTML;
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Submitting...';
-    lucide.createIcons();
-
-    try {
-      // Create FormData from form
-      const formData = new FormData(this);
-
-      // Add captured photos if any
-      console.log('Captured photos count:', capturedPhotos.length);
-      
-      if (capturedPhotos.length > 0) {
-        // Add photos as individual files with proper naming
-        capturedPhotos.forEach((photo, index) => {
-          try {
-            const blob = dataURLtoBlob(photo);
-            formData.append(`photo_${index}`, blob, `camera_${Date.now()}_${index}.jpg`);
-            console.log(`Added photo_${index} to FormData`);
-          } catch (photoError) {
-            console.error(`Error processing photo ${index}:`, photoError);
-          }
-        });
-
-        // Also add as JSON string for backend fallback
-        formData.set('camera-images', JSON.stringify(capturedPhotos));
-      } else {
-        formData.set('camera-images', '[]');
-      }
-
-      // Log FormData contents for debugging
-      console.log('FormData contents:');
-      for (let [key, value] of formData.entries()) {
-        if (value instanceof File || value instanceof Blob) {
-          console.log(`${key}: File/Blob - ${value.name || 'unnamed'} (${value.size} bytes)`);
-        } else {
-          console.log(`${key}: ${typeof value === 'string' && value.length > 100 ? value.substring(0, 100) + '...' : value}`);
-        }
-      }
-
-      // Submit to server
-      console.log('Sending request to server...');
-      
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
-      
-      const response = await fetch(
-        "https://civiceye-4-q1te.onrender.com/api/reports/submit-report",
-        {
-          method: "POST",
-          body: formData,
-          signal: controller.signal
-        }
-      );
-
-      clearTimeout(timeoutId);
-      
-      console.log('Response received:', response.status, response.statusText);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Server error response:', errorText);
-        throw new Error(`Server returned ${response.status}: ${errorText}`);
-      }
-
-      const data = await response.json();
-      console.log('Success response data:', data);
-
-      if (data.success) {
-        alert(`Report submitted successfully!\n\nReport ID: ${data.reportId}\nEvidence files: ${data.evidenceCount || 0}`);
+        const submitButton = this.querySelector(".btn-submit");
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Submitting...';
         
-        // Try to show confirmation modal
-        try {
-          showConfirmationModal(data.reportId);
-        } catch (modalError) {
-          console.error('Error showing modal:', modalError);
-          // Fallback behavior
-          if (confirm('Would you like to submit another report?')) {
-            resetForm();
-          } else {
-            window.location.href = '/Frontend/Dashboard/dashboard.html';
-          }
+        if (window.lucide) {
+            lucide.createIcons();
         }
 
-        // Store submission data
-        sessionStorage.setItem(
-          "lastSubmission",
-          JSON.stringify({
-            id: data.reportId,
-            time: new Date().toISOString(),
-            evidenceCount: data.evidenceCount || 0
-          })
-        );
+        try {
+            // Create FormData from form
+            const formData = new FormData(this);
 
-      } else {
-        throw new Error(data.message || 'Submission failed');
-      }
+            // Add captured photos if any
+            console.log('Captured photos count:', capturedPhotos.length);
+            
+            if (capturedPhotos.length > 0) {
+                capturedPhotos.forEach((photo, index) => {
+                    try {
+                        const blob = dataURLtoBlob(photo);
+                        formData.append(`photo_${index}`, blob, `camera_${Date.now()}_${index}.jpg`);
+                    } catch (photoError) {
+                        console.error(`Error processing photo ${index}:`, photoError);
+                    }
+                });
+                formData.set('camera-images', JSON.stringify(capturedPhotos));
+            } else {
+                formData.set('camera-images', '[]');
+            }
 
-    } catch (error) {
-      console.error("Form submission error:", error);
-      
-      let errorMessage = "Report submission failed. Please try again.";
-      
-      if (error.name === 'AbortError') {
-        errorMessage = "Request timed out. Please check your internet connection and try again.";
-      } else if (error.message.includes('Failed to fetch')) {
-        errorMessage = "Network error. Please check your internet connection.";
-      } else if (error.message.includes('500')) {
-        errorMessage = "Server error. Please try again in a few moments.";
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      alert(`Error: ${errorMessage}`);
-      
-    } finally {
-      // Reset button state
-      submitButton.disabled = false;
-      submitButton.innerHTML = originalButtonText;
-      lucide.createIcons();
-      isSubmitting = false;
-      console.log("Form submission completed");
+            // INCREASED TIMEOUT and better error handling
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => {
+                console.log('Request timeout reached, but continuing to wait for response...');
+                // Don't abort immediately - wait a bit longer for slow connections
+            }, 30000); // 30 seconds initial timeout
+
+            const response = await fetch(
+                "https://civiceye-4-q1te.onrender.com/api/reports/submit-report",
+                {
+                    method: "POST",
+                    body: formData,
+                    signal: controller.signal
+                }
+            );
+
+            clearTimeout(timeoutId);
+            
+            console.log('Response received:', response.status, response.statusText);
+
+            if (!response.ok) {
+                // If response came but with error status
+                const errorText = await response.text();
+                console.error('Server error response:', errorText);
+                
+                // Try to parse as JSON, else use text
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch {
+                    errorData = { message: errorText };
+                }
+                
+                throw new Error(errorData.message || `Server returned ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Success response data:', data);
+
+            if (data.success) {
+                // SUCCESS - Show confirmation modal
+                console.log('Submission successful, showing confirmation modal');
+                showConfirmationModal(data.reportId, data.evidenceCount || 0);
+                
+                // Store submission data
+                sessionStorage.setItem(
+                    "lastSubmission",
+                    JSON.stringify({
+                        id: data.reportId,
+                        time: new Date().toISOString(),
+                        evidenceCount: data.evidenceCount || 0
+                    })
+                );
+
+            } else {
+                throw new Error(data.message || 'Submission failed on server');
+            }
+
+        } catch (error) {
+            console.error("Form submission error:", error);
+            
+            // Check if the report might have succeeded despite the error
+            checkIfReportActuallySubmitted();
+            
+            let errorMessage = "Report submission failed. Please check your report status.";
+            
+            if (error.name === 'AbortError') {
+                errorMessage = "Request taking longer than expected. Please check 'Track Case' to see if your report was submitted.";
+            } else if (error.message.includes('Failed to fetch')) {
+                errorMessage = "Network error. Please check your internet connection and verify submission status.";
+            } else {
+                errorMessage = error.message;
+            }
+            
+            // Show less alarming error message
+            showErrorModal(errorMessage, error.name === 'AbortError');
+            
+        } finally {
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            isSubmitting = false;
+            console.log("Form submission completed");
+        }
+    });
+}
+
+// NEW FUNCTION: Check if report was actually submitted despite frontend error
+async function checkIfReportActuallySubmitted() {
+    try {
+        // Try to get the latest report for this user
+        const response = await fetch(`/api/reports/user-cases?email=${encodeURIComponent('vigneshgaddam100@gmail.com')}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.cases && data.cases.length > 0) {
+                const latestReport = data.cases[0];
+                console.log('Latest report found:', latestReport.reportId);
+                
+                // If the latest report was created very recently, it probably succeeded
+                const reportTime = new Date(latestReport.createdAt);
+                const now = new Date();
+                const timeDiff = (now - reportTime) / 1000; // difference in seconds
+                
+                if (timeDiff < 300) { // If report was created in last 5 minutes
+                    console.log('Report was likely submitted successfully despite frontend error');
+                    // You could show a message to the user here
+                }
+            }
+        }
+    } catch (checkError) {
+        console.error('Error checking submission status:', checkError);
     }
-  });
+}
+
+// NEW FUNCTION: Show error modal instead of alert
+function showErrorModal(message, isTimeout = false) {
+    const errorModalHTML = `
+        <div class="modal active" id="error-modal">
+            <div class="modal-content">
+                <div class="error-animation">
+                    <i data-lucide="alert-circle"></i>
+                </div>
+                <h2>Submission Status</h2>
+                <p>${message}</p>
+                ${isTimeout ? `
+                    <div class="modal-info">
+                        <p><strong>Note:</strong> Your report may have been submitted successfully. Please check the 'Track Case' page to verify.</p>
+                    </div>
+                ` : ''}
+                <div class="modal-actions">
+                    <button onclick="closeErrorModal()" class="btn-primary">
+                        <i data-lucide="check"></i> OK
+                    </button>
+                    ${isTimeout ? `
+                    <button onclick="window.location.href='/Frontend/Track_case/track.html'" class="btn-secondary">
+                        <i data-lucide="search"></i> Track Case
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', errorModalHTML);
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+}
+
+function closeErrorModal() {
+    const modal = document.getElementById('error-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// UPDATED: Better confirmation modal function
+function showConfirmationModal(reportId, evidenceCount) {
+    const crimeForm = document.getElementById("crimeForm");
+    const modal = document.getElementById("confirmation-modal");
+    const reportIdElement = document.getElementById("reportId");
+    
+    // Hide the form
+    if (crimeForm) {
+        crimeForm.style.display = 'none';
+    }
+    
+    // Show the modal
+    if (modal) {
+        // Update report ID
+        if (reportIdElement) {
+            reportIdElement.textContent = reportId;
+        }
+        
+        // Update evidence count in modal if element exists
+        const evidenceElement = modal.querySelector('.evidence-count');
+        if (!evidenceElement) {
+            // Create evidence count element if it doesn't exist
+            const reportIdPara = reportIdElement.parentElement;
+            const evidencePara = document.createElement('p');
+            evidencePara.innerHTML = `Evidence Files: <strong>${evidenceCount}</strong>`;
+            evidencePara.className = 'evidence-count';
+            reportIdPara.parentNode.insertBefore(evidencePara, reportIdPara.nextSibling);
+        } else {
+            evidenceElement.innerHTML = `Evidence Files: <strong>${evidenceCount}</strong>`;
+        }
+        
+        modal.classList.remove("hidden");
+        modal.classList.add("active");
+        
+        // Add modal background
+        const modalBackdrop = document.createElement('div');
+        modalBackdrop.className = 'modal-backdrop active';
+        modalBackdrop.onclick = resetForm;
+        document.body.appendChild(modalBackdrop);
+    }
+    
+    console.log('Confirmation modal shown for report:', reportId);
+}
+
+// UPDATED: Reset form function
+function resetForm() {
+    const confirmationModal = document.getElementById("confirmation-modal");
+    const crimeForm = document.getElementById("crimeForm");
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    
+    // Remove modal and backdrop
+    if (confirmationModal) {
+        confirmationModal.classList.remove("active");
+        confirmationModal.classList.add("hidden");
+    }
+    
+    if (modalBackdrop) {
+        modalBackdrop.remove();
+    }
+    
+    // Reset and show form
+    if (crimeForm) {
+        crimeForm.reset();
+        crimeForm.style.display = 'block';
+    }
+    
+    // Reset form sections
+    const sectionReview = document.getElementById("section-review");
+    const sectionPersonal = document.getElementById("section-personal");
+    
+    if (sectionReview) {
+        sectionReview.classList.remove("active");
+    }
+    if (sectionPersonal) {
+        sectionPersonal.classList.add("active");
+    }
+    
+    updateProgressSteps("section-personal");
+
+    // Reset file preview and captured photos
+    const filePreview = document.getElementById("file-preview");
+    if (filePreview) {
+        filePreview.innerHTML = "";
+    }
+    
+    capturedPhotos = [];
+
+    const evidenceInput = document.getElementById("evidence");
+    if (evidenceInput) {
+        evidenceInput.value = "";
+    }
+    
+    // Clear session storage
+    sessionStorage.removeItem("lastSubmission");
+    
+    console.log("Form reset completed");
 }
 
 // Enhanced dataURLtoBlob function
