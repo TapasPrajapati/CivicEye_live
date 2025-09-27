@@ -112,8 +112,6 @@ reportSchema.pre('save', function(next) {
     next();
 });
 
-// REMOVE DUPLICATE INDEX DEFINITIONS - Keep only compound indexes
-// Only define indexes that are NOT already defined in the field definitions
 
 // Compound indexes for better query performance
 reportSchema.index({ email: 1, createdAt: -1 });        // User cases query
@@ -121,8 +119,6 @@ reportSchema.index({ state: 1, crimeType: 1 });         // Regional reports
 reportSchema.index({ status: 1, createdAt: -1 });       // Admin dashboard
 reportSchema.index({ createdAt: -1 });                  // General sorting
 
-// REMOVE THIS DUPLICATE LINE - it's already handled by unique: true in the field
-// reportSchema.index({ reportId: 1 }, { unique: true });
 
 // Static method to get reports by email
 reportSchema.statics.findByUser = function(email) {
@@ -147,14 +143,7 @@ reportSchema.methods.updateStatus = function(newStatus, note = '') {
     return this.save();
 };
 
-// Remove the error handling middleware that causes issues
-// reportSchema.post('save', function(error, doc, next) {
-//     if (error.name === 'MongoServerError' && error.code === 11000) {
-//         next(new Error('Report ID already exists. Please try again.'));
-//     } else {
-//         next(error);
-//     }
-// });
+
 
 // Create and export the model
 const Report = mongoose.model('Report', reportSchema);
