@@ -572,11 +572,11 @@ function setupFormSubmission() {
         }
       }
 
-      // Submit to server
+      // Submit to server with shorter timeout
       console.log('Sending request to server...');
       
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout (reduced from 2 minutes)
       
       const response = await fetch(
         "https://civiceye-4-q1te.onrender.com/api/reports/submit-report",
@@ -601,22 +601,9 @@ function setupFormSubmission() {
       console.log('Success response data:', data);
 
       if (data.success) {
-        alert(`Report submitted successfully!\n\nReport ID: ${data.reportId}\nEvidence files: ${data.evidenceCount || 0}`);
+        console.log('Report submitted successfully, showing confirmation modal');
         
-        // Try to show confirmation modal
-        try {
-          showConfirmationModal(data.reportId);
-        } catch (modalError) {
-          console.error('Error showing modal:', modalError);
-          // Fallback behavior
-          if (confirm('Would you like to submit another report?')) {
-            resetForm();
-          } else {
-            window.location.href = '/Frontend/Dashboard/dashboard.html';
-          }
-        }
-
-        // Store submission data
+        // Store submission data first
         sessionStorage.setItem(
           "lastSubmission",
           JSON.stringify({
@@ -625,6 +612,14 @@ function setupFormSubmission() {
             evidenceCount: data.evidenceCount || 0
           })
         );
+
+        // Show confirmation modal immediately
+        showConfirmationModal(data.reportId, data.evidenceCount || 0);
+        
+        // Optional: Show browser alert as backup
+        setTimeout(() => {
+          console.log('Showing backup alert for confirmation');
+        }, 500);
 
       } else {
         throw new Error(data.message || 'Submission failed');
@@ -657,6 +652,7 @@ function setupFormSubmission() {
     }
   });
 }
+
 
 // Enhanced dataURLtoBlob function
 function dataURLtoBlob(dataURL) {
@@ -759,6 +755,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ?.addEventListener("click", openCameraModal);
 });
 
+// ENHANCED MODAL ACTION SETUP
 function setupModalActions() {
   document.getElementById("printReport")?.addEventListener("click", () => {
     window.print();
@@ -769,9 +766,11 @@ function setupModalActions() {
   });
 
   document.getElementById("goDashboard")?.addEventListener("click", () => {
-    window.location.href = "/Frontend/landing/index.html";
+    // Update this path according to your dashboard location
+    window.location.href = "/Frontend/Dashboard/dashboard.html";
   });
 
+  // Close modal when clicking outside
   const modal = document.getElementById("confirmation-modal");
   modal?.addEventListener("click", (e) => {
     if (e.target === modal) {
@@ -780,74 +779,121 @@ function setupModalActions() {
   });
 }
 
-function showConfirmationModal(reportId) {
+// ENHANCED MODAL DISPLAY FUNCTION
+function showConfirmationModal(reportId, evidenceCount = 0) {
+  console.log('showConfirmationModal called with:', reportId, evidenceCount);
+  
   const crimeForm = document.getElementById("crimeForm");
   const modal = document.getElementById("confirmation-modal");
   const reportIdElement = document.getElementById("reportId");
   
+  if (!modal) {
+    console.error('Confirmation modal element not found');
+    alert(`Report submitted successfully!\nReport ID: ${reportId}`);
+    return;
+  }
+
+  // Hide the form
   if (crimeForm) {
-    crimeForm.classList.add("hidden");
+    console.log('Hiding form');
+    crimeForm.style.display = 'none';
   }
   
+  // Set report ID
   if (reportIdElement) {
     reportIdElement.textContent = reportId;
+    console.log('Set report ID in modal:', reportId);
   }
   
-  if (modal) {
-    modal.classList.remove("hidden");
-    modal.classList.add("active");
-    
-    const lastSubmission = sessionStorage.getItem("lastSubmission");
-    if (lastSubmission) {
-      const data = JSON.parse(lastSubmission);
-      const detailsSection = modal.querySelector(".report-details");
-      if (detailsSection) {
-        detailsSection.innerHTML = `
-          <strong>Report Details:</strong><br>
-          Report ID: ${reportId}<br>
-          Evidence Files: ${data.evidenceCount || 0}<br>
-          Submitted: ${new Date(data.time).toLocaleString()}
-        `;
+  // Remove hidden class and add active class
+  modal.classList.remove('hidden');
+  modal.classList.add('active');
+  
+  // Force display in case CSS conflicts exist
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.pointerEvents = 'all';
+  
+  console.log('Modal should now be visible');
+  console.log('Modal classes:', modal.className);
+  console.log('Modal style display:', modal.style.display);
+  
+  // Update modal content with submission details
+  const modalContent = modal.querySelector('.modal-content');
+  if (modalContent) {
+    // Find or create details section
+    let detailsSection = modalContent.querySelector('.report-details');
+    if (!detailsSection) {
+      detailsSection = document.createElement('div');
+      detailsSection.className = 'report-details';
+      // Insert before modal-actions
+      const actionsSection = modalContent.querySelector('.modal-actions');
+      if (actionsSection) {
+        modalContent.insertBefore(detailsSection, actionsSection);
+      } else {
+        modalContent.appendChild(detailsSection);
       }
     }
+    
+    detailsSection.innerHTML = `
+      <p><strong>Report Details:</strong></p>
+      <p>Report ID: <strong>${reportId}</strong></p>
+      <p>Evidence Files: ${evidenceCount}</p>
+      <p>Submitted: ${new Date().toLocaleString()}</p>
+    `;
   }
   
-  console.log('Confirmation modal shown for report:', reportId);
+  // Ensure icons are rendered
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+  
+  // Scroll to top to ensure modal is visible
+  window.scrollTo(0, 0);
 }
 
+// ENHANCED RESET FUNCTION
 function resetForm() {
+  console.log('Resetting form');
+  
   const confirmationModal = document.getElementById("confirmation-modal");
   const crimeForm = document.getElementById("crimeForm");
   
   if (confirmationModal) {
     confirmationModal.classList.remove("active");
     confirmationModal.classList.add("hidden");
+    confirmationModal.style.display = 'none';
   }
 
   if (crimeForm) {
     crimeForm.reset();
-    crimeForm.classList.remove("hidden");
+    crimeForm.style.display = 'block';
   }
 
+  // Reset to first section
   const sectionReview = document.getElementById("section-review");
   const sectionPersonal = document.getElementById("section-personal");
   
-  if (sectionReview) {
-    sectionReview.classList.remove("active");
-  }
+  document.querySelectorAll('.form-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
   if (sectionPersonal) {
     sectionPersonal.classList.add("active");
   }
   
   updateProgressSteps("section-personal");
 
+  // Clear file preview
   const filePreview = document.getElementById("file-preview");
   if (filePreview) {
     filePreview.innerHTML = "";
   }
   
+  // Clear captured photos
   capturedPhotos = [];
 
+  // Clear file inputs
   const evidenceInput = document.getElementById("evidence");
   if (evidenceInput) {
     evidenceInput.value = "";
