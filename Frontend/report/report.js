@@ -163,13 +163,31 @@ async function startCamera() {
 function capturePhoto() {
   const cameraView = document.getElementById("camera-view");
   const canvas = document.createElement("canvas");
+  
+  if (!cameraView.videoWidth || !cameraView.videoHeight) {
+    alert("Camera not ready. Please wait a moment and try again.");
+    return;
+  }
+  
   canvas.width = cameraView.videoWidth;
   canvas.height = cameraView.videoHeight;
   const ctx = canvas.getContext("2d");
   ctx.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
 
-  capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.8));
+  // Convert to JPEG with good quality but reasonable file size
+  const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+  
+  // Check file size (approximate)
+  const sizeInBytes = Math.round(dataURL.length * 0.75); // Base64 is ~33% larger than binary
+  if (sizeInBytes > 5 * 1024 * 1024) { // 5MB limit
+    alert("Image too large. Please try again with better lighting or closer to subject.");
+    return;
+  }
+  
+  capturedPhotos.push(dataURL);
   updateCameraGallery();
+  
+  console.log(`Captured photo ${capturedPhotos.length}, size: ~${(sizeInBytes/1024/1024).toFixed(2)}MB`);
 }
 
 function updateCameraGallery() {
@@ -545,42 +563,74 @@ function setupFormSubmission() {
       // Prepare form data
       const formData = new FormData(this);
 
-      // Add captured photos
+      // Add captured photos as individual files with proper naming
       capturedPhotos.forEach((photo, index) => {
         const blob = dataURLtoBlob(photo);
-        formData.append(`photo_${index}`, blob, `evidence_${index}.jpg`);
+        formData.append(`photo_${index}`, blob, `camera_evidence_${index}.jpg`);
       });
 
-      // Submit to server
+      console.log('Submitting form with captured photos:', capturedPhotos.length);
+      console.log('Form data entries:', Array.from(formData.entries()).map(([key, value]) => [key, typeof value === 'object' ? 'File object' : value]));
+
+      // Submit to server with proper timeout and error handling
       const response = await fetch(
         "https://civiceye-4-q1te.onrender.com/api/reports/submit-report",
         {
           method: "POST",
           body: formData,
+          // Add timeout configuration
+          signal: AbortSignal.timeout(60000), // 60 second timeout
+          headers: {
+            // Don't set Content-Type header - let browser set it for FormData with boundary
+          },
         }
       );
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error || `Server error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Server error response:', errorText);
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Success response:', data);
 
-      // Show confirmation modal
-      showConfirmationModal(data.reportId);
+      if (data.success) {
+        // Show confirmation modal
+        showConfirmationModal(data.reportId);
 
-      // Store submission in session storage
-      sessionStorage.setItem(
-        "lastSubmission",
-        JSON.stringify({
-          id: data.reportId,
-          time: new Date().toISOString(),
-        })
-      );
+        // Store submission in session storage
+        sessionStorage.setItem(
+          "lastSubmission",
+          JSON.stringify({
+            id: data.reportId,
+            time: new Date().toISOString(),
+            evidenceCount: data.evidenceCount || 0
+          })
+        );
+
+        console.log('Report submitted successfully:', data.reportId);
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+
     } catch (error) {
       console.error("Submission failed:", error);
-      alert(`Error: ${error.message}`);
+      
+      let errorMessage = "Report submission failed. Please try again.";
+      
+      if (error.name === 'TimeoutError') {
+        errorMessage = "Request timed out. Please check your connection and try again.";
+      } else if (error.message.includes('Network')) {
+        errorMessage = "Network error. Please check your internet connection.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(`Error: ${errorMessage}`);
     } finally {
       // Reset button state
       submitButton.disabled = false;
@@ -705,9 +755,37 @@ function showConfirmationModal(reportId) {
 
   // Show modal and set report ID
   const modal = document.getElementById("confirmation-modal");
-  document.getElementById("reportId").textContent = reportId;
-  modal.classList.remove("hidden");
-  modal.classList.add("active");
+  const reportIdElement = document.getElementById("reportId");
+  
+  if (reportIdElement) {
+    reportIdElement.textContent = reportId;
+  }
+  
+  if (modal) {
+    modal.classList.remove("hidden");
+    modal.classList.add("active");
+    
+    // Add success message with evidence count
+    const lastSubmission = sessionStorage.getItem("lastSubmission");
+    if (lastSubmission) {
+      const data = JSON.parse(lastSubmission);
+      const successMessage = document.createElement("p");
+      successMessage.innerHTML = `
+        <strong>Report Details:</strong><br>
+        Report ID: ${reportId}<br>
+        Evidence Files: ${data.evidenceCount || 0}<br>
+        Submitted: ${new Date(data.time).toLocaleString()}
+      `;
+      
+      // Add to modal if there's a details section
+      const detailsSection = modal.querySelector(".report-details");
+      if (detailsSection) {
+        detailsSection.innerHTML = successMessage.innerHTML;
+      }
+    }
+  }
+  
+  console.log('Confirmation modal shown for report:', reportId);
 }
 
 function resetForm() {
@@ -732,17 +810,22 @@ function resetForm() {
   document.getElementById("evidence").value = "";
 }
 function dataURLtoBlob(dataURL) {
-  const arr = dataURL.split(",");
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
+  try {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
 
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new Blob([u8arr], { type: mime });
+  } catch (error) {
+    console.error('Error converting dataURL to blob:', error);
+    throw new Error('Failed to process captured image');
   }
-
-  return new Blob([u8arr], { type: mime });
 }
 
 // Add animation class to Lucide loader

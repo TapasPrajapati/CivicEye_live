@@ -8,56 +8,129 @@ exports.submitReport = async (req, res) => {
     try {
         const { name, email, phone, crimeType, date, time, location, state, description } = req.body;
         
-        // Process evidence files
+        console.log('Received report submission:', { name, email, crimeType }); // Debug log
+        
+        // Process evidence files from regular file uploads
         const evidence = [];
         if (req.files && req.files.length > 0) {
-            req.files.forEach(file => evidence.push(file.filename));
+            req.files.forEach(file => {
+                evidence.push(file.filename);
+                console.log('Added uploaded file:', file.filename); // Debug log
+            });
         }
 
-        // Process base64 images
-        const base64Images = Object.entries(req.body)
-            .filter(([key]) => key.startsWith('cameraImage'))
-            .map(([_, val]) => val);
+        // Process base64 images from camera captures
+        const base64Images = [];
         
+        // Check for base64 image data in request body
+        Object.keys(req.body).forEach(key => {
+            if (key.startsWith('photo_') || key.startsWith('cameraImage')) {
+                const base64Data = req.body[key];
+                if (base64Data && base64Data.includes('data:image/')) {
+                    base64Images.push(base64Data);
+                }
+            }
+        });
+
+        // Also check for files with base64 data
+        if (req.files) {
+            req.files.forEach(file => {
+                if (file.fieldname && file.fieldname.startsWith('photo_')) {
+                    // This handles base64 images sent as files
+                    evidence.push(file.filename);
+                }
+            });
+        }
+        
+        // Process base64 images and save them as files
         base64Images.forEach((base64Data, index) => {
-            const cleanBase64 = base64Data.replace(/^data:image\/\w+;base64,/, '');
-            const buffer = Buffer.from(cleanBase64, 'base64');
-            const fileName = `camera_${Date.now()}_${index}.jpg`;
-            fs.writeFileSync(path.join('uploads', fileName), buffer);
-            evidence.push(fileName);
+            try {
+                const cleanBase64 = base64Data.replace(/^data:image\/\w+;base64,/, '');
+                const buffer = Buffer.from(cleanBase64, 'base64');
+                const fileName = `camera_${Date.now()}_${index}.jpg`;
+                const filePath = path.join('uploads', fileName);
+                
+                // Ensure uploads directory exists
+                const uploadsDir = path.join(__dirname, '..', 'uploads');
+                if (!fs.existsSync(uploadsDir)) {
+                    fs.mkdirSync(uploadsDir, { recursive: true });
+                }
+                
+                fs.writeFileSync(path.join(uploadsDir, fileName), buffer);
+                evidence.push(fileName);
+                console.log('Saved camera image:', fileName); // Debug log
+            } catch (imageError) {
+                console.error('Error processing base64 image:', imageError);
+                // Continue processing other images even if one fails
+            }
         });
 
         // Generate report ID
         const reportId = `${state}-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
         
+        console.log('Generated report ID:', reportId); // Debug log
+        console.log('Evidence files:', evidence); // Debug log
+        
         // Create and save report
         const newReport = new Report({
-            reportId, name, email, phone, crimeType,
+            reportId,
+            name,
+            email,
+            phone,
+            crimeType,
             date: date && time ? `${date}T${time}:00` : null,
-            location, state, description, evidence
+            location,
+            state,
+            description,
+            evidence: evidence, // This will now include all uploaded files and camera photos
+            status: 'registered',
+            createdAt: new Date()
         });
         
-        await newReport.save();
+        const savedReport = await newReport.save();
+        console.log('Report saved successfully:', savedReport._id); // Debug log
 
-        // Send confirmation email
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: `Report Submitted: ${reportId}`,
-            text: `Thank you for submitting your report.\n\nReport ID: ${reportId}`
-        });
+        // Send confirmation email (with error handling)
+        try {
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: `Report Submitted: ${reportId}`,
+                html: `
+                    <h2>Report Submission Confirmation</h2>
+                    <p>Thank you for submitting your report.</p>
+                    <p><strong>Report ID:</strong> ${reportId}</p>
+                    <p><strong>Status:</strong> Registered</p>
+                    <p>You will receive updates as your case progresses.</p>
+                `
+            });
+            console.log('Confirmation email sent to:', email); // Debug log
+        } catch (emailError) {
+            console.error('Email sending failed:', emailError);
+            // Don't fail the entire request if email fails
+        }
 
+        // Send success response with proper status
         res.status(201).json({
             success: true,
             message: 'Report submitted successfully',
-            reportId
+            reportId: reportId,
+            evidenceCount: evidence.length,
+            data: {
+                reportId,
+                status: 'registered',
+                evidenceFiles: evidence
+            }
         });
 
     } catch (error) {
         console.error('Report submission failed:', error);
-        res.status(400).json({
+        
+        // Send proper error response
+        res.status(500).json({
             success: false,
-            message: error.message
+            message: 'Report submission failed. Please try again.',
+            error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
         });
     }
 };
@@ -105,7 +178,12 @@ exports.getReportById = async (req, res) => {
 exports.getUserCases = async (req, res) => {
     try {
         const userEmail = req.query.email || req.body.email;
-        if (!userEmail) return res.status(400).json({ message: 'Email required' });
+        if (!userEmail) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'Email required' 
+            });
+        }
 
         const cases = await Report.find({ email: userEmail })
             .sort({ createdAt: -1 })
@@ -133,12 +211,15 @@ exports.getUserCases = async (req, res) => {
 exports.getAllReports = async (req, res) => {
     try {
         const reports = await Report.find({})
-            .select('reportId name email crimeType status createdAt')
+            .select('reportId name email crimeType status createdAt evidence')
             .lean();
 
         res.status(200).json({
             success: true,
-            reports,
+            reports: reports.map(report => ({
+                ...report,
+                evidenceCount: report.evidence ? report.evidence.length : 0
+            })),
             count: reports.length
         });
     } catch (error) {
