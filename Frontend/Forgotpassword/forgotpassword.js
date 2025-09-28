@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const resendCode = document.getElementById('resendCode');
   const countdown = document.getElementById('countdown');
   const successLoginBtn = document.getElementById('successLoginBtn');
-  const BACKEND_URL = 'http://localhost:5000'; 
+  const BACKEND_URL = 'https://civiceye-4-q1te.onrender.com'; 
   
   // State variables
   let currentStep = 1;
