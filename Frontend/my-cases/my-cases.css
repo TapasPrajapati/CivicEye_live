@@ -124,6 +124,8 @@
     color: #374151;
     cursor: pointer;
     transition: border-color 0.2s;
+    min-width: 220px;
+    width: 220px;
 }
 
 .filter-group select:focus {
