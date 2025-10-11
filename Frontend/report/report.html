@@ -28,7 +28,7 @@
         </div>
         <ul class="nav-links">
             <li>
-                <a href="index.html" class="active">
+                <a href="/Frontend/index.html" class="active">
                     <i data-lucide="home"></i>
                     <span>Home</span>
                 </a>
@@ -101,7 +101,7 @@
             <button class="menu-btn" id="openNav">
                 <i data-lucide="menu"></i>
             </button>
-            <div class="brand" onclick="window.location.href='../../index.html'" style="cursor: pointer;">
+            <div class="brand" onclick="window.location.href='/Frontend/index.html'" style="cursor: pointer;">
                 <i data-lucide="shield-alert"></i>
                 <span>CivicEye</span>
             </div>
@@ -415,14 +415,6 @@
         <div class="login-modal" id="loginModal">
             <div class="modal-box">
                 <div class="container">
-                    <div class="toggle-switch">
-                        <span>User</span>
-                        <label class="switch">
-                            <input type="checkbox" id="roleToggle" />
-                            <span class="slider"></span>
-                        </label>
-                        <span>Police</span>
-                    </div>
 
                     <div class="flip-card" id="flipCard">
                         <!-- User Registration Form -->
@@ -453,43 +445,6 @@
                             </form>
                         </div>
 
-                        <!-- Police Registration Form -->
-                        <div class="card-back">
-                            <h2 class="form-title">Police Registration</h2>
-                            <form id="policeForm">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <input type="text" id="policeId" placeholder="Police ID" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" id="batchNo" placeholder="Batch NO." required />
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <input type="text" id="rank" placeholder="Rank" required />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="tel" id="policePhone" pattern="[0-9]{10}" placeholder="Phone No."
-                                            required />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" id="station" placeholder="Police Station" required />
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" id="policeEmail" placeholder="Email" required />
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" id="policePassword" placeholder="Password" required />
-                                </div>
-                                <button type="submit" class="submit-btn">Register</button>
-                                <p style="margin-top: 10px; margin-left: 50px">
-                                    You have an account?
-                                    <a class="register" href="#" onclick="showLoginForm()">Sign In</a>
-                                </p>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // API endpoints
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = "https://civiceye-4-q1te.onrender.com/api";
     const CASE_ENDPOINT = `${API_BASE_URL}/reports`;
 
     // Event listeners

@@ -124,6 +124,8 @@
     color: #374151;
     cursor: pointer;
     transition: border-color 0.2s;
+    min-width: 220px;
+    width: 220px;
 }
 
 .filter-group select:focus {
@@ -166,6 +168,7 @@
 .case-card {
     background: white;
     border-radius: 12px;
+    width: 800px;
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-left: 4px solid #667eea;
@@ -269,6 +272,7 @@
     color: #6b7280;
     font-size: 0.9rem;
     line-height: 1.5;
+    word-wrap: break-word;
 }
 
 .case-actions {

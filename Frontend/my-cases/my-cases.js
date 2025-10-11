@@ -221,7 +221,7 @@ class MyCasesManager {
         const statusMap = {
             registered: "Registered",
             approved: "Approved",
-            "officer-assigned": "Officer Assigned",
+            "Officer Assigned": "Officer-Assigned",
             investigating: "Under Investigation",
             resolved: "Resolved",
         };
