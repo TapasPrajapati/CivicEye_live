@@ -14,6 +14,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="/Frontend/landing/auth_passing.js"></script>
     <script src="/Frontend/landing/profile-dropdown.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <nav class="sidebar" id="sidebar">
@@ -184,33 +185,81 @@
                     <div class="status-progress">
                         <div class="progress-container">
                             <div class="progress-steps">
+                                <!-- Registered Step -->
                                 <div id="step-registered" class="progress-step">
-                                    <div class="step-icon"><i class="fas fa-check"></i></div>
-                                    <div class="step-label">Registered</div>
-                                    <div class="step-details"></div>
+                                    <div class="step-connector"></div>
+                                    <div class="step-icon-container">
+                                        <div class="step-icon">
+                                            <i class="icon-pending fas fa-file-alt"></i>
+                                            <i class="icon-completed fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="step-content">
+                                        <div class="step-label">Registered</div>
+                                        <div class="step-details"></div>
+                                    </div>
                                 </div>
+
+                                <!-- Approved Step -->
                                 <div id="step-approved" class="progress-step">
-                                    <div class="step-icon"><i class="fas fa-check"></i></div>
-                                    <div class="step-label">Approved</div>
-                                    <div class="step-details"></div>
+                                    <div class="step-connector"></div>
+                                    <div class="step-icon-container">
+                                        <div class="step-icon">
+                                            <i class="icon-pending fas fa-check-circle"></i>
+                                            <i class="icon-completed fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="step-content">
+                                        <div class="step-label">Approved</div>
+                                        <div class="step-details"></div>
+                                    </div>
                                 </div>
+
+                                <!-- Officer Assigned Step -->
                                 <div id="step-officer-assigned" class="progress-step">
-                                    <div class="step-icon"><i class="fas fa-check"></i></div>
-                                    <div class="step-label">Officer Assigned</div>
-                                    <div class="step-details"></div>
+                                    <div class="step-connector"></div>
+                                    <div class="step-icon-container">
+                                        <div class="step-icon">
+                                            <i class="icon-pending fas fa-user-shield"></i>
+                                            <i class="icon-completed fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="step-content">
+                                        <div class="step-label">Officer Assigned</div>
+                                        <div class="step-details"></div>
+                                    </div>
                                 </div>
+
+                                <!-- Investigating Step -->
                                 <div id="step-investigating" class="progress-step">
-                                    <div class="step-icon"><i class="fas fa-user-shield"></i></div>
-                                    <div class="step-label">Investigating</div>
-                                    <div class="step-details"></div>
+                                    <div class="step-connector"></div>
+                                    <div class="step-icon-container">
+                                        <div class="step-icon">
+                                            <i class="icon-pending fas fa-search"></i>
+                                            <i class="icon-completed fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="step-content">
+                                        <div class="step-label">Investigating</div>
+                                        <div class="step-details"></div>
+                                    </div>
                                 </div>
+
+                                <!-- Resolved Step -->
                                 <div id="step-resolved" class="progress-step">
-                                    <div class="step-icon"><i class="fas fa-flag"></i></div>
-                                    <div class="step-label">Resolved</div>
-                                    <div class="step-details"></div>
+                                    <div class="step-connector"></div>
+                                    <div class="step-icon-container">
+                                        <div class="step-icon">
+                                            <i class="icon-pending fas fa-flag"></i>
+                                            <i class="icon-completed fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="step-content">
+                                        <div class="step-label">Resolved</div>
+                                        <div class="step-details"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="progress-bar"></div>
                         </div>
                     </div>
 

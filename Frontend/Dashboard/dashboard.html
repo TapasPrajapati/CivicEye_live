@@ -3,265 +3,401 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crime Statistics Dashboard</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    
-      <script src="/Frontend/landing/profile-dropdown.js"></script>
-        <script src="/Frontend/landing/auth_passing.js"></script>
-    <!-- <link rel="stylesheet" href="Dashboard.css"> -->
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            margin: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        canvas {
-            max-width: 100%;
-        }
-        .map-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .map-container img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .state-section {
-            padding-top: 70px;
-            margin-top: -70px;
-        }
-        .state-selector {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .intro-text {
-    text-align: center;
-    margin: 30px auto;
-    padding: 20px;
-    max-width: 600px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.intro-text h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #343a40;
-    margin-bottom: 10px;
-}
-
-.intro-text p {
-    font-size: 1.1rem;
-    color: #555;
-    margin: 5px 0;
-}
-
-        area {
-            cursor: pointer;
-        }
-        .state-info-card {
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            text-align: center;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            color: white;
-        }
-        .stat-card.theft {
-            background-color: #4bc0c0;
-        }
-        .stat-card.murder {
-            background-color: #ff6384;
-        }
-        .stat-card.assault {
-            background-color: #ffce56;
-        }
-        .stat-card.rape {
-            background-color: #36a2eb;
-        }
-        .highlight-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #36a2eb;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .state-details {
-            margin-top: 15px;
-        }
-        .state-details p {
-            margin-bottom: 5px;
-        }
-        .state-details strong {
-            display: inline-block;
-            width: 120px;
-        }
-    </style>
+    <title>Crime Statistics Dashboard | CivicEye</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-        <!-- <nav class="sidebar" id="sidebar">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Loading Crime Data</h2>
+            <p>Please wait while we prepare your dashboard</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <button class="close-btn" id="closeNav">
-                <i data-lucide="chevron-left"></i>
-            </button>
             <div class="logo">
-                <i data-lucide="shield-alert"></i>
+                <i class="fas fa-shield-alt"></i>
                 <span>CivicEye</span>
             </div>
         </div>
         <ul class="nav-links">
             <li>
-                <a href="index.html" class="active">
-                    <i data-lucide="home"></i>
+                <a href="/Frontend/index.html">
+                    <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
             </li>
-            <li>
-                <a href="/Frontend/Dashboard/Home/Home.html" class="active">
-                    <i data-lucide="layout-dashboard"></i>
+            <li class="active">
+                <a href="/Frontend/Dashboard/Home/Home.html">
+                    <i class="fas fa-chart-bar"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="/Frontend/report/report.html" class="active">
-                    <i data-lucide="file-text"></i>
+                <a href="/Frontend/report/report.html">
+                    <i class="fas fa-file-alt"></i>
                     <span>Report Case</span>
                 </a>
             </li>
             <li>
-                <a href="/Frontend/Track_case/track.html" class="active">
-                    <i data-lucide="search"></i>
+                <a href="/Frontend/Track_case/track.html">
+                    <i class="fas fa-search"></i>
                     <span>Track Case</span>
                 </a>
             </li>
             <li>
-                <a href="/Frontend/Emergency/emergency.html" class="active">
-                    <i data-lucide="phone"></i>
+                <a href="/Frontend/Emergency/emergency.html">
+                    <i class="fas fa-phone"></i>
                     <span>Emergency Contacts</span>
                 </a>
             </li>
             <li>
-                <a href="/Frontend/help_guide/help.html" class="active">
-                    <i data-lucide="help-circle"></i>
-                    <span>Help Guide</span>
-                </a>
-            </li>
-            <li>
-                <a href="/Frontend/safety-tips/safety.html" class="active">
-                    <i data-lucide="shield"></i>
+                <a href="/Frontend/safety-tips/safety.html">
+                    <i class="fas fa-shield"></i>
                     <span>Safety Tips</span>
                 </a>
             </li>
-            
-            <li>
-                <a href="/Frontend/Contact Us/contact-us.html"><i data-lucide="phone"></i>Contact</a>
-            </li>
         </ul>
+
         <div class="emergency-section">
             <div class="emergency-title">
-                <i data-lucide="phone-call"></i>
+                <i class="fas fa-phone"></i>
                 <span>Emergency Numbers</span>
             </div>
             <div class="emergency-numbers">
-                <a href="tel:100" class="emergency-item" style="color: #ffff; text-decoration: none">
+                <a href="tel:100" class="emergency-item">
                     <span class="service">Police</span>
                     <span class="number">100</span>
                 </a>
-
-                <a href="tel:1091" class="emergency-item" style="color: #ffff; text-decoration: none">
+                <a href="tel:1091" class="emergency-item">
                     <span class="service">Women Helpline</span>
                     <span class="number">1091</span>
                 </a>
-                <a href="tel:108" class="emergency-item" style="color: #ffff; text-decoration: none">
+                <a href="tel:108" class="emergency-item">
                     <span class="service">Ambulance</span>
                     <span class="number">108</span>
                 </a>
             </div>
         </div>
-    </nav> -->
-    <div class="container">
-       <!-- Intro Section -->
-<div class="intro-text">
-    <h2>Crime in India</h2>
-    <p>Opening up India's crime data</p>
-    <p>Know your city. Track different kinds of crimes.</p>
-</div>
+    </nav>
 
+    <main class="main-content">
+        <header class="top-nav">
+            <div class="nav-left">
+                <div class="brand" onclick="window.location.href='/Frontend/index.html'" style="cursor: pointer">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>CivicEye</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <a href="tel:112" style="color: #ffff; text-decoration: none">
+                    <button class="btn btn-emergency">
+                        <i class="fas fa-phone"></i>
+                        Emergency
+                    </button>
+                </a>
+                <button id="openLoginBtn" class="btn btn-login">Login</button>
+                <button id="showLogin" class="btn btn-signup">Register</button>
+                <div id="profileSection" style="display: none">
+                    <button id="profileBtn" class="btn btn-profile">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+                <div class="theme-toggle">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </div>
+            </div>
+        </header>
 
-        <!-- State Dropdown Selector -->
-        <div class="state-selector">
-            <select id="stateDropdown" class="form-control" style="max-width: 300px; margin: 0 auto;">
-                <option value="">Select a State...</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
+        <!-- Dashboard Header -->
+        <section class="dashboard-header">
+            <div class="header-content">
+                <h1>Crime Statistics Dashboard</h1>
+                <p>Comprehensive analysis of crime data across Indian states</p>
+            </div>
+            <div class="header-actions">
+                <div class="date-filter">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate">Today</span>
+                </div>
+            </div>
+        </section>
 
-        <!-- India Map Section -->
-        <div class="map-container">
-            <h3>India Crime Statistics Overview</h3>
-            <img src="india_map.gif" alt="India Map with Crime Statistics" usemap="#image-map" />
-            <p class="mt-2">Click on any state to view its crime statistics</p>
-
-            <map name="image-map">
-                <area alt="Rajasthan" title="Rajasthan" data-state="Rajasthan" 
-                    coords="96,389,92,377,87,366,78,360,74,348,69,338,64,330,123,293,68,328,72,315,169,252,200,285,223,372,241,316,170,423,217,353,230,396,160,414,158,418,230,309,239,320,240,325,169,405,186,410,172,434,158,421,137,393,121,386,113,386" 
-                    shape="poly" />
-                <area alt="Gujarat" title="Gujarat" data-state="Gujarat" 
-                    coords="52,406,132,389,170,435,154,489,149,502,144,501,60,464,38,419" 
-                    shape="poly" />
-                <area alt="Andhra Pradesh" title="Andhra Pradesh" data-state="Andhra Pradesh" 
-                    coords="273,628,414,536,379,523,233,609,230,640,247,648,271,672,304,658,305,637,304,620,319,590,331,577,325,567,337,552,338,555,312,586" 
-                    shape="poly" />
-                <!-- Add more states as needed -->
-            </map>
-        </div>
-
-        <!-- National Overview Section -->
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">National Crime Trends (Bar Chart)</h5>
-                        <canvas id="overallBarChart"></canvas>
+        <!-- Quick Stats -->
+        <section class="quick-stats">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalTheft">0</h3>
+                        <p>Theft Cases</p>
+                        <span class="stat-trend up">+12% from last year</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon danger">
+                        <i class="fas fa-skull"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalMurder">0</h3>
+                        <p>Murder Cases</p>
+                        <span class="stat-trend down">-5% from last year</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalAssault">0</h3>
+                        <p>Assault Cases</p>
+                        <span class="stat-trend up">+8% from last year</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon info">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRape">0</h3>
+                        <p>Rape Cases</p>
+                        <span class="stat-trend down">-3% from last year</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">National Crime Distribution (Pie Chart)</h5>
-                        <canvas id="overallPieChart"></canvas>
+        </section>
+
+        <!-- Controls Section -->
+        <section class="controls-section">
+            <div class="control-panel">
+                <div class="filter-group">
+                    <label for="stateDropdown"><i class="fas fa-map-marker-alt"></i> State</label>
+                    <select id="stateDropdown" class="filter-select">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="yearDropdown"><i class="fas fa-calendar"></i> Year</label>
+                    <select id="yearDropdown" class="filter-select">
+                        <option value="">All Years</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="crimeTypeDropdown"><i class="fas fa-crime"></i> Crime Type</label>
+                    <select id="crimeTypeDropdown" class="filter-select">
+                        <option value="">All Crimes</option>
+                        <option value="theft">Theft</option>
+                        <option value="murder">Murder</option>
+                        <option value="assault">Assault</option>
+                        <option value="rape">Rape</option>
+                    </select>
+                </div>
+                <button class="filter-btn" id="applyFilters">
+                    <i class="fas fa-filter"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="section-header">
+                <h2>Crime Analytics</h2>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-chart="line">
+                        <i class="fas fa-chart-line"></i>
+                        Line
+                    </button>
+                    <button class="chart-btn" data-chart="bar">
+                        <i class="fas fa-chart-bar"></i>
+                        Bar
+                    </button>
+                    <button class="chart-btn" data-chart="area">
+                        <i class="fas fa-chart-area"></i>
+                        Area
+                    </button>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <!-- Crime Distribution (Small) -->
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Crime Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crime Trends Over Time (Small) -->
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Crime Trends Over Time</h3>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color theft"></span>
+                                    <span>Theft</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color murder"></span>
+                                    <span>Murder</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color assault"></span>
+                                    <span>Assault</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color rape"></span>
+                                    <span>Rape</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- State Comparison (Large) -->
+                <div class="chart-container large">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>State Comparison</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">National Crime Trends Over Time (Line Chart)</h5>
-                        <canvas id="overallLineChart"></canvas>
+        </section>
+
+        <!-- Map and Insights Section -->
+        <section class="map-insights-section">
+            <div class="section-header">
+                <h2>Geographic Analysis</h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="map">Map View</button>
+                    <button class="view-btn" data-view="table">Table View</button>
+                </div>
+            </div>
+
+            <div class="map-table-container">
+                <div class="map-container active" id="mapView">
+                    <div class="map-card">
+                        <div class="map-header">
+                            <h3>India Crime Heatmap</h3>
+                            <div class="map-actions">
+                                <button class="map-btn active" data-layer="heatmap">
+                                    <i class="fas fa-fire"></i>
+                                </button>
+                                <button class="map-btn" data-layer="regional">
+                                    <i class="fas fa-map"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="map-body">
+                            <div id="indiaMap"></div>
+                            <div class="map-legend">
+                                <span>Low Crime</span>
+                                <div class="legend-gradient"></div>
+                                <span>High Crime</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container" id="tableView">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>State-wise Crime Data</h3>
+                            <div class="table-actions">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" placeholder="Search states..." id="stateSearch">
+                                </div>
+                                <button class="export-btn">
+                                    <i class="fas fa-download"></i>
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-body">
+                            <table id="crimeTable">
+                                <thead>
+                                    <tr>
+                                        <th>State</th>
+                                        <th>Theft</th>
+                                        <th>Murder</th>
+                                        <th>Assault</th>
+                                        <th>Rape</th>
+                                        <th>Total</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table rows will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- State-wise Sections -->
-        <div id="stateCharts">
-            <!-- State-wise charts will be populated here -->
-        </div>
-    </div>
+        <!-- State Details Section -->
+        <section class="state-details-section" id="stateDetails">
+            <!-- State details will be populated by JavaScript -->
+        </section>
 
+        <!-- Insights Section -->
+        <section class="insights-section">
+            <div class="section-header">
+                <h2>Key Insights</h2>
+            </div>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Crime Rate Trend</h3>
+                    <p>Overall crime rates have decreased by 2.3% compared to last year, with significant improvements in urban areas.</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Regional Patterns</h3>
+                    <p>Northern states show higher theft rates, while southern states report better safety indexes across all crime categories.</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Seasonal Variation</h3>
+                    <p>Crime rates typically peak during festival seasons and show a decline during monsoon months across most states.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="Dashboard.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
